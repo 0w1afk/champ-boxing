@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.DS_Store
+
+# Движок Impeccable: скачивается лаунчером с проверкой контрольной суммы
+.agents/skills/impeccable/scripts/bin/
+
+# Локальные настройки
+.impeccable/config.local.json
