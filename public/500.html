@@ -1,0 +1,44 @@
+<!doctype html>
+<!--
+  Статическая страница 500: отдаётся веб-сервером при ошибке приложения.
+  Независима от сборки Astro. Копирайт: docs/copy/error.md.
+-->
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>Ошибка сайта — CHAMP BOXING CLUB</title>
+    <meta name="description" content="Сайт временно недоступен. Вернитесь на главную страницу CHAMP BOXING CLUB или позвоните в клуб." />
+    <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+    <style>
+      :root { color-scheme: dark; }
+      body {
+        margin: 0; min-height: 100vh; display: flex; flex-direction: column; justify-content: center;
+        background: #0b0a09; color: #ece7de;
+        font-family: system-ui, sans-serif; line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+      }
+      main { max-width: 820px; margin: 0 auto; padding: 64px 20px; }
+      .code { font-size: clamp(64px, 12vw, 144px); font-weight: 700; color: #e4570c; line-height: 1; margin: 0; }
+      h1 { font-size: clamp(28px, 4.5vw, 56px); font-weight: 700; text-transform: uppercase; margin: 24px 0 0; line-height: 1.1; }
+      p { color: #9a9284; margin: 16px 0 0; }
+      .actions { margin-top: 32px; display: flex; flex-wrap: wrap; gap: 16px; }
+      a { display: inline-flex; align-items: center; height: 56px; padding: 0 32px; text-decoration: none;
+          font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.2em; }
+      a.primary { background: #e4570c; color: #0b0a09; }
+      a.secondary { border: 1px solid rgb(236 231 222 / 0.12); color: #ece7de; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p class="code" aria-hidden="true">500</p>
+      <h1>Сайт временно недоступен.</h1>
+      <p>Попробуйте открыть главную позже или позвоните: +7 (914) 423-45-55.</p>
+      <div class="actions">
+        <a class="primary" href="/">На главную</a>
+        <a class="secondary" href="tel:+79144234555">Позвонить: +7 (914) 423-45-55</a>
+      </div>
+    </main>
+  </body>
+</html>

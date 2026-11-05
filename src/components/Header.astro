@@ -1,0 +1,76 @@
+---
+// Шапка: лого, навигация, CTA; мобильное меню — нативный details (без JS).
+import raw from '../assets/logo.svg?raw';
+
+const logo = raw
+  .replace(/<!--[\s\S]*?-->\s*/, '')
+  .replace('<svg ', '<svg class="h-8 w-auto" aria-hidden="true" focusable="false" ')
+  .replace('role="img" aria-label="CHAMP"', '');
+---
+
+<header class="sticky top-0 z-50 border-b border-line bg-bg">
+  <div class="mx-auto flex min-h-[72px] max-w-[1440px] items-center justify-between gap-3 px-5 py-2 md:px-10">
+    <a
+      href="/#top"
+      aria-label="CHAMP BOXING CLUB — на главную"
+      class="inline-flex items-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright"
+    >
+      <Fragment set:html={logo} />
+    </a>
+
+    <nav class="hidden items-center gap-8 font-display text-sm font-medium uppercase tracking-[0.2em] md:flex" aria-label="Основная навигация">
+      <a href="/#formats" class="transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">Тренировки</a>
+      <a href="/#coaches" class="transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">Команда</a>
+      <a href="/#contacts" class="transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">Контакты</a>
+    </nav>
+
+    <a
+      href="https://wa.me/79144234555"
+      aria-describedby="cond-header"
+      aria-label="Пробное бесплатно — записаться на&#160;групповое занятие в&#160;WhatsApp"
+      class="hidden h-12 items-center bg-flame px-6 font-display text-sm font-semibold uppercase tracking-[0.2em] text-[#0b0a09] transition duration-200 hover:bg-bright active:bg-press active:scale-[0.97] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright md:inline-flex"
+    >
+      Пробное бесплатно
+    </a>
+    <p id="cond-header" class="sr-only">Первое занятие в общей, детской или женской группе — бесплатно, кроме мини-групп.</p>
+
+    <!-- Мобильное меню: нативный details, без JS; панель — от шапки (sticky = позиционный предок) -->
+    <details class="md:hidden">
+      <summary
+        class="flex h-11 w-11 list-none items-center justify-center border border-line transition duration-200 hover:border-flame focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright [&::-webkit-details-marker]:hidden"
+      >
+        <span aria-hidden="true" class="menu-sign relative block h-[1.5px] w-5 bg-ink transition-transform duration-200 before:absolute before:block before:h-[1.5px] before:w-5 before:-translate-y-[4px] before:bg-ink after:absolute after:block after:h-[1.5px] after:w-5 after:translate-y-[3px] after:bg-ink"></span>
+        <span class="when-closed sr-only">Открыть меню</span>
+        <span class="when-open sr-only">Закрыть меню</span>
+      </summary>
+      <nav class="absolute inset-x-0 top-full border-b border-line bg-surface px-5 py-5" aria-label="Мобильная навигация">
+        <p class="flex items-center justify-between">
+          <span class="font-display text-sm font-semibold uppercase tracking-[0.2em]">Меню</span>
+          <span class="inline-flex h-11 items-center border border-line px-4 font-display text-xs font-semibold uppercase tracking-[0.2em]">Закрыть меню</span>
+        </p>
+        <div class="mt-5 flex flex-col gap-4 font-display text-xl font-semibold uppercase tracking-wide">
+          <a href="/#formats" class="w-fit transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">Тренировки</a>
+          <a href="/#coaches" class="w-fit transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">Команда</a>
+          <a href="/#contacts" class="w-fit transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">Контакты</a>
+          <a
+            href="https://wa.me/79144234555"
+            aria-describedby="cond-menu"
+            class="mt-2 inline-flex h-14 items-center justify-center bg-flame px-6 font-display text-sm font-semibold uppercase tracking-[0.2em] text-[#0b0a09] transition duration-200 hover:bg-bright active:bg-press active:scale-[0.97] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright"
+          >Пробное бесплатно</a>
+          <p id="cond-menu" class="text-xs leading-relaxed text-mut">
+            Первое занятие в общей, детской или женской группе — бесплатно, кроме мини-групп.
+            <a href="/privacy/" class="text-ink underline underline-offset-4 transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">Политика конфиденциальности</a>
+          </p>
+          <a href="tel:+79144234555" class="text-sm text-ink underline underline-offset-4 transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">Позвонить: +7 (914) 423-45-55</a>
+        </div>
+      </nav>
+    </details>
+  </div>
+</header>
+
+<script>
+  // Мобильное меню закрывается при переходе по ссылке (нативный details, без библиотек).
+  document.querySelectorAll('header details nav a').forEach((a) => {
+    a.addEventListener('click', () => a.closest('details')?.removeAttribute('open'));
+  });
+</script>

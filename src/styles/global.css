@@ -1,0 +1,130 @@
+@import "tailwindcss";
+@import "./fonts.css";
+
+/* Токены «Макро-нуар» — источник: docs/design/tokens.json (утверждён G2) */
+@theme {
+  --color-bg: #0b0a09;
+  --color-surface: #131110;
+  --color-raised: #1a1715;
+  --color-ink: #ece7de;
+  --color-mut: #9a9284;
+  --color-flame: #e4570c;
+  --color-bright: #ff7a1f;
+  --color-press: #d94e0d;
+  --color-line: rgb(236 231 222 / 0.12);
+  --color-linestrong: rgb(236 231 222 / 0.24);
+  --color-disbg: #26221e;
+
+  --font-display: Oswald, "Arial Narrow", system-ui, sans-serif;
+  --font-body: Manrope, system-ui, sans-serif;
+}
+
+/* База */
+html {
+  color-scheme: dark;
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+body {
+  -webkit-font-smoothing: antialiased;
+}
+::selection {
+  background: #e4570c;
+  color: #0b0a09;
+}
+
+/* Плёночное зерно поверх всей страницы */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Контурные слова — только фоновый слой, всегда aria-hidden */
+.text-stroke-faint {
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgb(236 231 222 / 0.22);
+}
+
+/* Нативные раскрытия details/summary */
+details > summary {
+  list-style: none;
+  cursor: pointer;
+}
+details > summary::-webkit-details-marker {
+  display: none;
+}
+.sign::after {
+  content: "+";
+}
+details[open] > summary .sign::after {
+  content: "×";
+}
+
+/* Карточки тренеров: видимый текст действия следует за состоянием (без JS) */
+.when-open {
+  display: none;
+}
+details[open] > summary .when-open {
+  display: inline;
+}
+details[open] > summary .when-closed {
+  display: none;
+}
+
+/* Шапка: гамбургер/крестик по состоянию details (без JS) */
+.menu-sign {
+  position: relative;
+}
+details[open] .menu-sign {
+  transform: rotate(45deg);
+}
+details[open] .menu-sign::before {
+  transform: rotate(-90deg);
+}
+
+/* Бегущая строка */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee {
+  animation: marquee 32s linear infinite;
+}
+@media (hover: hover) and (pointer: fine) {
+  .animate-marquee:hover {
+    animation-play-state: paused;
+  }
+}
+
+.price-num {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Reduced motion: маркизы и transform-переходы отключаются; color-переходы ≤200 ms допустимы */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .animate-marquee {
+    animation: none;
+  }
+  .row-arrow {
+    transition: none !important;
+    transform: none !important;
+  }
+  a,
+  button,
+  summary {
+    transition-property: color, background-color, border-color, text-decoration-color !important;
+  }
+  a:active,
+  button:active {
+    transform: none !important;
+  }
+}

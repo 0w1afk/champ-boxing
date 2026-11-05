@@ -1,0 +1,27 @@
+---
+import raw from '../assets/logo.svg?raw';
+
+const logo = raw
+  .replace(/<!--[\s\S]*?-->\s*/, '')
+  .replace('<svg ', '<svg class="h-7 w-auto" aria-hidden="true" focusable="false" ')
+  .replace('role="img" aria-label="CHAMP"', '');
+---
+
+<footer class="border-t border-line">
+  <div class="mx-auto max-w-[1440px] px-5 py-8 md:px-10">
+    <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <a
+        href="/#top"
+        aria-label="CHAMP BOXING CLUB — на главную"
+        class="inline-flex items-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright"
+      >
+        <Fragment set:html={logo} />
+      </a>
+      <p class="text-sm text-mut">г.&#160;Хабаровск, ул.&#160;Восточное шоссе, 41, 3&#160;этаж</p>
+      <div class="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+        <a href="tel:+79144234555" class="text-ink underline underline-offset-4 transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">Позвонить: +7 (914) 423-45-55</a>
+        <a href="/privacy/" class="text-ink underline underline-offset-4 transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">Политика конфиденциальности</a>
+      </div>
+    </div>
+  </div>
+</footer>
