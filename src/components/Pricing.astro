@@ -1,0 +1,66 @@
+---
+import { PRICING, MSG, wa } from '../data/site';
+import SectionHead from './SectionHead.astro';
+---
+
+<section id="prices" class="pb-20 md:pb-28">
+  <SectionHead index="04" label="Цены">
+    Стоимость <span class="text-stroke-flame">занятий</span><span class="text-flame">.</span>
+  </SectionHead>
+
+  <div class="mx-auto mt-8 w-full max-w-[1536px] px-5 md:px-10">
+    <p class="max-w-2xl text-base leading-relaxed text-mut md:text-lg" data-reveal>{PRICING.intro}</p>
+  </div>
+
+  <div class="mx-auto mt-14 grid w-full max-w-[1536px] grid-cols-1 gap-8 px-5 md:grid-cols-2 md:gap-6 md:px-10 xl:grid-cols-3">
+    {PRICING.cards.map((p, i) => (
+      <div data-reveal style={`transition-delay: ${0.08 * i}s`} class="h-full">
+        <article
+          class:list={[
+            'relative flex h-full flex-col border p-8 transition-colors duration-300',
+            p.highlight ? 'border-flame bg-surface' : 'border-line hover:border-mut/40',
+          ]}
+        >
+          {p.badge && (
+            <span class="absolute -top-3 left-8 bg-flame px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-bg">
+              {p.badge}
+            </span>
+          )}
+          <h3 class="font-display text-lg font-semibold uppercase tracking-[0.16em] text-mut">{p.name}</h3>
+          <p class="price-num mt-6 font-display text-5xl font-semibold tracking-[0.025em]">{p.price}</p>
+          <p class="mt-2 text-[11px] uppercase tracking-[0.2em] text-mut">{p.unit}</p>
+          <p class="price-num mt-4 flex-1 border-t border-line pt-4 text-sm leading-relaxed text-mut">{p.sub}</p>
+          <a
+            href={wa(p.msg)}
+            target="_blank"
+            rel="noopener"
+            class:list={[
+              'mt-8 inline-flex min-h-14 items-center justify-center px-6 py-3 text-center text-xs font-semibold uppercase leading-tight tracking-[0.2em] transition-colors duration-300',
+              p.highlight
+                ? 'bg-flame text-bg hover:bg-bright'
+                : 'border border-line hover:border-flame hover:text-bright',
+            ]}
+          >
+            {p.cta}
+          </a>
+        </article>
+      </div>
+    ))}
+  </div>
+
+  <div class="mx-auto mt-10 w-full max-w-[1536px] px-5 md:px-10">
+    <p class="max-w-2xl text-sm leading-relaxed text-mut" data-reveal>{PRICING.notes}</p>
+    <div class="mt-8" data-reveal>
+      <span data-magnetic class="inline-flex">
+        <a
+          href={wa(MSG.base)}
+          target="_blank"
+          rel="noopener"
+          class="inline-flex items-center gap-3 bg-flame px-8 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-bg transition-colors duration-300 hover:bg-bright active:bg-press"
+        >
+          {PRICING.cta}
+        </a>
+      </span>
+    </div>
+  </div>
+</section>

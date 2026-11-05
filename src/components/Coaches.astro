@@ -1,0 +1,37 @@
+---
+import { COACHES } from '../data/site';
+import SectionHead from './SectionHead.astro';
+import Placeholder from './Placeholder.astro';
+---
+
+<section id="coaches" class="pb-20 md:pb-28">
+  <SectionHead index="03" label="Тренеры">
+    Тренеры <span class="text-stroke-flame">CHAMP</span><span class="text-flame">.</span>
+  </SectionHead>
+
+  <div class="mx-auto mt-6 w-full max-w-[1536px] px-5 md:px-10">
+    <p class="flex items-center gap-3 text-sm text-mut" data-reveal>
+      <span class="h-2 w-2 rotate-45 bg-flame" aria-hidden></span>
+      5 тренеров — мастера спорта и кандидаты в мастера спорта по боксу.
+    </p>
+  </div>
+
+  <div class="mx-auto mt-14 w-full max-w-[1536px] px-5 md:px-10">
+    <div class="grid grid-cols-1 gap-10 md:grid-cols-3 md:gap-8">
+      {COACHES.map((c, i) => (
+        <div data-reveal style={`transition-delay: ${0.08 * i}s`}>
+          <article class="group">
+            <div class="relative">
+              <Placeholder label={c.slot} class="aspect-[3/4] w-full [&>div]:transition-transform [&>div]:duration-700 [&>div]:ease-out group-hover:[&>div]:scale-[1.04]" />
+              <span class="absolute right-4 top-4 z-[2] font-display text-sm text-flame">0{i + 1}</span>
+              <span class="absolute bottom-0 left-0 z-[2] h-1 w-0 bg-flame transition-all duration-500 group-hover:w-full" aria-hidden></span>
+            </div>
+            <h3 class="mt-5 font-display text-2xl font-semibold uppercase tracking-[0.025em]">{c.name}</h3>
+            <p class="mt-1 text-[11px] font-medium uppercase tracking-[0.22em] text-bright">{c.role}</p>
+            <p class="mt-3 text-sm leading-relaxed text-mut">{c.line}</p>
+          </article>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

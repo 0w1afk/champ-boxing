@@ -1,28 +1,27 @@
 ---
-// Бегущая строка: 8 утверждённых фактов G4. Пауза — при наведении (точные указатели).
-const ITEMS = [
-  'Первое занятие в группе — бесплатно, кроме мини-групп',
-  'Спарринги — только по желанию',
-  'Пять тренеров: два мастера спорта и три кандидата в мастера спорта',
-  'Абонемент на 12 занятий действует 45 дней',
-  'Мини-группа — до 5 человек',
-  'Детская группа — с 7 лет',
-  'Хабаровск, Восточное шоссе, 41, 3 этаж',
-  'Индивидуальная пробная — 1 500 ₽',
-];
-const sep = '<span class="mx-5 flex items-center gap-5 md:mx-6"><span>·</span><span class="inline-block h-2 w-2 rotate-45 bg-bright" aria-hidden="true"></span></span>';
-const rowHtml = ITEMS.join(sep);
-const rowClass = 'flex items-center font-display text-[clamp(0.8125rem,1vw,0.875rem)] font-medium uppercase tracking-[0.28em] text-mut';
+import { TICKER } from '../data/site';
+
+// Тикер по референсу example: две копии (вторая aria-hidden), ромб-flame разделитель,
+// marquee 32s, пауза на hover; при prefers-reduced-motion — статичная строка.
 ---
 
-<div class="ticker w-full min-w-0 overflow-hidden border-t border-line bg-bg py-4" role="group" aria-labelledby="ticker-label">
-  <p id="ticker-label" class="sr-only">Ключевые факты о клубе</p>
+<div class="ticker overflow-hidden border-y border-line py-4">
   <div class="animate-marquee flex w-max">
     <div class="flex w-max shrink-0 items-center whitespace-nowrap">
-      <span class={rowClass} set:html={rowHtml} />
+      {TICKER.map((t) => (
+        <span class="flex items-center">
+          <span class="font-display text-sm font-medium uppercase tracking-[0.28em] text-mut">{t}</span>
+          <span class="mx-8 inline-block h-2 w-2 rotate-45 bg-flame" aria-hidden="true"></span>
+        </span>
+      ))}
     </div>
     <div aria-hidden="true" class="flex w-max shrink-0 items-center whitespace-nowrap">
-      <span class={rowClass} set:html={rowHtml} />
+      {TICKER.map((t) => (
+        <span class="flex items-center">
+          <span class="font-display text-sm font-medium uppercase tracking-[0.28em] text-mut">{t}</span>
+          <span class="mx-8 inline-block h-2 w-2 rotate-45 bg-flame" aria-hidden="true"></span>
+        </span>
+      ))}
     </div>
   </div>
 </div>

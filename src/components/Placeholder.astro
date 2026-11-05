@@ -1,0 +1,35 @@
+---
+// Заглушка изображения: тёмная плоскость + halftone + подпись-слот (или маскот-водяной знак).
+// Опционально: параллакс плоскости; дети через default-slot заменяют содержимое.
+interface Props {
+  label: string;
+  class?: string;
+  parallax?: boolean;
+  /** Декоративный фон (подпись не выводится) — фоновые плоскости секций. */
+  decor?: boolean;
+  /** Водяной знак — маскот CHAMP по центру плоскости. */
+  watermark?: boolean;
+}
+const { label, class: className = '', parallax = false, decor = false, watermark = false } = Astro.props;
+const hasChildren = Astro.slots.has('default');
+---
+
+<div class:list={[`halftone relative overflow-hidden border border-line bg-raised ${className}`]}>
+  <div
+    class="absolute inset-x-0 -top-[10%] flex h-[120%] w-full items-center justify-center"
+    data-parallax={parallax ? '7' : undefined}
+  >
+    {hasChildren ? (
+      <slot />
+    ) : (
+      <div class="flex flex-col items-center gap-5 px-6 text-center">
+        {watermark && <img src="/logo.png" alt="" class="h-1/2 max-h-56 w-auto opacity-80" />}
+        {!decor && (
+          <span class="text-[11px] uppercase tracking-[0.22em] text-mut/70">
+            Изображение: {label}
+          </span>
+        )}
+      </div>
+    )}
+  </div>
+</div>

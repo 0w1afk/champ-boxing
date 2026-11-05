@@ -16,7 +16,7 @@ const { title, description } = Astro.props;
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
-    <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.png" type="image/png" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
@@ -34,5 +34,8 @@ const { title, description } = Astro.props;
       Перейти к содержимому
     </a>
     <slot />
+    <script>
+      import '../scripts/motion';
+    </script>
   </body>
 </html>

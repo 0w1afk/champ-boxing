@@ -1,0 +1,47 @@
+---
+import { FAQ, MSG, wa, PHONE_TEL } from '../data/site';
+import SectionHead from './SectionHead.astro';
+---
+
+<section id="faq" class="pb-20 md:pb-28">
+  <SectionHead index="05" label="FAQ">
+    Частые <span class="text-stroke-flame">вопросы</span><span class="text-flame">.</span>
+  </SectionHead>
+
+  <div class="mx-auto mt-14 w-full max-w-[1536px] px-5 md:px-10">
+    {FAQ.items.map((item, i) => (
+      <div data-reveal style={`transition-delay: ${0.03 * i}s`}>
+        <details class="group border-t border-line last:border-b">
+          <summary class="flex items-center justify-between gap-6 py-5 text-base font-medium transition-colors duration-300 hover:text-bright md:text-lg">
+            {item.q}
+            <span class="sign text-mut transition-colors duration-300 group-hover:text-flame" aria-hidden></span>
+          </summary>
+          <p class="pb-5 text-sm leading-relaxed text-mut md:max-w-3xl">{item.a}</p>
+        </details>
+      </div>
+    ))}
+
+    <div class="mt-10 flex flex-wrap items-center gap-4" data-reveal>
+      <a
+        href={FAQ.actions.prices.href}
+        class="inline-flex items-center border border-line px-6 py-3 text-xs font-semibold uppercase tracking-[0.2em] transition-colors duration-300 hover:border-flame hover:text-bright"
+      >
+        {FAQ.actions.prices.label}
+      </a>
+      <a
+        href={wa(MSG.base)}
+        target="_blank"
+        rel="noopener"
+        class="inline-flex items-center bg-flame px-6 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-bg transition-colors duration-300 hover:bg-bright"
+      >
+        {FAQ.actions.signup.label}
+      </a>
+      <a
+        href={PHONE_TEL}
+        class="inline-flex items-center border border-line px-6 py-3 text-xs font-semibold uppercase tracking-[0.2em] transition-colors duration-300 hover:border-flame hover:text-bright"
+      >
+        {FAQ.actions.call.label}
+      </a>
+    </div>
+  </div>
+</section>

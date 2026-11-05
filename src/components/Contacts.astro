@@ -1,0 +1,104 @@
+---
+import { CONTACTS, MSG, wa } from '../data/site';
+import Placeholder from './Placeholder.astro';
+
+const waHref = wa(MSG.base);
+---
+
+<section id="contacts" class="relative overflow-hidden pb-20 md:pb-28">
+  {/* Фон: заглушка с параллаксом + градиент от фона (по референсу) */}
+  <div class="absolute inset-0" aria-hidden="true">
+    <Placeholder label={CONTACTS.imageSlot} decor watermark parallax class="h-full w-full border-0 opacity-45" />
+    <div class="absolute inset-0 bg-gradient-to-b from-bg via-bg/60 to-bg"></div>
+  </div>
+
+  {/* Верхняя линия секции — как у SectionHead (зазор до линии, контент после неё) */}
+  <div class="relative mt-16 border-t border-line md:mt-24" aria-hidden="true"></div>
+
+  <div class="relative mx-auto w-full max-w-[1536px] px-5 pt-10 md:px-10 md:pt-14">
+    <div data-reveal>
+      <div class="flex items-center gap-3 text-xs font-medium uppercase tracking-[0.28em] text-mut">
+        <span class="text-flame">06</span>
+        <span class="h-px w-10 bg-line" aria-hidden></span>
+        <span>Контакты</span>
+      </div>
+      <h2 class="mt-6 font-display text-5xl font-semibold uppercase leading-[0.95] tracking-[0.025em] md:text-7xl">
+        Приходи <span class="text-stroke-flame">{CONTACTS.titleAccent}</span><span class="text-flame">.</span>
+      </h2>
+      <p class="mt-6 max-w-xl text-base leading-relaxed text-mut md:text-lg">{CONTACTS.support}</p>
+    </div>
+
+    <div class="mt-10" data-reveal>
+      <div class="flex flex-wrap items-center gap-4">
+        <span data-magnetic class="inline-flex">
+          <a
+            href={waHref}
+            data-wa-base
+            target="_blank"
+            rel="noopener"
+            aria-label="Пробное бесплатно — записаться на групповое занятие в WhatsApp"
+            class="inline-flex items-center gap-3 bg-flame px-8 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-bg transition-colors duration-300 hover:bg-bright active:bg-press"
+          >
+            {CONTACTS.cta}
+          </a>
+        </span>
+        <a
+          href="tel:+79144234555"
+          class="inline-flex items-center gap-3 whitespace-nowrap border border-line px-8 py-4 text-sm font-semibold uppercase tracking-[0.2em] transition-colors duration-300 hover:border-flame hover:text-bright"
+        >
+          {CONTACTS.call}
+        </a>
+      </div>
+      <p class="mt-3 max-w-xl text-xs leading-relaxed text-mut/80">{CONTACTS.condition}</p>
+      <p class="mt-1 max-w-xl text-xs text-mut/60">{CONTACTS.waFallback}</p>
+    </div>
+
+    <div class="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-3">
+      {CONTACTS.blocks.map((c, i) => (
+        <div data-reveal style={`transition-delay: ${0.06 * i}s`}>
+          <div class="border-l border-line pl-5">
+            <p class="text-[11px] font-medium uppercase tracking-[0.24em] text-bright">{c.label}</p>
+            <p class="mt-2 font-display text-xl font-medium uppercase tracking-[0.025em]">{c.value}</p>
+            <p class="mt-1 text-sm text-mut">{c.sub}</p>
+          </div>
+        </div>
+      ))}
+
+      <div data-reveal style="transition-delay: 0.12s">
+        <div class="border-l border-line pl-5">
+          <p class="text-[11px] font-medium uppercase tracking-[0.24em] text-bright">{CONTACTS.socialsLabel}</p>
+          <div class="mt-2 flex flex-col items-start gap-1">
+            {CONTACTS.socials.map((s) =>
+              s.href ? (
+                <a
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener"
+                  class="text-sm text-ink underline-offset-4 transition-colors hover:text-bright hover:underline"
+                >
+                  {s.label} — {s.handle}
+                </a>
+              ) : (
+                <span class="text-sm text-mut">{s.label} — {s.handle}</span>
+              )
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {/* Карта: 2GIS-виджет (код пользователя 05.11.2026); при отказе — адрес текстом */}
+    <div class="mt-16" data-reveal>
+      <div class="border border-line">
+        <iframe
+          title="CHAMP BOXING CLUB — карта"
+          src={CONTACTS.mapSrc}
+          sandbox="allow-modals allow-forms allow-scripts allow-same-origin allow-popups allow-top-navigation-by-user-activation"
+          loading="lazy"
+          class="h-[420px] w-full"
+        ></iframe>
+      </div>
+      <p class="mt-3 text-xs text-mut">{CONTACTS.mapNote}</p>
+    </div>
+  </div>
+</section>

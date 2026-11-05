@@ -1,0 +1,58 @@
+---
+import { CLUB } from '../data/site';
+import SectionHead from './SectionHead.astro';
+import Placeholder from './Placeholder.astro';
+---
+
+<section id="club" class="pb-20 md:pb-28">
+  <SectionHead index="01" label="Клуб">
+    Начать можно <span class="text-stroke-flame">{CLUB.titleAccent}</span><span class="text-flame">.</span>
+  </SectionHead>
+
+  <div class="mx-auto mt-14 grid w-full max-w-[1536px] grid-cols-1 gap-12 px-5 md:px-10 lg:grid-cols-12">
+    {/* Заглушка — sticky, как в example */}
+    <div class="lg:col-span-5" data-reveal>
+      <div class="lg:sticky lg:top-28">
+        <Placeholder label={CLUB.imageSlot} parallax watermark class="aspect-[3/4] w-full" />
+        <p class="mt-4 flex items-center gap-3 text-[11px] uppercase tracking-[0.22em] text-mut">
+          <span class="h-px w-8 bg-flame" aria-hidden></span>
+          {CLUB.imageCaption}
+        </p>
+      </div>
+    </div>
+
+    <div class="lg:col-span-7">
+      <p class="text-2xl font-medium leading-snug md:text-4xl md:leading-snug" data-reveal>
+        {CLUB.manifesto}
+      </p>
+
+      <div class="mt-12 grid grid-cols-1 gap-10 md:grid-cols-2">
+        {CLUB.columns.map((c, i) => (
+          <div data-reveal style={`transition-delay: ${0.05 * (i + 1)}s`}>
+            <h3 class="font-display text-lg font-semibold uppercase tracking-[0.18em] text-bright">{c.title}</h3>
+            <p class="mt-4 text-sm leading-relaxed text-mut md:text-base">{c.text}</p>
+          </div>
+        ))}
+      </div>
+
+      <div class="mt-12">
+        {CLUB.facts.map((f, i) => (
+          <div data-reveal style={`transition-delay: ${0.05 * i}s`}>
+            <div class="group flex items-center justify-between border-b border-line py-4 transition-all duration-300 first:border-t hover:pl-3">
+              <div class="flex items-center gap-5">
+                <span class="text-xs text-flame">0{i + 1}</span>
+                <span class="font-display text-xl font-medium uppercase tracking-[0.025em] md:text-2xl">{f}</span>
+              </div>
+              <span class="h-2 w-2 rotate-45 bg-flame opacity-0 transition-opacity duration-300 group-hover:opacity-100" aria-hidden></span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <p class="mt-8 flex items-center gap-3 text-sm text-mut" data-reveal>
+        <span class="h-2 w-2 rotate-45 bg-flame" aria-hidden></span>
+        {CLUB.note}
+      </p>
+    </div>
+  </div>
+</section>

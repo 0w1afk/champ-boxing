@@ -1,0 +1,74 @@
+---
+import { FORMATS, wa } from '../data/site';
+import SectionHead from './SectionHead.astro';
+---
+
+<section id="formats" class="relative pb-20 md:pb-28" data-preview-area>
+  <SectionHead index="02" label="Тренировки">
+    Найди <span class="text-stroke-flame">свой</span> формат<span class="text-flame">.</span>
+  </SectionHead>
+
+  {/* Плавающее превью за курсором — только точные указатели, включается JS */}
+  <div
+    aria-hidden="true"
+    data-preview
+    class="pointer-events-none absolute left-0 top-0 z-20 hidden lg:block"
+  >
+    <div
+      data-preview-card
+      class="halftone relative -ml-28 -mt-44 flex h-80 w-56 items-center justify-center overflow-hidden border border-line bg-surface p-4 text-center shadow-2xl shadow-black/60"
+    >
+      <span data-preview-label class="text-[11px] uppercase tracking-[0.22em] text-mut"></span>
+    </div>
+  </div>
+
+  <div class="mx-auto mt-14 w-full max-w-[1536px] px-5 md:px-10">
+    <p class="mb-6 flex items-center gap-3 text-sm text-mut" data-reveal>
+      <span class="h-2 w-2 rotate-45 bg-flame" aria-hidden></span>
+      Кликни, чтобы выбрать свой формат и записаться.
+    </p>
+    {FORMATS.map((p, i) => (
+      <div data-reveal style={`transition-delay: ${0.04 * i}s`}>
+        <a
+          href={wa(p.msg)}
+          target="_blank"
+          rel="noopener"
+          data-slot={p.slot}
+          class="format-row group grid grid-cols-12 items-center gap-x-4 gap-y-3 border-t border-line py-8 transition-colors duration-300 last:border-b hover:bg-surface/60 md:py-10"
+        >
+          <span class="col-span-2 text-xs text-mut md:col-span-1">0{i + 1}</span>
+          <h3 class="col-span-10 font-display text-3xl font-semibold uppercase tracking-[0.025em] transition-colors duration-300 group-hover:text-bright md:col-span-5 md:text-5xl">
+            {p.name}
+          </h3>
+          <div class="col-span-10 col-start-3 md:col-span-4 md:col-start-7">
+            <p class="text-sm leading-relaxed text-mut">{p.desc}</p>
+            <p class="mt-2 text-[11px] uppercase tracking-[0.2em] text-mut/70">{p.marker}</p>
+          </div>
+          <span class="col-span-2 col-start-11 flex justify-end md:col-span-2 md:col-start-12">
+            <svg
+              class="row-arrow text-mut/50 group-hover:text-flame"
+              width="28"
+              height="28"
+              viewBox="0 0 28 28"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.25"
+              aria-hidden
+            >
+              <path d="M7 21L21 7M9 7h12v12" />
+            </svg>
+          </span>
+        </a>
+      </div>
+    ))}
+
+    <div class="mt-10" data-reveal>
+      <a
+        href="#prices"
+        class="inline-flex items-center gap-3 border border-line px-8 py-4 text-sm font-semibold uppercase tracking-[0.2em] transition-colors duration-300 hover:border-flame hover:text-bright"
+      >
+        Все цены и условия
+      </a>
+    </div>
+  </div>
+</section>

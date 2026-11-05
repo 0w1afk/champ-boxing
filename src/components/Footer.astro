@@ -1,27 +1,43 @@
 ---
-import raw from '../assets/logo.svg?raw';
-
-const logo = raw
-  .replace(/<!--[\s\S]*?-->\s*/, '')
-  .replace('<svg ', '<svg class="h-7 w-auto" aria-hidden="true" focusable="false" ')
-  .replace('role="img" aria-label="CHAMP"', '');
+import { FOOTER, NAV } from '../data/site';
 ---
 
-<footer class="border-t border-line">
-  <div class="mx-auto max-w-[1440px] px-5 py-8 md:px-10">
-    <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-      <a
-        href="/#top"
-        aria-label="CHAMP BOXING CLUB — на главную"
-        class="inline-flex items-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright"
-      >
-        <Fragment set:html={logo} />
-      </a>
-      <p class="text-sm text-mut">г.&#160;Хабаровск, ул.&#160;Восточное шоссе, 41, 3&#160;этаж</p>
-      <div class="flex flex-wrap gap-x-6 gap-y-2 text-sm">
-        <a href="tel:+79144234555" class="text-ink underline underline-offset-4 transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">Позвонить: +7 (914) 423-45-55</a>
-        <a href="/privacy/" class="text-ink underline underline-offset-4 transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">Политика конфиденциальности</a>
+<footer class="mt-auto border-t border-line">
+  <div class="mx-auto flex w-full max-w-[1536px] flex-col gap-8 px-5 py-10 md:flex-row md:items-center md:justify-between md:px-10">
+    <div class="flex items-center gap-3">
+      <img src="/logo.png" alt="" width="36" height="33" class="h-9 w-auto" />
+      <div>
+        <p class="font-display text-base font-semibold uppercase tracking-[0.18em]">{FOOTER.name}</p>
+        <p class="text-xs text-mut">{FOOTER.tagline} · © {new Date().getFullYear()}</p>
       </div>
+    </div>
+
+    <nav aria-label="Навигация в подвале" class="flex flex-wrap gap-x-6 gap-y-2">
+      {NAV.map((n) => (
+        <a href={n.href} class="text-[11px] font-medium uppercase tracking-[0.2em] text-mut transition-colors duration-300 hover:text-bright">
+          {n.label}
+        </a>
+      ))}
+    </nav>
+
+    <div class="flex flex-wrap gap-6">
+      {FOOTER.socials.map((s) =>
+        s.href ? (
+          <a
+            href={s.href}
+            target="_blank"
+            rel="noopener"
+            class="text-[11px] font-medium uppercase tracking-[0.2em] text-mut transition-colors duration-300 hover:text-bright"
+          >
+            {s.label}
+          </a>
+        ) : (
+          <span class="text-[11px] font-medium uppercase tracking-[0.2em] text-mut">{s.label}</span>
+        )
+      )}
+      <a href={FOOTER.privacy.href} class="text-[11px] font-medium uppercase tracking-[0.2em] text-mut underline underline-offset-4 transition-colors duration-300 hover:text-bright">
+        {FOOTER.privacy.label}
+      </a>
     </div>
   </div>
 </footer>
