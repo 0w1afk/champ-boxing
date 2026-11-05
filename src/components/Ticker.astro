@@ -1,5 +1,5 @@
 ---
-// Бегущая строка: 8 утверждённых фактов G4, пауза без JS-фреймворков.
+// Бегущая строка: 8 утверждённых фактов G4. Пауза — при наведении (точные указатели).
 const ITEMS = [
   'Первое занятие в группе — бесплатно, кроме мини-групп',
   'Спарринги — только по желанию',
@@ -17,7 +17,7 @@ const rowClass = 'flex items-center font-display text-[clamp(0.8125rem,1vw,0.875
 
 <div role="group" aria-labelledby="ticker-label" class="w-full min-w-0 overflow-hidden border-t border-line py-4">
   <p id="ticker-label" class="sr-only">Ключевые факты о клубе</p>
-  <div id="ticker-marquee" class="animate-marquee flex w-max">
+  <div class="animate-marquee flex w-max">
     <div class="flex w-max shrink-0 items-center whitespace-nowrap">
       <span class={rowClass} set:html={rowHtml} />
     </div>
@@ -26,28 +26,3 @@ const rowClass = 'flex items-center font-display text-[clamp(0.8125rem,1vw,0.875
     </div>
   </div>
 </div>
-<div class="border-t border-line px-5 py-3 md:px-10">
-  <button
-    type="button"
-    id="ticker-toggle"
-    aria-label="Пауза тикера"
-    class="inline-flex h-12 items-center gap-2 border border-line px-5 font-display text-xs font-semibold uppercase tracking-[0.2em] transition duration-200 hover:border-flame hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright"
-  >
-    <span aria-hidden="true">▮▮</span> <span id="ticker-toggle-text">Пауза</span>
-  </button>
-</div>
-
-<script>
-  const btn = document.getElementById('ticker-toggle');
-  const marquee = document.getElementById('ticker-marquee');
-  const text = document.getElementById('ticker-toggle-text');
-  if (btn && marquee && text) {
-    let paused = false;
-    btn.addEventListener('click', () => {
-      paused = !paused;
-      marquee.style.animationPlayState = paused ? 'paused' : 'running';
-      text.textContent = paused ? 'Продолжить' : 'Пауза';
-      btn.setAttribute('aria-label', paused ? 'Продолжить тикер' : 'Пауза тикера');
-    });
-  }
-</script>
