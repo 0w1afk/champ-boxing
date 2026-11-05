@@ -1,0 +1,362 @@
+{
+  "screens": [
+    "home",
+    "privacy",
+    "error"
+  ],
+  "gates": {
+    "G1": {
+      "status": "утверждено",
+      "date": "2026-11-04",
+      "materials": [
+        "docs/brief/brief.md",
+        "PRODUCT.md"
+      ],
+      "evidence": "Утверждаю G1"
+    },
+    "G2": {
+      "status": "утверждено",
+      "date": "2026-11-04",
+      "materials": [
+        "docs/strategy/strategy.md",
+        "docs/strategy/sitemap.md"
+      ],
+      "evidence": "Утверждаю G2, давай дальше"
+    },
+    "G3": {
+      "status": "утверждено",
+      "date": "2026-11-04",
+      "materials": [
+        "docs/design/concept.md",
+        "docs/design/references/g3-one-gesture-approved.webp"
+      ],
+      "evidence": "Утверждаю G3"
+    },
+    "G4": {
+      "status": "утверждено",
+      "date": "2026-11-04",
+      "materials": [
+        "docs/copy/home.md",
+        "docs/copy/privacy.md",
+        "docs/copy/error.md"
+      ],
+      "evidence": "Утверждаю G4"
+    },
+    "G5": {
+      "status": "в работе",
+      "date": "2026-11-04"
+    }
+  },
+  "checklists": {
+    "s0": {
+      "figma-plugin": {
+        "date": "2026-11-04",
+        "note": "Figma Desktop запущена; пользователь авторизован; окно доступно для управления через экран"
+      },
+      "figma-file": {
+        "date": "2026-11-04",
+        "note": "Создан Figma-файл WiHJaCOSLNO9rsHwnRmRz5; ссылка записана в статус"
+      },
+      "figma-tools": {
+        "date": "2026-11-04",
+        "note": "Управление Figma Desktop через экран проверено; MCP оставлен только как отдельный запасной маршрут чтения"
+      },
+      "figma-write": {
+        "date": "2026-11-04",
+        "note": "На странице S0 Probe созданы два фрейма, color/s0-accent, компонент с кириллицей, переход On click → Desktop - 2 и PNG-изображение; маршрут desktop_ui"
+      },
+      "figma-limit": {
+        "date": "2026-11-04",
+        "note": "Вся пробная запись выполнена через desktop_ui; счётчик MCP остался 0/20"
+      },
+      "hooks": {
+        "date": "2026-11-04",
+        "note": ".codex/hooks.json присутствует; Impeccable doctor: no drift; команда hook выполняется с exit 0 в Codex-проекте"
+      },
+      "agents": {
+        "date": "2026-11-04",
+        "note": "Проверены marketer gpt-6.1-sol/high, copywriter gpt-6.1-terra/high, designer gpt-6-astra/high, frontend gpt-6.1-sol/medium, qa_checker gpt-6-luna/medium, reviewer gpt-6.1-terra/high; роли загрузили инструкции и не меняли файлы"
+      },
+      "probe": {
+        "date": "2026-11-04",
+        "note": "Изолированный проход завершён: Figma export 1440×1024 → frontend → QA (PASS после 1 точечной правки шрифта) → reviewer (PASS); Impeccable не потребовал нового направления; tmp/s0-probe удалён"
+      }
+    },
+    "s9": {},
+    "claude": {
+      "skills": {
+        "date": "2026-11-04",
+        "note": "Claude Code 2.1.308: pipeline, impeccable и 9 скиллов Эмиля есть в списке init, /pipeline виден как команда"
+      },
+      "agents": {
+        "date": "2026-11-04",
+        "note": "Claude Code 2.1.308: 5 агентов из .claude/agents загружены и ответили на простое задание через --agent, запуск на haiku"
+      },
+      "hooks": {
+        "date": "2026-11-04",
+        "note": "Claude Code 2.1.308: при Write в tmp/hook-probe.css пришёл ответ [impeccable@1] из .claude/settings.json; файл удалён"
+      }
+    },
+    "opencode": {
+      "command": {
+        "date": "2026-11-05",
+        "note": "Команда /pipeline задана в .opencode/command/pipeline.md; после перезагрузки сессии gate.mjs status выполнен, скрипт управляет статусом"
+      },
+      "agents": {
+        "date": "2026-11-05",
+        "note": "Субагент copywriter из .opencode/agent запущен с тестовым заданием и ответил; роль загрузилась"
+      },
+      "images": {
+        "date": "2026-11-05",
+        "note": "image.mjs создал docs/design/generated/test.png через ChatGPT (Codex): красная перчатка, студийное макро"
+      }
+    }
+  },
+  "figma": {
+    "url": "https://www.figma.com/design/WiHJaCOSLNO9rsHwnRmRz5/Untitled",
+    "route": "desktop_ui",
+    "reads": 0,
+    "month": null,
+    "limit": null
+  },
+  "history": [
+    {
+      "date": "2026-11-04",
+      "action": "figma",
+      "gate": null,
+      "detail": "ссылка, способ desktop_ui"
+    },
+    {
+      "date": "2026-11-04",
+      "action": "item s0",
+      "gate": null,
+      "detail": "figma-plugin: Figma Desktop запущена; пользователь авторизован; окно доступно для управления через экран"
+    },
+    {
+      "date": "2026-11-04",
+      "action": "item s0",
+      "gate": null,
+      "detail": "figma-file: Создан Figma-файл WiHJaCOSLNO9rsHwnRmRz5; ссылка записана в статус"
+    },
+    {
+      "date": "2026-11-04",
+      "action": "item s0",
+      "gate": null,
+      "detail": "figma-tools: Управление Figma Desktop через экран проверено; MCP оставлен только как отдельный запасной маршрут чтения"
+    },
+    {
+      "date": "2026-11-04",
+      "action": "item s0",
+      "gate": null,
+      "detail": "figma-write: На странице S0 Probe созданы два фрейма, color/s0-accent, компонент с кириллицей, переход On click → Desktop - 2 и PNG-изображение; маршрут desktop_ui"
+    },
+    {
+      "date": "2026-11-04",
+      "action": "item s0",
+      "gate": null,
+      "detail": "figma-limit: Вся пробная запись выполнена через desktop_ui; счётчик MCP остался 0/20"
+    },
+    {
+      "date": "2026-11-04",
+      "action": "item s0",
+      "gate": null,
+      "detail": "hooks: .codex/hooks.json присутствует; Impeccable doctor: no drift; команда hook выполняется с exit 0 в Codex-проекте"
+    },
+    {
+      "date": "2026-11-04",
+      "action": "item s0",
+      "gate": null,
+      "detail": "agents: Проверены marketer gpt-6.1-sol/high, copywriter gpt-6.1-terra/high, designer gpt-6-astra/high, frontend gpt-6.1-sol/medium, qa_checker gpt-6-luna/medium, reviewer gpt-6.1-terra/high; роли загрузили инструкции и не меняли файлы"
+    },
+    {
+      "date": "2026-11-04",
+      "action": "item s0",
+      "gate": null,
+      "detail": "probe: Изолированный проход завершён: Figma export 1440×1024 → frontend → QA (PASS после 1 точечной правки шрифта) → reviewer (PASS); Impeccable не потребовал нового направления; tmp/s0-probe удалён"
+    },
+    {
+      "date": "2026-11-04",
+      "action": "start",
+      "gate": "G1"
+    },
+    {
+      "date": "2026-11-04",
+      "action": "submit",
+      "gate": "G1"
+    },
+    {
+      "date": "2026-11-04",
+      "action": "approve",
+      "gate": "G1",
+      "detail": "Утверждаю G1"
+    },
+    {
+      "date": "2026-11-04",
+      "action": "start",
+      "gate": "G2"
+    },
+    {
+      "date": "2026-11-04",
+      "action": "submit",
+      "gate": "G2"
+    },
+    {
+      "date": "2026-11-04",
+      "action": "rework",
+      "gate": "G2",
+      "detail": "Нужен иммерсивный одностраничный лендинг вместо MPA; подробности раскрывать в попапах или оверлеях. Новых бизнес-данных кроме старого сайта не будет, поэтому стратегия не должна зависеть от их получения."
+    },
+    {
+      "date": "2026-11-04",
+      "action": "submit",
+      "gate": "G2"
+    },
+    {
+      "date": "2026-11-04",
+      "action": "approve",
+      "gate": "G2",
+      "detail": "Утверждаю G2"
+    },
+    {
+      "date": "2026-11-04",
+      "action": "screen add",
+      "gate": null,
+      "detail": "home"
+    },
+    {
+      "date": "2026-11-04",
+      "action": "screen add",
+      "gate": null,
+      "detail": "privacy"
+    },
+    {
+      "date": "2026-11-04",
+      "action": "screen add",
+      "gate": null,
+      "detail": "error"
+    },
+    {
+      "date": "2026-11-04",
+      "action": "start",
+      "gate": "G3"
+    },
+    {
+      "date": "2026-11-04",
+      "action": "rework",
+      "gate": "G2",
+      "detail": "Пересмотреть карту иммерсивного лендинга: меньше текста, особенно на первом экране; больше визуального сторителлинга, оригинальных иллюстраций и движения; подробности переносить в доступные раскрытия; заложить выраженный вау-эффект. Сохранить удачное макрофото первого концепта как референс, не делая его обязательным направлением.; устарели: G3"
+    },
+    {
+      "date": "2026-11-04",
+      "action": "submit",
+      "gate": "G2"
+    },
+    {
+      "date": "2026-11-04",
+      "action": "approve",
+      "gate": "G2",
+      "detail": "Утверждаю G2, давай дальше"
+    },
+    {
+      "date": "2026-11-04",
+      "action": "start",
+      "gate": "G3"
+    },
+    {
+      "date": "2026-11-04",
+      "action": "submit",
+      "gate": "G3"
+    },
+    {
+      "date": "2026-11-04",
+      "action": "approve",
+      "gate": "G3",
+      "detail": "Утверждаю G3"
+    },
+    {
+      "date": "2026-11-04",
+      "action": "start",
+      "gate": "G4"
+    },
+    {
+      "date": "2026-11-04",
+      "action": "submit",
+      "gate": "G4"
+    },
+    {
+      "date": "2026-11-04",
+      "action": "rework",
+      "gate": "G4",
+      "detail": "Фраза «Первое групповое занятие — бесплатно, кроме мини-групп» перегружает хук. Оставить её только как уточнение рядом с коротким действием; сделать основной хук и CTA лаконичнее. Остальные тексты приняты пользователем."
+    },
+    {
+      "date": "2026-11-04",
+      "action": "submit",
+      "gate": "G4"
+    },
+    {
+      "date": "2026-11-04",
+      "action": "approve",
+      "gate": "G4",
+      "detail": "Утверждаю G4"
+    },
+    {
+      "date": "2026-11-04",
+      "action": "start",
+      "gate": "G5"
+    },
+    {
+      "date": "2026-11-04",
+      "action": "rework",
+      "gate": "G4",
+      "detail": "Исправить доступное имя CTA: оно должно включать видимую подпись «Пробное бесплатно» для соответствия label-in-name и голосового управления. Другие утверждённые тексты не менять."
+    },
+    {
+      "date": "2026-11-04",
+      "action": "submit",
+      "gate": "G4"
+    },
+    {
+      "date": "2026-11-04",
+      "action": "approve",
+      "gate": "G4",
+      "detail": "Утверждаю G4"
+    },
+    {
+      "date": "2026-11-04",
+      "action": "item claude",
+      "gate": null,
+      "detail": "skills: Claude Code 2.1.308: pipeline, impeccable и 9 скиллов Эмиля есть в списке init, /pipeline виден как команда"
+    },
+    {
+      "date": "2026-11-04",
+      "action": "item claude",
+      "gate": null,
+      "detail": "agents: Claude Code 2.1.308: 5 агентов из .claude/agents загружены и ответили на простое задание через --agent, запуск на haiku"
+    },
+    {
+      "date": "2026-11-04",
+      "action": "item claude",
+      "gate": null,
+      "detail": "hooks: Claude Code 2.1.308: при Write в tmp/hook-probe.css пришёл ответ [impeccable@1] из .claude/settings.json; файл удалён"
+    },
+    {
+      "date": "2026-11-05",
+      "action": "item opencode",
+      "gate": null,
+      "detail": "command: Команда /pipeline задана в .opencode/command/pipeline.md; после перезагрузки сессии gate.mjs status выполнен, скрипт управляет статусом"
+    },
+    {
+      "date": "2026-11-05",
+      "action": "item opencode",
+      "gate": null,
+      "detail": "agents: Субагент copywriter из .opencode/agent запущен с тестовым заданием и ответил; роль загрузилась"
+    },
+    {
+      "date": "2026-11-05",
+      "action": "item opencode",
+      "gate": null,
+      "detail": "images: image.mjs создал docs/design/generated/test.png через ChatGPT (Codex): красная перчатка, студийное макро"
+    }
+  ]
+}
