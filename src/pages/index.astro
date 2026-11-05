@@ -178,8 +178,9 @@ const formats = [
   <Header />
 
   <main id="main" tabindex="-1" class="focus:outline-none">
-    <!-- 1. ПЕРВЫЙ ЭКРАН: перчатка во весь экран, часть кадра обрезана — норма по концепции -->
-    <section id="top" aria-label="Первый экран" class="relative min-h-[100svh] overflow-hidden">
+    <!-- 1. ПЕРВЫЙ ЭКРАН: перчатка во весь экран + тикер внутри 100svh -->
+    <section id="top" aria-label="Первый экран" class="relative flex min-h-[calc(100svh-72px)] flex-col overflow-hidden">
+      <div class="relative min-w-0 flex-1">
       <img
         src="/img/glove-hero.jpg"
         alt="Макро красной боксёрской перчатки: потёртая кожа, шнуровка, жёсткий студийный свет"
@@ -190,7 +191,7 @@ const formats = [
       />
       <div aria-hidden="true" class="absolute inset-0 bg-linear-to-t from-bg/95 via-bg/55 to-bg/25 md:bg-linear-to-r md:from-bg/90 md:via-bg/45 md:to-transparent"></div>
 
-      <div class="hero-in relative z-10 mx-auto flex min-h-[100svh] max-w-[1440px] flex-col justify-center px-5 pb-20 pt-24 md:px-10">
+      <div class="hero-in relative z-10 mx-auto flex h-full max-w-[1440px] flex-col justify-center px-5 pb-6 pt-24 md:px-10">
         <p class="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.25em] text-mut">
           <span class="inline-block h-2 w-2 rotate-45 bg-flame" aria-hidden="true"></span>
           Клуб бокса — Хабаровск
@@ -226,12 +227,13 @@ const formats = [
           <a href="#formats" class="text-sm text-ink/80 underline underline-offset-4 transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">Перейти к&#160;форматам</a>
         </div>
       </div>
+      </div>
+
+      <Ticker />
     </section>
 
-    <Ticker />
-
     <!-- 2. ПОЧУВСТВОВАТЬ БОКС: удар по мешку на весь экран -->
-    <section id="experience" aria-labelledby="h-experience" class="relative flex min-h-[70svh] items-center overflow-hidden">
+    <section id="experience" aria-labelledby="h-experience" class="relative flex min-h-[100svh] items-center overflow-hidden">
       <img
         src="/img/bag-punch.jpg"
         alt="Удар перчаткой по тяжёлому мешку, в воздухе облако пыли"
@@ -255,8 +257,8 @@ const formats = [
     </section>
 
     <!-- 3. ВЫБРАТЬ ФОРМАТ -->
-    <section id="formats" aria-labelledby="h-formats" class="border-t border-line">
-      <div class="mx-auto max-w-[1440px] px-5 py-16 md:px-10 md:py-32" data-reveal>
+    <section id="formats" aria-labelledby="h-formats" class="flex min-h-[100svh] flex-col border-t border-line">
+      <div class="mx-auto my-auto max-w-[1440px] px-5 py-16 md:px-10 md:py-16" data-reveal>
         <p class="text-xs font-semibold uppercase tracking-[0.25em] text-mut"><span class="text-flame">02</span><span class="mx-3 inline-block h-px w-10 bg-line align-middle" aria-hidden="true"></span>Найти свой формат</p>
         <h2 id="h-formats" class="mt-6 font-display text-[clamp(2rem,4.5vw,3.75rem)] font-semibold uppercase leading-none">Найди свой формат.</h2>
 
@@ -302,8 +304,8 @@ const formats = [
     </section>
 
     <!-- 4. ТРЕНЕРЫ -->
-    <section id="coaches" aria-labelledby="h-coaches">
-      <div class="mx-auto max-w-[1440px] px-5 py-16 md:px-10 md:py-32" data-reveal>
+    <section id="coaches" aria-labelledby="h-coaches" class="flex min-h-[100svh] flex-col border-t border-line">
+      <div class="mx-auto my-auto max-w-[1440px] px-5 py-16 md:px-10 md:py-16" data-reveal>
         <p class="text-xs font-semibold uppercase tracking-[0.25em] text-mut"><span class="text-flame">03</span><span class="mx-3 inline-block h-px w-10 bg-line align-middle" aria-hidden="true"></span>Довериться и начать</p>
         <h2 id="h-coaches" class="mt-6 font-display text-[clamp(2rem,4.5vw,3.75rem)] font-semibold uppercase leading-none">Начни в&#160;своём темпе.</h2>
         <p class="mt-4 max-w-[68ch] text-sm text-mut">5&#160;тренеров — мастера спорта и&#160;кандидаты в&#160;мастера спорта по&#160;боксу.</p>
@@ -337,13 +339,12 @@ const formats = [
             ))
           }
         </div>
-        <p class="mt-4 max-w-[68ch] text-sm text-mut">Фото тренеров — реальные снимки клуба, обработанные под студийный свет.</p>
       </div>
     </section>
 
     <!-- 5. ПЕРВОЕ ЗАНЯТИЕ -->
-    <section id="start" aria-labelledby="h-start" class="border-t border-line">
-      <div class="mx-auto max-w-[1440px] px-5 py-16 md:px-10 md:py-32" data-reveal>
+    <section id="start" aria-labelledby="h-start" class="flex min-h-[100svh] flex-col border-t border-line">
+      <div class="mx-auto my-auto max-w-[1440px] px-5 py-16 md:px-10 md:py-16" data-reveal>
         <h2 id="h-start" class="font-display text-[clamp(1.5rem,3vw,2.5rem)] font-semibold uppercase leading-none">Первое занятие</h2>
         <div class="mt-6 max-w-[68ch] space-y-4">
           <p>Для начала возьмите спортивную форму и&#160;удобную сменную обувь. Специальная подготовка не&#160;нужна.</p>
@@ -360,8 +361,8 @@ const formats = [
     </section>
 
     <!-- 6. СТОИМОСТЬ -->
-    <section id="prices" aria-labelledby="h-prices" class="border-t border-line">
-      <div class="mx-auto max-w-[1440px] px-5 py-16 md:px-10 md:py-32" data-reveal>
+    <section id="prices" aria-labelledby="h-prices" class="flex min-h-[100svh] flex-col border-t border-line">
+      <div class="mx-auto my-auto max-w-[1440px] px-5 py-16 md:px-10 md:py-16" data-reveal>
         <h2 id="h-prices" class="font-display text-[clamp(1.5rem,3vw,2.5rem)] font-semibold uppercase leading-none">Стоимость занятий</h2>
 
         <div class="mt-8 border border-line md:hidden">
@@ -416,8 +417,8 @@ const formats = [
     </section>
 
     <!-- 7. ВОПРОСЫ -->
-    <section id="faq" aria-labelledby="h-faq" class="border-t border-line">
-      <div class="mx-auto max-w-[1440px] px-5 py-16 md:px-10 md:py-32" data-reveal>
+    <section id="faq" aria-labelledby="h-faq" class="flex min-h-[100svh] flex-col border-t border-line">
+      <div class="mx-auto my-auto max-w-[1440px] px-5 py-16 md:px-10 md:py-16" data-reveal>
         <h2 id="h-faq" class="font-display text-[clamp(1.5rem,3vw,2.5rem)] font-semibold uppercase leading-none">Частые вопросы</h2>
 
         <div class="mt-10 max-w-[820px] border-t border-line">
@@ -443,8 +444,8 @@ const formats = [
     </section>
 
     <!-- 8. КОНТАКТЫ -->
-    <section id="contacts" aria-labelledby="h-contacts" class="border-t border-line">
-      <div class="mx-auto max-w-[1440px] px-5 py-16 md:px-10 md:py-32" data-reveal>
+    <section id="contacts" aria-labelledby="h-contacts" class="flex min-h-[100svh] flex-col border-t border-line">
+      <div class="mx-auto my-auto max-w-[1440px] px-5 py-16 md:px-10 md:py-16" data-reveal>
         <p class="text-xs font-semibold uppercase tracking-[0.25em] text-mut"><span class="text-flame">04</span><span class="mx-3 inline-block h-px w-10 bg-line align-middle" aria-hidden="true"></span>Сделать шаг</p>
         <h2 id="h-contacts" class="mt-6 font-display text-[clamp(2rem,4.5vw,3.75rem)] font-semibold uppercase leading-none">Приходи в клуб.</h2>
         <p class="mt-4 text-lg">г.&#160;Хабаровск, ул.&#160;Восточное шоссе, 41, 3&#160;этаж.</p>
