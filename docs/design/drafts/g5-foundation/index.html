@@ -1,0 +1,614 @@
+<!doctype html>
+<html lang="ru" data-theme="signal">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#050505" />
+    <title>G5 — Основа «Один жест» · CHAMP</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./prototype.js" defer></script>
+  </head>
+  <body>
+    <a class="skip" href="#palette">Перейти к содержимому</a>
+    <header class="board-header">
+      <a
+        class="wordmark"
+        href="#top"
+        aria-label="CHAMP BOXING CLUB — на главную"
+        >CHAMP<span>BOXING CLUB</span></a
+      >
+      <p>G5 · Браузерный прототип<br /><span>Основа «Один жест»</span></p>
+      <a class="text-action" href="#components"
+        >К компонентам
+        <svg class="arrow" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 12h15m-6-6 6 6-6 6" /></svg
+      ></a>
+    </header>
+    <main id="top">
+      <section class="intro section-shell" aria-labelledby="intro-title">
+        <div>
+          <h1 id="intro-title">Один жест.<br /><span>Одна система.</span></h1>
+          <p class="intro-note">
+            Чёрный, фактура, красный импульс.<br />Три настройки одного
+            утверждённого мира.
+          </p>
+        </div>
+        <div class="intro-facts">
+          <span>Oswald + Golos Text</span><span>Сетка 12 / 4 колонки</span
+          ><span>Действия от 48 px</span>
+        </div>
+        <p class="prototype-note">
+          Одноразовый дизайн-артефакт S5. Ссылки записи здесь открывают
+          демонстрационные раскрытия. Настоящие внешние переходы появятся в
+          реализации после G7.
+        </p>
+      </section>
+
+      <section
+        id="palette"
+        class="section-shell"
+        aria-labelledby="palette-title"
+      >
+        <div class="section-title">
+          <h2 id="palette-title">Цветовой характер</h2>
+          <p>
+            Рекомендую Signal: он ближе к выбранному макрокадру. Красный в
+            фотографии ярче заливки CTA — светлая надпись остаётся читаемой.
+          </p>
+        </div>
+        <fieldset class="palette-selector">
+          <legend>Применить схему ко всему стенду</legend>
+          <label
+            ><input type="radio" name="theme" value="signal" checked /><span
+              >Signal · рекомендуемая</span
+            ></label
+          ><label
+            ><input type="radio" name="theme" value="ember" /><span
+              >Ember · тёплая</span
+            ></label
+          ><label
+            ><input type="radio" name="theme" value="flash" /><span
+              >Flash · яркая</span
+            ></label
+          >
+        </fieldset>
+        <div class="palette-comparison">
+          <article
+            class="palette-sample"
+            data-palette="signal"
+            aria-labelledby="signal-title"
+          >
+            <header>
+              <h3 id="signal-title">Signal</h3>
+              <span class="recommended">Рекомендую</span>
+            </header>
+            <div class="sample-word">НАЧНИ.</div>
+            <p class="sample-location">Бокс в Хабаровске</p>
+            <button class="primary" data-open="start">
+              Пробное бесплатно
+              <svg class="arrow" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 12h15m-6-6 6 6-6 6" />
+              </svg>
+            </button>
+            <div class="swatches" aria-label="Палитра Signal">
+              <span style="--swatch: #050505">050505</span
+              ><span style="--swatch: #f1eee7">F1EEE7</span
+              ><span style="--swatch: #e51d2a">E51D2A</span
+              ><span style="--swatch: #cf1826">CF1826</span>
+            </div>
+            <dl class="contrast">
+              <div>
+                <dt>Текст / фон</dt>
+                <dd>17,59:1</dd>
+              </div>
+              <div>
+                <dt>Надпись / CTA</dt>
+                <dd>4,75:1</dd>
+              </div>
+            </dl>
+          </article>
+          <article
+            class="palette-sample"
+            data-palette="ember"
+            aria-labelledby="ember-title"
+          >
+            <header>
+              <h3 id="ember-title">Ember</h3>
+              <span>Тёплая</span>
+            </header>
+            <div class="sample-word">НАЧНИ.</div>
+            <p class="sample-location">Бокс в Хабаровске</p>
+            <button class="primary" data-open="start">
+              Пробное бесплатно
+              <svg class="arrow" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 12h15m-6-6 6 6-6 6" />
+              </svg>
+            </button>
+            <div class="swatches" aria-label="Палитра Ember">
+              <span style="--swatch: #080707">080707</span
+              ><span style="--swatch: #f7f1e8">F7F1E8</span
+              ><span style="--swatch: #c92b32">C92B32</span>
+            </div>
+            <dl class="contrast">
+              <div>
+                <dt>Текст / фон</dt>
+                <dd>17,92:1</dd>
+              </div>
+              <div>
+                <dt>Надпись / CTA</dt>
+                <dd>4,83:1</dd>
+              </div>
+            </dl>
+          </article>
+          <article
+            class="palette-sample"
+            data-palette="flash"
+            aria-labelledby="flash-title"
+          >
+            <header>
+              <h3 id="flash-title">Flash</h3>
+              <span>Яркая</span>
+            </header>
+            <div class="sample-word">НАЧНИ.</div>
+            <p class="sample-location">Бокс в Хабаровске</p>
+            <button class="primary" data-open="start">
+              Пробное бесплатно
+              <svg class="arrow" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 12h15m-6-6 6 6-6 6" />
+              </svg>
+            </button>
+            <div class="swatches" aria-label="Палитра Flash">
+              <span style="--swatch: #040608">040608</span
+              ><span style="--swatch: #f3f4f1">F3F4F1</span
+              ><span style="--swatch: #fa3e46">FA3E46</span>
+            </div>
+            <dl class="contrast">
+              <div>
+                <dt>Текст / фон</dt>
+                <dd>18,38:1</dd>
+              </div>
+              <div>
+                <dt>Надпись / CTA</dt>
+                <dd>5,65:1</dd>
+              </div>
+            </dl>
+          </article>
+        </div>
+        <p class="small-note">
+          Порог для обычного текста — 4,5:1, для крупного — 3:1. Во всех трёх
+          схемах пары проходят порог для обычного текста. Полные условия CTA
+          показаны ниже в рабочем компоненте.
+        </p>
+      </section>
+
+      <section id="type" class="section-shell" aria-labelledby="type-title">
+        <div class="section-title">
+          <h2 id="type-title">
+            Коротко — крупно.<br />Подробности — спокойно.
+          </h2>
+          <p>
+            Oswald сжимает команду, сохраняя характер. Golos Text оставляет
+            цены, условия и биографии понятными. Полная кириллица загружена
+            локально.
+          </p>
+        </div>
+        <div class="type-display">
+          <p class="spec-label">Oswald Bold · 160 / 152 · −2,5%</p>
+          <p class="display">НАЧНИ.</p>
+          <p class="glyphs display-glyphs">Ж Щ Ю ё</p>
+        </div>
+        <div class="type-pair">
+          <div>
+            <p class="spec-label">Oswald SemiBold · 80 / 84</p>
+            <p class="heading-one">Найди свой<br />формат.</p>
+            <p class="spec-label">Oswald SemiBold · 48 / 53</p>
+            <p class="heading-two">Начни в своём темпе.</p>
+          </div>
+          <div class="body-specimen">
+            <p class="spec-label">Golos Text · 18 / 27 · максимум 68ch</p>
+            <p>
+              Для начала возьмите спортивную форму и удобную сменную обувь.
+              Специальная подготовка не нужна.
+            </p>
+            <p>Спарринги — не сразу и только по желанию.</p>
+            <p class="body-glyphs">Женская группа. Ещё вопросы: Ж Щ Ю ё.</p>
+            <p class="spec-label">Golos Text · 14 / 21 · уточнения</p>
+            <p class="condition">
+              Первое занятие в общей, детской или женской группе — бесплатно.
+              Мини-группы не участвуют.
+            </p>
+            <p class="spec-label">Golos Text Medium · табличные цифры</p>
+            <p class="price-specimen">
+              700 ₽ <span>6 000 ₽</span> <span>45 дней</span>
+            </p>
+          </div>
+        </div>
+        <div class="type-scale">
+          <span>160 <small>Команда</small></span
+          ><span>80 <small>Большой заголовок</small></span
+          ><span>48 <small>Заголовок раскрытия</small></span
+          ><span>18 <small>Основной текст</small></span
+          ><span>14 <small>Уточнение</small></span>
+        </div>
+      </section>
+
+      <section
+        id="components"
+        class="section-shell"
+        aria-labelledby="components-title"
+      >
+        <div class="section-title">
+          <h2 id="components-title">Действия</h2>
+          <p>
+            Короткий хук остаётся на кнопке. Ограничение — отдельной читаемой
+            строкой рядом. Клавиатурный фокус заметен на тёмном фоне.
+          </p>
+        </div>
+        <div class="working-action">
+          <button
+            class="primary"
+            data-open="start"
+            aria-label="Пробное бесплатно — записаться на групповое занятие в WhatsApp"
+            aria-describedby="trial-condition"
+          >
+            Пробное бесплатно
+            <svg class="arrow" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 12h15m-6-6 6 6-6 6" />
+            </svg>
+          </button>
+          <p id="trial-condition" class="condition">
+            Первое занятие в общей, детской или женской группе — бесплатно.
+            Мини-группы не участвуют.
+          </p>
+        </div>
+        <div class="component-states">
+          <div>
+            <span class="spec-label">Обычное</span
+            ><button class="primary" data-open="start">
+              Пробное бесплатно
+              <svg class="arrow" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 12h15m-6-6 6 6-6 6" />
+              </svg>
+            </button>
+          </div>
+          <div>
+            <span class="spec-label">Наведение</span
+            ><button class="primary is-hover" data-open="start">
+              Пробное бесплатно
+              <svg class="arrow" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 12h15m-6-6 6 6-6 6" />
+              </svg>
+            </button>
+          </div>
+          <div>
+            <span class="spec-label">Нажатие</span
+            ><button class="primary is-pressed" data-open="start">
+              Пробное бесплатно
+              <svg class="arrow" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 12h15m-6-6 6 6-6 6" />
+              </svg>
+            </button>
+          </div>
+          <div>
+            <span class="spec-label">Фокус клавиатуры</span
+            ><button class="primary is-focus" data-open="start">
+              Пробное бесплатно
+              <svg class="arrow" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 12h15m-6-6 6 6-6 6" />
+              </svg>
+            </button>
+          </div>
+          <div>
+            <span class="spec-label">Недоступно</span
+            ><button class="primary" disabled>
+              Пробное бесплатно
+              <svg class="arrow" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 12h15m-6-6 6 6-6 6" />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <p class="small-note">
+          56 px высота · 24 px по краям · 2 px радиус · один акцент. Недоступное
+          состояние показано для библиотеки; в текущем сценарии ссылка WhatsApp
+          остаётся доступной.
+        </p>
+        <h3 class="subheading">Вторичное действие</h3>
+        <div class="component-states secondary-states">
+          <div>
+            <span class="spec-label">Обычное</span
+            ><button class="text-action" data-open="prices">
+              Все цены и условия
+              <svg class="arrow" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 12h15m-6-6 6 6-6 6" />
+              </svg>
+            </button>
+          </div>
+          <div>
+            <span class="spec-label">Наведение / нажатие</span
+            ><button class="text-action is-hover" data-open="prices">
+              Все цены и условия
+              <svg class="arrow" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 12h15m-6-6 6 6-6 6" />
+              </svg>
+            </button>
+          </div>
+          <div>
+            <span class="spec-label">Фокус</span
+            ><button class="text-action is-focus" data-open="prices">
+              Все цены и условия
+              <svg class="arrow" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 12h15m-6-6 6 6-6 6" />
+              </svg>
+            </button>
+          </div>
+          <div>
+            <span class="spec-label">Недоступно</span
+            ><button class="text-action" disabled>
+              Все цены и условия
+              <svg class="arrow" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 12h15m-6-6 6 6-6 6" />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <h3 class="subheading">Меню и закрытие</h3>
+        <div class="icon-states">
+          <div>
+            <span class="spec-label">Закрыто · нажмите</span
+            ><button
+              class="icon-button"
+              id="menu-toggle"
+              aria-label="Открыть меню"
+              aria-expanded="false"
+              aria-controls="menu-demo"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M3 8h18M3 16h18" />
+              </svg>
+            </button>
+          </div>
+          <div>
+            <span class="spec-label">Наведение</span
+            ><button
+              class="icon-button is-hover"
+              data-open="prices"
+              aria-label="Открыть меню"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M3 8h18M3 16h18" />
+              </svg>
+            </button>
+          </div>
+          <div>
+            <span class="spec-label">Открыто</span
+            ><button
+              class="icon-button"
+              data-open="prices"
+              aria-label="Закрыть меню"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="m5 5 14 14M19 5 5 19" />
+              </svg>
+            </button>
+          </div>
+          <div>
+            <span class="spec-label">Фокус</span
+            ><button
+              class="icon-button is-focus"
+              data-open="prices"
+              aria-label="Закрыть"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="m5 5 14 14M19 5 5 19" />
+              </svg>
+            </button>
+          </div>
+          <div>
+            <span class="spec-label">Недоступно</span
+            ><button class="icon-button" disabled aria-label="Открыть меню">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M3 8h18M3 16h18" />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <nav
+          id="menu-demo"
+          class="menu-demo"
+          aria-label="Демонстрация открытого меню"
+          hidden
+        >
+          <a href="#grid">Тренировки</a><a href="#type">Команда</a
+          ><a href="#overlays">Контакты</a
+          ><button class="primary" data-open="start">Пробное бесплатно</button>
+          <p class="condition">
+            Первое занятие в общей, детской или женской группе — бесплатно.
+            Мини-группы не участвуют.
+          </p>
+          <span class="body-secondary">Позвонить: +7 (914) 423-45-55</span>
+        </nav>
+      </section>
+
+      <section
+        id="overlays"
+        class="section-shell"
+        aria-labelledby="overlays-title"
+      >
+        <div class="section-title">
+          <h2 id="overlays-title">Глубина по запросу</h2>
+          <p>
+            800 px максимум на desktop, весь экран на mobile. Длинный текст
+            прокручивается внутри, закрытие всегда под рукой.
+          </p>
+        </div>
+        <div class="overlay-example">
+          <div class="overlay-preview">
+            <div class="overlay-heading">
+              <h3>Общая группа</h3>
+              <button
+                class="icon-button"
+                data-open="group"
+                aria-label="Закрыть: Общая группа"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="m5 5 14 14M19 5 5 19" />
+                </svg>
+              </button>
+            </div>
+            <p>
+              Для новичков и тех, кто уже занимался боксом. Техника, упражнения
+              на скорость и выносливость; спарринги — позже и по желанию.
+            </p>
+            <p class="price-specimen">700 ₽ <span>за занятие</span></p>
+            <button class="text-action" data-open="group">
+              Об общей группе
+              <svg class="arrow" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 12h15m-6-6 6 6-6 6" />
+              </svg>
+            </button>
+          </div>
+          <div class="overlay-guidelines">
+            <button class="text-action" data-open="prices">
+              Все цены и условия
+              <svg class="arrow" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 12h15m-6-6 6 6-6 6" />
+              </svg></button
+            ><button class="text-action" data-open="faq">
+              Частые вопросы
+              <svg class="arrow" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 12h15m-6-6 6 6-6 6" />
+              </svg>
+            </button>
+            <p>
+              Проверьте открытие, Tab, Shift+Tab, Escape и возврат фокуса.
+              Раскрытия используют настоящие тексты G4.
+            </p>
+            <p class="condition">
+              Оверлей: поверхность #151414, затемнение 80%, радиус 12 px. На
+              мобильном — радиус 0.
+            </p>
+          </div>
+        </div>
+        <h3 class="subheading">Отказ внешнего содержимого</h3>
+        <div class="fallback">
+          <div
+            class="map-placeholder"
+            role="img"
+            aria-label="Демонстрация загрузки карты"
+          >
+            <span class="map-loading" aria-hidden="true"></span>
+          </div>
+          <div>
+            <p class="spec-label">Ошибка карты</p>
+            <p>
+              Не удалось загрузить карту. Адрес: Хабаровск, ул. Восточное шоссе,
+              41, 3 этаж.
+            </p>
+            <button class="text-action" data-open="start">
+              Построить маршрут
+              <svg class="arrow" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 12h15m-6-6 6 6-6 6" />
+              </svg>
+            </button>
+            <p class="spec-label">Мессенджер недоступен</p>
+            <p>
+              Не получается открыть WhatsApp? Позвоните: +7 (914) 423-45-55.
+            </p>
+          </div>
+        </div>
+        <p class="small-note">
+          У ссылки WhatsApp нет состояния «заявка отправлена». Форма и пустая
+          выдача не входят в утверждённый объём. При уменьшении движения
+          загрузочный индикатор остаётся статичным.
+        </p>
+      </section>
+
+      <section id="grid" class="section-shell" aria-labelledby="grid-title">
+        <div class="section-title">
+          <h2 id="grid-title">Ритм и опора</h2>
+          <p>
+            Макрообъект живёт от края до края. Текст и действия держатся
+            безопасных полей. Мобильная версия получает собственную композицию.
+          </p>
+        </div>
+        <div class="grid-comparison">
+          <div class="grid-desktop">
+            <div class="grid-caption">
+              <strong>Desktop · 1440</strong
+              ><span>12 колонок · поля 64 · gutter 24</span>
+            </div>
+            <div
+              class="grid-drawing grid-12"
+              aria-label="Схема двенадцати колонок"
+            >
+              <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i
+              ><i></i><i></i><i></i>
+              <div class="grid-content">
+                <p>Найди свой формат.</p>
+                <span>1312 px полезной ширины</span>
+              </div>
+            </div>
+          </div>
+          <div class="grid-mobile">
+            <div class="grid-caption">
+              <strong>Mobile · 390</strong
+              ><span>4 колонки · поля 20 · gutter 16</span>
+            </div>
+            <div class="grid-drawing grid-4" aria-label="Схема четырёх колонок">
+              <i></i><i></i><i></i><i></i>
+              <div class="grid-content">
+                <p>Найди свой<br />формат.</p>
+                <span>350 px полезной ширины</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="spacing-heading">
+          <h3>Шаг — 4 px</h3>
+          <p>
+            8 px внутри группы · 12 px от CTA до уточнения · 24 px между
+            группами.
+          </p>
+        </div>
+        <div class="spacing-scale" aria-label="Шкала отступов">
+          <div><span style="height: 4px"></span><b>4</b></div>
+          <div><span style="height: 8px"></span><b>8</b></div>
+          <div><span style="height: 12px"></span><b>12</b></div>
+          <div><span style="height: 16px"></span><b>16</b></div>
+          <div><span style="height: 20px"></span><b>20</b></div>
+          <div><span style="height: 24px"></span><b>24</b></div>
+          <div><span style="height: 32px"></span><b>32</b></div>
+          <div><span style="height: 48px"></span><b>48</b></div>
+          <div><span style="height: 64px"></span><b>64</b></div>
+          <div><span style="height: 96px"></span><b>96</b></div>
+          <div><span style="height: 128px"></span><b>128</b></div>
+        </div>
+      </section>
+    </main>
+    <footer class="section-shell board-footer">
+      <strong>CHAMP BOXING CLUB</strong>
+      <p>
+        Основа для переноса после утверждения прототипа.<br />Полноценные экраны
+        и движение — следующий этап G6.
+      </p>
+      <a class="text-action" href="#top"
+        >Наверх
+        <svg class="arrow arrow-up" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 12h15m-6-6 6 6-6 6" /></svg
+      ></a>
+    </footer>
+    <dialog id="details-dialog" aria-labelledby="dialog-title">
+      <div class="dialog-top">
+        <h2 id="dialog-title"></h2>
+        <button class="icon-button" id="dialog-close" aria-label="Закрыть">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="m5 5 14 14M19 5 5 19" />
+          </svg>
+        </button>
+      </div>
+      <div id="dialog-body"></div>
+    </dialog>
+  </body>
+</html>
