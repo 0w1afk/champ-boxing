@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /500.html
+
+Sitemap: https://champ-box.ru/sitemap.xml
