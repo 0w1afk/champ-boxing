@@ -8,9 +8,9 @@
   --color-raised: #1a1715;
   --color-ink: #ece7de;
   --color-mut: #9a9284;
-  --color-flame: #e4570c;
-  --color-bright: #ff7a1f;
-  --color-press: #d94e0d;
+  --color-flame: #fde097;
+  --color-bright: #fff3cd;
+  --color-press: #f0cd82;
   --color-line: rgb(236 231 222 / 0.12);
   --color-linestrong: rgb(236 231 222 / 0.24);
   --color-disbg: #26221e;
@@ -29,11 +29,11 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 ::selection {
-  background: #e4570c;
+  background: #fde097;
   color: #0b0a09;
 }
 :focus-visible {
-  outline: 2px solid #ff7a1f;
+  outline: 2px solid #fff3cd;
   outline-offset: 3px;
 }
 
@@ -67,7 +67,7 @@ body::after {
 }
 .text-stroke-flame {
   color: transparent;
-  -webkit-text-stroke: 1.5px #e4570c;
+  -webkit-text-stroke: 1.5px #fde097;
 }
 
 /* Бегущая строка (marquee 32s, пауза на hover — точные указатели) */
