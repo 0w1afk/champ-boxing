@@ -19,38 +19,28 @@ const MSG = {
 const coaches = [
   {
     name: 'Евгений Лелеков',
-    title: 'Мастер спорта по боксу.',
     photo: '/img/coaches/evgeny-lelekov.jpg',
     bio: 'Мастер спорта по&#160;боксу. Высшее образование — ДВГАФК. Тренирует групповые и&#160;персональные занятия. Тренерский стаж — более 5&#160;лет.',
-    open: true,
   },
   {
     name: 'Виктор Кириченко',
-    title: 'Кандидат в мастера спорта по боксу.',
     photo: '/img/coaches/viktor-kirichenko.jpg',
     bio: 'Кандидат в&#160;мастера спорта по&#160;боксу. Высшее образование — ДВГУПС. Тренирует групповые и&#160;персональные занятия. Тренерский стаж — более 5&#160;лет.',
-    open: false,
   },
   {
     name: 'Константин Касьянов',
-    title: 'Мастер спорта по боксу.',
     photo: '/img/coaches/konstantin-kasyanov.jpg',
     bio: 'Мастер спорта по&#160;боксу. Высшее образование — ДВГАФК. Тренирует групповые и&#160;персональные занятия, имеет опыт работы с&#160;детьми. Тренерский стаж — более 13&#160;лет.',
-    open: false,
   },
   {
     name: 'Виктор Мартынов',
-    title: 'Кандидат в мастера спорта по боксу.',
     photo: '/img/coaches/viktor-martynov.jpg',
     bio: 'Кандидат в&#160;мастера спорта по&#160;боксу. Обучается в&#160;ДВГАФК. Тренирует групповые и&#160;персональные занятия. Тренерский стаж — более 2&#160;лет.',
-    open: false,
   },
   {
     name: 'Роман Ефанов',
-    title: 'Кандидат в мастера спорта по боксу.',
     photo: '/img/coaches/roman-efanov.jpg',
     bio: 'Кандидат в&#160;мастера спорта по&#160;боксу. Обучается в&#160;ДВГАФК. Тренирует групповые и&#160;персональные занятия. Тренерский стаж — более 3&#160;лет.',
-    open: false,
   },
 ];
 
@@ -197,12 +187,10 @@ const formats = [
           Клуб бокса — Хабаровск
         </p>
 
-        <h1 class="mt-8 max-w-[12ch] font-display text-[clamp(2.25rem,9vw,5.625rem)] font-semibold uppercase leading-[0.95] tracking-[-0.01em]">
-          <span class="block">Бить не будем.</span>
-          <span class="block">Пока не попросишь.</span>
+        <h1 class="mt-8 font-display font-semibold uppercase leading-[0.95] tracking-[-0.01em]">
+          <span class="block text-[clamp(2.25rem,9vw,5.625rem)]">Бить не будем.</span>
+          <span class="mt-3 block text-[clamp(1.375rem,4vw,2.5rem)] tracking-[0.04em] text-flame">Пока не попросишь.</span>
         </h1>
-
-        <p class="mt-6 max-w-md text-lg text-ink/90">Специальная подготовка не нужна.</p>
 
         <div id="cta-hero" class="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
           <a
@@ -325,15 +313,7 @@ const formats = [
                 <img src={c.photo} alt={`Тренер ${c.name}`} width="700" height="875" class="aspect-[4/5] w-full border-b border-line object-cover" loading="lazy" />
                 <div class="flex flex-1 flex-col p-5">
                   <h3 class="font-display text-xl font-semibold uppercase tracking-wide">{c.name}</h3>
-                  <p class="mt-2 text-sm text-mut">{c.title}</p>
-                  <details open={c.open} class="mt-auto border-t border-line pt-4">
-                    <summary class="inline-flex items-center gap-2 text-sm text-ink underline underline-offset-4 transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">
-                      <span class="when-closed">Подробнее о тренере</span>
-                      <span class="when-open">Закрыть карточку тренера</span>
-                      <span class="sr-only">{`: ${c.name}`}</span>
-                    </summary>
-                    <p class="mt-3 text-sm leading-[1.5] text-mut" set:html={c.bio} />
-                  </details>
+                  <p class="mt-3 text-sm leading-[1.5] text-mut" set:html={c.bio} />
                 </div>
               </article>
             ))

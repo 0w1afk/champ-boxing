@@ -106,7 +106,7 @@ details[open] .menu-sign::before {
 /* Слайдер-прокрутка: секции ~100svh фиксируются у верхней границы (десктоп) */
 @media (min-width: 768px) {
   html {
-    scroll-snap-type: y proximity;
+    scroll-snap-type: y mandatory;
   }
   main > section {
     scroll-snap-align: start;
