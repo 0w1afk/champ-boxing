@@ -4,10 +4,10 @@
 
 ## Процесс
 
-- Процесс и роли: docs/process/workflow.md
+- Процесс (v2, четыре гейта): docs/process/workflow.md
 - Текущее состояние: docs/process/status.md — читай перед любой работой над сайтом.
-- Управление: `/pipeline status`, `/pipeline next`, `/pipeline approve G5`, `/pipeline rework G4 что изменить`. Состоянием гейтов управляет только скрипт `.agents/skills/pipeline/scripts/gate.mjs`; файлы status.json и status.md вручную не редактируются, блокировку скрипта обходить нельзя.
-- Роли — субагенты проекта: `.opencode/agent/` (marketer, copywriter, designer, frontend, reviewer).
+- Управление: `/pipeline status`, `/pipeline next`, `/pipeline approve G3`, `/pipeline rework G1 что изменить`. Состоянием гейтов управляет только скрипт `.agents/skills/pipeline/scripts/gate.mjs`; файлы status.json и status.md вручную не редактируются, блокировку скрипта обходить нельзя.
+- Работу делает основная сессия; независимая проверка перед утверждением гейта — субагент `reviewer` (.opencode/agent/).
 
 ## Правила
 

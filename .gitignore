@@ -1,6 +1,11 @@
 node_modules/
 dist/
+.astro/
 .DS_Store
+
+# Скриншоты-обзоры прототипов: регенерируются verify-скриптами
+docs/design/drafts/**/captures/
+
 
 # Одноразовые артефакты проверок, не код сайта
 tmp/

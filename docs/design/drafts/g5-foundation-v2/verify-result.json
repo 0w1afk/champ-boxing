@@ -1,0 +1,195 @@
+{
+  "hook": {
+    "1024": {
+      "fontSize": 90,
+      "columnWidth": 942,
+      "lines": [
+        {
+          "text": "Бить не будем.",
+          "rects": 1,
+          "height": 133,
+          "width": 595
+        },
+        {
+          "text": "Пока не попросишь.",
+          "rects": 1,
+          "height": 133,
+          "width": 832
+        }
+      ]
+    },
+    "1280": {
+      "fontSize": 90,
+      "columnWidth": 891,
+      "lines": [
+        {
+          "text": "Бить не будем.",
+          "rects": 1,
+          "height": 133,
+          "width": 595
+        },
+        {
+          "text": "Пока не попросишь.",
+          "rects": 1,
+          "height": 133,
+          "width": 832
+        }
+      ]
+    },
+    "1440": {
+      "fontSize": 90,
+      "columnWidth": 1011,
+      "lines": [
+        {
+          "text": "Бить не будем.",
+          "rects": 1,
+          "height": 133,
+          "width": 595
+        },
+        {
+          "text": "Пока не попросишь.",
+          "rects": 1,
+          "height": 133,
+          "width": 832
+        }
+      ]
+    }
+  },
+  "scrollWidths": [
+    {
+      "viewport": 1440,
+      "scrollWidth": 1440,
+      "bodyScrollWidth": 1440
+    },
+    {
+      "viewport": 1280,
+      "scrollWidth": 1280,
+      "bodyScrollWidth": 1280
+    },
+    {
+      "viewport": 1024,
+      "scrollWidth": 1024,
+      "bodyScrollWidth": 1024
+    },
+    {
+      "viewport": 768,
+      "scrollWidth": 768,
+      "bodyScrollWidth": 768
+    },
+    {
+      "viewport": 390,
+      "scrollWidth": 390,
+      "bodyScrollWidth": 390
+    }
+  ],
+  "contourOverlap": {
+    "word": {
+      "top": 1069,
+      "left": 762
+    },
+    "targets": [
+      {
+        "selector": "#cta-desktop",
+        "overlap": false
+      },
+      {
+        "selector": "#hook-desktop",
+        "overlap": false
+      }
+    ]
+  },
+  "mobileTicker": {
+    "390": [
+      {
+        "fact": "Первое занятие в группе — бе…",
+        "present": true
+      },
+      {
+        "fact": "Спарринги — только по желани…",
+        "present": true
+      },
+      {
+        "fact": "Пять тренеров: два мастера с…",
+        "present": true
+      },
+      {
+        "fact": "Абонемент на 12 занятий дейс…",
+        "present": true
+      },
+      {
+        "fact": "Мини-группа — до 5 человек…",
+        "present": true
+      },
+      {
+        "fact": "Детская группа — с 7 лет…",
+        "present": true
+      },
+      {
+        "fact": "Хабаровск, Восточное шоссе, …",
+        "present": true
+      },
+      {
+        "fact": "Индивидуальная пробная — 1 5…",
+        "present": true
+      }
+    ],
+    "1440": [
+      {
+        "fact": "Первое занятие в группе — бе…",
+        "present": true
+      },
+      {
+        "fact": "Спарринги — только по желани…",
+        "present": true
+      },
+      {
+        "fact": "Пять тренеров: два мастера с…",
+        "present": true
+      },
+      {
+        "fact": "Абонемент на 12 занятий дейс…",
+        "present": true
+      },
+      {
+        "fact": "Мини-группа — до 5 человек…",
+        "present": true
+      },
+      {
+        "fact": "Детская группа — с 7 лет…",
+        "present": true
+      },
+      {
+        "fact": "Хабаровск, Восточное шоссе, …",
+        "present": true
+      },
+      {
+        "fact": "Индивидуальная пробная — 1 5…",
+        "present": true
+      }
+    ]
+  },
+  "biosNbsp": {
+    "Евгений Лелеков": 3,
+    "Виктор Кириченко": 4,
+    "Константин Касьянов": 4,
+    "Виктор Мартынов": 5,
+    "Роман Ефанов": 5
+  },
+  "activePress": 5,
+  "h1Measured1440": 60,
+  "aria": {
+    "logos": 2,
+    "coachLinks": 5,
+    "groups": 3,
+    "closeDisclosure": true,
+    "wrongLogo": 0,
+    "strokeHidden": true,
+    "h3inRows": 11
+  },
+  "tickerToggle": {
+    "playState": "paused",
+    "label": "Продолжить тикер",
+    "text": "Продолжить"
+  },
+  "errors": []
+}

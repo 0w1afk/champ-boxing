@@ -1,0 +1,127 @@
+{
+  "scrollWidths": {
+    "390": 390,
+    "768": 768,
+    "1024": 1024,
+    "1440": 1440
+  },
+  "hook": {
+    "1024": [
+      1,
+      1
+    ],
+    "1280": [
+      1,
+      1
+    ],
+    "1440": [
+      1,
+      1
+    ]
+  },
+  "links": {
+    "flame": 13,
+    "wa": 15,
+    "waWithText": 7,
+    "tel": 6,
+    "badFlame": 0,
+    "stubs": [
+      "Построить маршрут",
+      "Мы во ВКонтакте",
+      "Построить маршрут"
+    ]
+  },
+  "labelInName": [
+    {
+      "name": "Евгений Лелеков",
+      "open": true,
+      "accName": "Закрыть карточку тренера: Евгений Лелеков",
+      "visibleName": "Закрыть карточку тренера",
+      "containsVisible": true,
+      "nameMatchesState": true,
+      "visibleMatchesState": true
+    },
+    {
+      "name": "Виктор Кириченко",
+      "open": false,
+      "accName": "Подробнее о тренере: Виктор Кириченко",
+      "visibleName": "Подробнее о тренере",
+      "containsVisible": true,
+      "nameMatchesState": true,
+      "visibleMatchesState": true
+    },
+    {
+      "name": "Константин Касьянов",
+      "open": false,
+      "accName": "Подробнее о тренере: Константин Касьянов",
+      "visibleName": "Подробнее о тренере",
+      "containsVisible": true,
+      "nameMatchesState": true,
+      "visibleMatchesState": true
+    },
+    {
+      "name": "Виктор Мартынов",
+      "open": false,
+      "accName": "Подробнее о тренере: Виктор Мартынов",
+      "visibleName": "Подробнее о тренере",
+      "containsVisible": true,
+      "nameMatchesState": true,
+      "visibleMatchesState": true
+    },
+    {
+      "name": "Роман Ефанов",
+      "open": false,
+      "accName": "Подробнее о тренере: Роман Ефанов",
+      "visibleName": "Подробнее о тренере",
+      "containsVisible": true,
+      "nameMatchesState": true,
+      "visibleMatchesState": true
+    }
+  ],
+  "labels": {
+    "start": null,
+    "prices": null,
+    "faq": null,
+    "experience": "01Почувствовать бокс",
+    "formats": "02Найти свой формат",
+    "coaches": "03Довериться и начать",
+    "contacts": "04Сделать шаг"
+  },
+  "prices390": {
+    "tableHidden": true,
+    "blocksVisible": true,
+    "fullLabel": true,
+    "shortLabel": true,
+    "allNumbers": true
+  },
+  "focus": {
+    "total": 66,
+    "missing": 0,
+    "skipHasToken": true
+  },
+  "ticker": {
+    "facts": 8,
+    "toggle": "paused"
+  },
+  "photos": [
+    true,
+    true,
+    true,
+    true,
+    true
+  ],
+  "anchors": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+  ],
+  "errors": [],
+  "nbspG4": true,
+  "scripts": 2
+}

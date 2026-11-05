@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="data:,">
+<title>Клуб бокса в Хабаровске — CHAMP BOXING CLUB</title>
+<meta name="description" content="Бокс для начинающих и опытных в Хабаровске. Общая, детская и женская группы, персональные занятия. Первое групповое занятие бесплатно, кроме мини-групп.">
+<!--
+  ДИЗАЙН-АРТЕФАКТ. Этап S6 / гейт G6.home. Экран home в прототипе. Круг правок 1 (ревью).
+  Основа: docs/design/tokens.json + docs/design/drafts/g5-foundation-v2 (утверждены на G5).
+  Тексты — дословно из docs/copy/home.md (утверждён G4), включая неразрывные пробелы.
+  Ссылки записи — deep-ссылки WhatsApp (сообщения из G4), телефоны — tel:.
+  Фото тренеров — сырые файлы из old_site_files; студийная обработка — S7/S8.
+  Единственный JS — демонстрация кнопки паузы тикера. Параллакс, reveal и магнитная
+  кнопка в статичный прототип не входят: движение — docs/design/motion.md (G6), реализация — S8.
+-->
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+  future: { hoverOnlyWhenSupported: true },
+  theme: {
+    extend: {
+      colors: {
+        bg: '#0b0a09',
+        surface: '#131110',
+        raised: '#1a1715',
+        ink: '#ece7de',
+        mut: '#9a9284',
+        flame: '#E4570C',
+        bright: '#ff7a1f',
+        press: '#d94e0d',
+        line: 'rgb(236 231 222 / 0.12)',
+        linestrong: 'rgb(236 231 222 / 0.24)',
+        strokefaint: 'rgb(236 231 222 / 0.22)',
+        disbg: '#26221e',
+      },
+      fontFamily: {
+        display: ['Oswald', 'system-ui', 'sans-serif'],
+        body: ['Manrope', 'system-ui', 'sans-serif'],
+      },
+    }
+  }
+}
+</script>
+<style>
+  html { color-scheme: dark; scroll-behavior: smooth; scroll-padding-top: 5rem; }
+  body { -webkit-font-smoothing: antialiased; }
+  ::selection { background: #E4570C; color: #0b0a09; }
+
+  /* Плёночное зерно поверх всей страницы */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    pointer-events: none;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Контурные слова — только фоновый слой, всегда aria-hidden */
+  .text-stroke-faint {
+    color: transparent;
+    -webkit-text-stroke: 1.5px rgb(236 231 222 / 0.22);
+  }
+
+  /* Нативные раскрытия details/summary */
+  details > summary { list-style: none; cursor: pointer; }
+  details > summary::-webkit-details-marker { display: none; }
+  .sign::after { content: "+"; }
+  details[open] > summary .sign::after { content: "×"; }
+
+  /* Карточки тренеров: видимый текст действия следует за состоянием (без JS) */
+  .when-open { display: none; }
+  details[open] > summary .when-open { display: inline; }
+  details[open] > summary .when-closed { display: none; }
+
+  /* Бегущая строка */
+  @keyframes marquee { to { transform: translateX(-50%); } }
+  .animate-marquee { animation: marquee 32s linear infinite; }
+  @media (hover: hover) and (pointer: fine) {
+    .animate-marquee:hover { animation-play-state: paused; }
+  }
+
+  /* «Замороженные» состояния для приложения «Состояния» */
+  .demo-hover-primary { background: #ff7a1f; }
+  .demo-press-primary { background: #d94e0d; }
+  .demo-focus { outline: 2px solid #ff7a1f; outline-offset: 3px; }
+
+  .price-num { font-variant-numeric: tabular-nums; }
+
+  /* Reduced motion: маркизы и transform-переходы отключаются; color-переходы ≤200 ms допустимы */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .animate-marquee { animation: none; }
+    .row-arrow { transition: none !important; transform: none !important; }
+    a, button, summary { transition-property: color, background-color, border-color, text-decoration-color !important; }
+    a:active, button:active { transform: none !important; }
+  }
+</style>
+</head>
+<body class="bg-bg text-ink font-body text-base leading-relaxed">
+
+<a href="#main" class="sr-only focus-visible:not-sr-only focus-visible:fixed focus-visible:left-4 focus-visible:top-4 focus-visible:z-[90] focus-visible:bg-flame focus-visible:px-4 focus-visible:py-2 focus-visible:text-[#0b0a09] focus-visible:font-display focus-visible:uppercase focus-visible:tracking-widest focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">Перейти к содержимому</a>
+
+<!-- ====================== ШАПКА ====================== -->
+<header class="sticky top-0 z-50 border-b border-line bg-bg">
+  <div class="mx-auto flex min-h-[72px] max-w-[1440px] items-center justify-between gap-3 px-5 py-2 md:px-10">
+    <a href="#top" aria-label="CHAMP BOXING CLUB — на главную" class="inline-flex items-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">
+      <img src="logo.svg" alt="CHAMP" class="h-8 w-auto">
+    </a>
+    <nav class="hidden items-center gap-8 font-display text-sm font-medium uppercase tracking-[0.2em] md:flex" aria-label="Основная навигация">
+      <a href="#formats" class="transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">Тренировки</a>
+      <a href="#coaches" class="transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">Команда</a>
+      <a href="#contacts" class="transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">Контакты</a>
+    </nav>
+    <a href="https://wa.me/79144234555" aria-describedby="cond-header" aria-label="Пробное бесплатно — записаться на&#160;групповое занятие в&#160;WhatsApp" class="hidden h-12 items-center bg-flame px-6 font-display text-sm font-semibold uppercase tracking-[0.2em] text-[#0b0a09] transition duration-200 hover:bg-bright active:bg-press focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright active:scale-[0.97] md:inline-flex">
+      Пробное бесплатно
+    </a>
+    <p id="cond-header" class="sr-only">Первое занятие в общей, детской или женской группе — бесплатно, кроме мини-групп.</p>
+    <button type="button" aria-label="Открыть меню" class="flex h-11 w-11 items-center justify-center border border-line transition duration-200 hover:border-flame focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright md:hidden">
+      <span aria-hidden="true" class="block h-[1.5px] w-5 bg-ink before:block before:h-[1.5px] before:w-5 before:-translate-y-[4px] before:bg-ink after:block after:h-[1.5px] after:w-5 after:translate-y-[3px] after:bg-ink"></span>
+    </button>
+  </div>
+</header>
+
+<main id="main" tabindex="-1" class="focus:outline-none">
+
+<!-- ====================== 1. ПЕРВЫЙ ЭКРАН ====================== -->
+<section id="top" aria-label="Первый экран">
+  <div>
+    <div class="grid grid-cols-12 gap-4 px-5 pb-12 pt-12 md:px-10 lg:gap-8 lg:pt-20">
+      <div class="col-span-12 min-w-0 flex flex-col justify-center xl:col-span-9">
+        <p class="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.25em] text-mut">
+          <span class="inline-block h-2 w-2 rotate-45 bg-flame" aria-hidden="true"></span>
+          Клуб бокса — Хабаровск
+        </p>
+
+        <h1 class="mt-8 font-display font-semibold uppercase leading-[0.95] tracking-[-0.01em] text-[clamp(2.25rem,9vw,5.625rem)]">
+          <span class="hook-line block">Бить не будем.</span>
+          <span class="hook-line block">Пока не попросишь.</span>
+        </h1>
+
+        <p class="mt-6 text-lg text-mut">Специальная подготовка не нужна.</p>
+
+        <div id="cta-hero" class="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
+          <a href="https://wa.me/79144234555" aria-describedby="cond-hero" aria-label="Пробное бесплатно — записаться на&#160;групповое занятие в&#160;WhatsApp" class="inline-flex h-14 items-center bg-flame px-8 font-display text-sm font-semibold uppercase tracking-[0.2em] text-[#0b0a09] transition duration-200 hover:bg-bright active:bg-press focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright active:scale-[0.97]">
+            Пробное бесплатно
+          </a>
+          <div>
+            <p id="cond-hero" class="max-w-xs text-sm text-mut">Первое занятие в общей, детской или женской группе — бесплатно, кроме мини-групп.</p>
+            <a href="tel:+79144234555" class="mt-2 inline-block text-sm text-ink underline underline-offset-4 transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">Или позвоните: +7 (914) 423-45-55</a>
+          </div>
+        </div>
+
+        <div class="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
+          <a href="#experience" class="inline-flex h-14 items-center gap-3 border border-line px-8 font-display text-sm font-semibold uppercase tracking-[0.2em] transition duration-200 hover:border-flame hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">
+            Узнать о тренировках
+            <span aria-hidden="true">↓</span>
+          </a>
+          <a href="#formats" class="text-sm text-mut underline underline-offset-4 transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">Перейти к&#160;форматам</a>
+        </div>
+      </div>
+
+      <div class="col-span-12 min-w-0 xl:col-span-3">
+        <figure class="flex h-full min-h-[420px] flex-col items-center justify-end gap-3 border border-line bg-raised p-4 pb-5 text-center xl:min-h-[560px]">
+          <span aria-hidden="true" class="text-3xl text-mut">▨</span>
+          <figcaption class="max-w-[240px] text-sm leading-relaxed text-mut">
+            Изображение: макро красной боксёрской перчатки, шнуровка и кожа в студийном свете, тёплый почти чёрный фон. Фотореалистичная плоскость на всю колонку. Генерируется через image.mjs; в прототипе — заглушка.
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <!-- Контурная полоса: вне зоны текста и кнопок, aria-hidden -->
+    <div aria-hidden="true" class="relative h-[110px] select-none overflow-hidden md:h-[200px]">
+      <span class="text-stroke-faint absolute bottom-[-0.35em] right-5 font-display font-bold uppercase leading-none text-[clamp(96px,22vw,280px)] md:right-10">Бокс</span>
+    </div>
+
+    <!-- Тикер: 8 утверждённых фактов -->
+    <p id="ticker-label" class="sr-only">Ключевые факты о клубе</p>
+    <div role="group" aria-labelledby="ticker-label" class="w-full min-w-0 overflow-hidden border-t border-line py-4">
+      <div id="ticker-marquee" class="animate-marquee flex w-max">
+        <div class="flex w-max shrink-0 items-center whitespace-nowrap">
+          <span class="flex items-center font-display text-[clamp(0.8125rem,1vw,0.875rem)] font-medium uppercase tracking-[0.28em] text-mut">Первое занятие в группе — бесплатно, кроме мини-групп<span class="mx-5 flex items-center gap-5 md:mx-6"><span>·</span><span class="inline-block h-2 w-2 rotate-45 bg-bright" aria-hidden="true"></span></span>Спарринги — только по желанию<span class="mx-5 flex items-center gap-5 md:mx-6"><span>·</span><span class="inline-block h-2 w-2 rotate-45 bg-bright" aria-hidden="true"></span></span>Пять тренеров: два мастера спорта и три кандидата в мастера спорта<span class="mx-5 flex items-center gap-5 md:mx-6"><span>·</span><span class="inline-block h-2 w-2 rotate-45 bg-bright" aria-hidden="true"></span></span>Абонемент на 12 занятий действует 45 дней<span class="mx-5 flex items-center gap-5 md:mx-6"><span>·</span><span class="inline-block h-2 w-2 rotate-45 bg-bright" aria-hidden="true"></span></span>Мини-группа — до 5 человек<span class="mx-5 flex items-center gap-5 md:mx-6"><span>·</span><span class="inline-block h-2 w-2 rotate-45 bg-bright" aria-hidden="true"></span></span>Детская группа — с 7 лет<span class="mx-5 flex items-center gap-5 md:mx-6"><span>·</span><span class="inline-block h-2 w-2 rotate-45 bg-bright" aria-hidden="true"></span></span>Хабаровск, Восточное шоссе, 41, 3 этаж<span class="mx-5 flex items-center gap-5 md:mx-6"><span>·</span><span class="inline-block h-2 w-2 rotate-45 bg-bright" aria-hidden="true"></span></span>Индивидуальная пробная — 1 500 ₽<span class="mx-5 flex items-center gap-5 md:mx-6"><span>·</span><span class="inline-block h-2 w-2 rotate-45 bg-bright" aria-hidden="true"></span></span></span>
+        </div>
+        <div aria-hidden="true" class="flex w-max shrink-0 items-center whitespace-nowrap">
+          <span class="flex items-center font-display text-[clamp(0.8125rem,1vw,0.875rem)] font-medium uppercase tracking-[0.28em] text-mut">Первое занятие в группе — бесплатно, кроме мини-групп<span class="mx-5 flex items-center gap-5 md:mx-6"><span>·</span><span class="inline-block h-2 w-2 rotate-45 bg-bright" aria-hidden="true"></span></span>Спарринги — только по желанию<span class="mx-5 flex items-center gap-5 md:mx-6"><span>·</span><span class="inline-block h-2 w-2 rotate-45 bg-bright" aria-hidden="true"></span></span>Пять тренеров: два мастера спорта и три кандидата в мастера спорта<span class="mx-5 flex items-center gap-5 md:mx-6"><span>·</span><span class="inline-block h-2 w-2 rotate-45 bg-bright" aria-hidden="true"></span></span>Абонемент на 12 занятий действует 45 дней<span class="mx-5 flex items-center gap-5 md:mx-6"><span>·</span><span class="inline-block h-2 w-2 rotate-45 bg-bright" aria-hidden="true"></span></span>Мини-группа — до 5 человек<span class="mx-5 flex items-center gap-5 md:mx-6"><span>·</span><span class="inline-block h-2 w-2 rotate-45 bg-bright" aria-hidden="true"></span></span>Детская группа — с 7 лет<span class="mx-5 flex items-center gap-5 md:mx-6"><span>·</span><span class="inline-block h-2 w-2 rotate-45 bg-bright" aria-hidden="true"></span></span>Хабаровск, Восточное шоссе, 41, 3 этаж<span class="mx-5 flex items-center gap-5 md:mx-6"><span>·</span><span class="inline-block h-2 w-2 rotate-45 bg-bright" aria-hidden="true"></span></span>Индивидуальная пробная — 1 500 ₽<span class="mx-5 flex items-center gap-5 md:mx-6"><span>·</span><span class="inline-block h-2 w-2 rotate-45 bg-bright" aria-hidden="true"></span></span></span>
+        </div>
+      </div>
+    </div>
+    <div class="border-t border-line px-5 py-3 md:px-10">
+      <button type="button" id="ticker-toggle" aria-label="Пауза тикера" class="inline-flex h-12 items-center gap-2 border border-line px-5 font-display text-xs font-semibold uppercase tracking-[0.2em] transition duration-200 hover:border-flame hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">
+        <span aria-hidden="true">▮▮</span> <span id="ticker-toggle-text">Пауза</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== 2. ПОЧУВСТВОВАТЬ БОКС ====================== -->
+<section id="experience" aria-labelledby="h-experience" class="border-t border-line">
+  <div class="mx-auto max-w-[1440px] px-5 py-16 md:px-10 md:py-32">
+    <p class="text-xs font-semibold uppercase tracking-[0.25em] text-mut"><span class="text-flame">01</span><span class="mx-3 inline-block h-px w-10 bg-line align-middle" aria-hidden="true"></span>Почувствовать бокс</p>
+    <h2 id="h-experience" class="mt-6 font-display font-semibold uppercase leading-none text-[clamp(2rem,4.5vw,3.75rem)]">Начать можно с&#160;нуля.</h2>
+    <div class="mt-8 flex flex-wrap items-center gap-x-8 gap-y-4">
+      <a href="#start" class="inline-flex h-14 items-center gap-3 border border-line px-8 font-display text-sm font-semibold uppercase tracking-[0.2em] transition duration-200 hover:border-flame hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">
+        Как проходит первое занятие
+        <span aria-hidden="true">↓</span>
+      </a>
+    </div>
+    <figure class="mt-12 flex aspect-[16/9] max-h-[560px] w-full flex-col items-center justify-end gap-3 border border-line bg-raised p-4 pb-5 text-center md:aspect-[21/9]">
+      <span aria-hidden="true" class="text-4xl text-mut">▨</span>
+      <figcaption class="max-w-[520px] text-sm leading-relaxed text-mut">
+        Изображение: макро бинтов на кулаке и канаты ринга в студийном свете. Фотореалистичная плоскость на всю ширину сцены; липнет к колонке при скролле (движение — G6). Генерируется через image.mjs; в прототипе — заглушка.
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ====================== 3. ВЫБРАТЬ ФОРМАТ ====================== -->
+<section id="formats" aria-labelledby="h-formats" class="border-t border-line">
+  <div class="mx-auto max-w-[1440px] px-5 py-16 md:px-10 md:py-32">
+    <p class="text-xs font-semibold uppercase tracking-[0.25em] text-mut"><span class="text-flame">02</span><span class="mx-3 inline-block h-px w-10 bg-line align-middle" aria-hidden="true"></span>Найти свой формат</p>
+    <h2 id="h-formats" class="mt-6 font-display font-semibold uppercase leading-none text-[clamp(2rem,4.5vw,3.75rem)]">Найди свой формат.</h2>
+
+    <div class="mt-10 border-t border-line">
+
+      <!-- 01 · Общая группа — раскрытый образец.
+           Заголовок формата — h3 вне summary (sr-only); видимое имя — в summary. -->
+      <div class="border-b border-line">
+        <h3 class="sr-only">Общая группа</h3>
+        <details open>
+          <summary aria-label="Об общей группе" class="group grid grid-cols-12 items-center gap-x-4 gap-y-1 px-2 py-6 transition-colors duration-200 hover:bg-surface focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright md:py-8">
+            <span class="col-span-2 text-sm text-mut md:col-span-1">01</span>
+            <span class="col-span-9 font-display text-2xl font-semibold uppercase tracking-wide transition-colors duration-200 group-hover:text-bright md:col-span-5 md:text-[28px]">Общая группа</span>
+            <span class="col-span-9 col-start-3 text-sm text-mut md:col-span-4 md:col-start-7">Новичкам и&#160;опытным</span>
+            <span class="col-span-3 col-start-10 flex justify-end md:col-span-2 md:col-start-12"><span class="sign text-xl text-mut transition-colors duration-200 group-hover:text-flame" aria-hidden="true"></span></span>
+          </summary>
+          <div class="grid gap-6 px-2 pb-8 md:grid-cols-2 md:gap-x-12">
+            <div>
+              <p class="max-w-[68ch]">Для новичков и&#160;тех, кто уже занимался боксом. Техника, упражнения на&#160;скорость и&#160;выносливость; спарринги — позже и&#160;по&#160;желанию.</p>
+              <p class="mt-4 price-num font-semibold">Разовое занятие — 700&#160;₽. Абонемент на&#160;12&#160;занятий — 6&#160;000&#160;₽, действует 45&#160;дней.</p>
+            </div>
+            <div>
+              <p class="text-sm text-mut">Первое занятие в&#160;общей группе бесплатно.</p>
+              <a href="https://wa.me/79144234555?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%21%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%BD%D0%B0%20%D0%B1%D0%B5%D1%81%D0%BF%D0%BB%D0%B0%D1%82%D0%BD%D0%BE%D0%B5%20%D0%BF%D0%B5%D1%80%D0%B2%D0%BE%D0%B5%20%D0%B7%D0%B0%D0%BD%D1%8F%D1%82%D0%B8%D0%B5%20%D0%B2%20%D0%BE%D0%B1%D1%89%D0%B5%D0%B9%20%D0%B3%D1%80%D1%83%D0%BF%D0%BF%D0%B5.%20%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%20%D0%B2%D1%80%D0%B5%D0%BC%D1%8F." class="mt-4 inline-flex h-14 items-center bg-flame px-8 font-display text-sm font-semibold uppercase tracking-[0.2em] text-[#0b0a09] transition duration-200 hover:bg-bright active:bg-press focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright active:scale-[0.97]">Записаться на&#160;бесплатное первое занятие</a>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <!-- 02 · Детская группа -->
+      <div class="border-b border-line">
+        <h3 class="sr-only">Детская группа</h3>
+        <details>
+          <summary aria-label="О детской группе" class="group grid grid-cols-12 items-center gap-x-4 gap-y-1 px-2 py-6 transition-colors duration-200 hover:bg-surface focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright md:py-8">
+            <span class="col-span-2 text-sm text-mut md:col-span-1">02</span>
+            <span class="col-span-9 font-display text-2xl font-semibold uppercase tracking-wide transition-colors duration-200 group-hover:text-bright md:col-span-5 md:text-[28px]">Детская группа</span>
+            <span class="col-span-9 col-start-3 text-sm text-mut md:col-span-4 md:col-start-7">От&#160;7&#160;лет</span>
+            <span class="col-span-3 col-start-10 flex justify-end md:col-span-2 md:col-start-12"><span class="sign text-xl text-mut transition-colors duration-200 group-hover:text-flame" aria-hidden="true"></span></span>
+          </summary>
+          <div class="grid gap-6 px-2 pb-8 md:grid-cols-2 md:gap-x-12">
+            <div>
+              <p class="max-w-[68ch]">Для детей от&#160;7&#160;лет. Техника бокса и&#160;подвижные упражнения помогают развивать координацию и&#160;дисциплину.</p>
+              <p class="mt-4 price-num font-semibold">Разовое занятие — 500&#160;₽. Абонемент на&#160;12&#160;занятий — 5&#160;000&#160;₽, действует 45&#160;дней.</p>
+            </div>
+            <div>
+              <p class="text-sm text-mut">Первое занятие в&#160;детской группе бесплатно.</p>
+              <a href="https://wa.me/79144234555?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%21%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BF%D0%B8%D1%81%D0%B0%D1%82%D1%8C%20%D1%80%D0%B5%D0%B1%D1%91%D0%BD%D0%BA%D0%B0%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%BE%D0%B1%D0%BD%D0%BE%D0%B5%20%D0%B7%D0%B0%D0%BD%D1%8F%D1%82%D0%B8%D0%B5%20%D0%B2%20%D0%B4%D0%B5%D1%82%D1%81%D0%BA%D1%83%D1%8E%20%D0%B3%D1%80%D1%83%D0%BF%D0%BF%D1%83.%20%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%20%D0%B2%D1%80%D0%B5%D0%BC%D1%8F." class="mt-4 inline-flex h-14 items-center bg-flame px-8 font-display text-sm font-semibold uppercase tracking-[0.2em] text-[#0b0a09] transition duration-200 hover:bg-bright active:bg-press focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright active:scale-[0.97]">Записаться на&#160;бесплатное первое занятие</a>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <!-- 03 · Женская группа -->
+      <div class="border-b border-line">
+        <h3 class="sr-only">Женская группа</h3>
+        <details>
+          <summary aria-label="О женской группе" class="group grid grid-cols-12 items-center gap-x-4 gap-y-1 px-2 py-6 transition-colors duration-200 hover:bg-surface focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright md:py-8">
+            <span class="col-span-2 text-sm text-mut md:col-span-1">03</span>
+            <span class="col-span-9 font-display text-2xl font-semibold uppercase tracking-wide transition-colors duration-200 group-hover:text-bright md:col-span-5 md:text-[28px]">Женская группа</span>
+            <span class="col-span-9 col-start-3 text-sm text-mut md:col-span-4 md:col-start-7">Любой уровень</span>
+            <span class="col-span-3 col-start-10 flex justify-end md:col-span-2 md:col-start-12"><span class="sign text-xl text-mut transition-colors duration-200 group-hover:text-flame" aria-hidden="true"></span></span>
+          </summary>
+          <div class="grid gap-6 px-2 pb-8 md:grid-cols-2 md:gap-x-12">
+            <div>
+              <p class="max-w-[68ch]">Для девушек и&#160;женщин с&#160;любым уровнем подготовки. Техника бокса, кардио и&#160;функциональные упражнения.</p>
+              <p class="mt-4 price-num font-semibold">Разовое занятие — 700&#160;₽. Абонемент на&#160;12&#160;занятий — 6&#160;000&#160;₽, действует 45&#160;дней.</p>
+            </div>
+            <div>
+              <p class="text-sm text-mut">Первое занятие в&#160;женской группе бесплатно.</p>
+              <a href="https://wa.me/79144234555?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%21%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%BD%D0%B0%20%D0%B1%D0%B5%D1%81%D0%BF%D0%BB%D0%B0%D1%82%D0%BD%D0%BE%D0%B5%20%D0%BF%D0%B5%D1%80%D0%B2%D0%BE%D0%B5%20%D0%B7%D0%B0%D0%BD%D1%8F%D1%82%D0%B8%D0%B5%20%D0%B2%20%D0%B6%D0%B5%D0%BD%D1%81%D0%BA%D0%BE%D0%B9%20%D0%B3%D1%80%D1%83%D0%BF%D0%BF%D0%B5.%20%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%20%D0%B2%D1%80%D0%B5%D0%BC%D1%8F." class="mt-4 inline-flex h-14 items-center bg-flame px-8 font-display text-sm font-semibold uppercase tracking-[0.2em] text-[#0b0a09] transition duration-200 hover:bg-bright active:bg-press focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright active:scale-[0.97]">Записаться на&#160;бесплатное первое занятие</a>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <!-- 04 · Мини-группа -->
+      <div class="border-b border-line">
+        <h3 class="sr-only">Мини-группа</h3>
+        <details>
+          <summary aria-label="О мини-группе" class="group grid grid-cols-12 items-center gap-x-4 gap-y-1 px-2 py-6 transition-colors duration-200 hover:bg-surface focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright md:py-8">
+            <span class="col-span-2 text-sm text-mut md:col-span-1">04</span>
+            <span class="col-span-9 font-display text-2xl font-semibold uppercase tracking-wide transition-colors duration-200 group-hover:text-bright md:col-span-5 md:text-[28px]">Мини-группа</span>
+            <span class="col-span-9 col-start-3 text-sm text-mut md:col-span-4 md:col-start-7">До&#160;5&#160;человек</span>
+            <span class="col-span-3 col-start-10 flex justify-end md:col-span-2 md:col-start-12"><span class="sign text-xl text-mut transition-colors duration-200 group-hover:text-flame" aria-hidden="true"></span></span>
+          </summary>
+          <div class="grid gap-6 px-2 pb-8 md:grid-cols-2 md:gap-x-12">
+            <div>
+              <p class="max-w-[68ch]">До&#160;5&#160;человек. Для мужчин и&#160;женщин с&#160;любым уровнем подготовки.</p>
+              <p class="mt-4 price-num font-semibold">Разовое занятие — 900&#160;₽. Абонемент на&#160;12&#160;занятий — 7&#160;000&#160;₽, действует 45&#160;дней.</p>
+            </div>
+            <div>
+              <p class="text-sm text-mut">Занятие платное; бесплатное первое групповое занятие на&#160;мини-группу не&#160;распространяется.</p>
+              <a href="https://wa.me/79144234555?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%21%20%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%B5%D1%81%D1%83%D0%B5%D1%82%20%D0%BC%D0%B8%D0%BD%D0%B8-%D0%B3%D1%80%D1%83%D0%BF%D0%BF%D0%B0%20%28900%20%E2%82%BD%20%D0%B7%D0%B0%20%D0%B7%D0%B0%D0%BD%D1%8F%D1%82%D0%B8%D0%B5%29.%20%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%20%D0%B2%D1%80%D0%B5%D0%BC%D1%8F." class="mt-4 inline-flex h-14 items-center bg-flame px-8 font-display text-sm font-semibold uppercase tracking-[0.2em] text-[#0b0a09] transition duration-200 hover:bg-bright active:bg-press focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright active:scale-[0.97]">Записаться в&#160;мини-группу — 900&#160;₽ за&#160;занятие</a>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <!-- 05 · Сплит -->
+      <div class="border-b border-line">
+        <h3 class="sr-only">Сплит</h3>
+        <details>
+          <summary aria-label="О сплит-тренировке" class="group grid grid-cols-12 items-center gap-x-4 gap-y-1 px-2 py-6 transition-colors duration-200 hover:bg-surface focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright md:py-8">
+            <span class="col-span-2 text-sm text-mut md:col-span-1">05</span>
+            <span class="col-span-9 font-display text-2xl font-semibold uppercase tracking-wide transition-colors duration-200 group-hover:text-bright md:col-span-5 md:text-[28px]">Сплит</span>
+            <span class="col-span-9 col-start-3 text-sm text-mut md:col-span-4 md:col-start-7">Двое с&#160;тренером</span>
+            <span class="col-span-3 col-start-10 flex justify-end md:col-span-2 md:col-start-12"><span class="sign text-xl text-mut transition-colors duration-200 group-hover:text-flame" aria-hidden="true"></span></span>
+          </summary>
+          <div class="grid gap-6 px-2 pb-8 md:grid-cols-2 md:gap-x-12">
+            <div>
+              <p class="max-w-[68ch]">Два человека занимаются с одним тренером. Можно прийти с другом, второй половинкой или членом семьи.</p>
+              <p class="mt-4 price-num font-semibold">Разовое занятие — 1&#160;400&#160;₽. Абонемент на&#160;12&#160;занятий — 14&#160;000&#160;₽, действует 45&#160;дней.</p>
+            </div>
+            <div>
+              <p class="text-sm text-mut">Занятие платное. Формат — двое с одним тренером.</p>
+              <a href="https://wa.me/79144234555?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%21%20%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%B5%D1%81%D1%83%D0%B5%D1%82%20%D1%81%D0%BF%D0%BB%D0%B8%D1%82-%D1%82%D1%80%D0%B5%D0%BD%D0%B8%D1%80%D0%BE%D0%B2%D0%BA%D0%B0%20%D0%BD%D0%B0%20%D0%B4%D0%B2%D0%BE%D0%B8%D1%85.%20%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%20%D0%B2%D1%80%D0%B5%D0%BC%D1%8F." class="mt-4 inline-flex h-14 items-center bg-flame px-8 font-display text-sm font-semibold uppercase tracking-[0.2em] text-[#0b0a09] transition duration-200 hover:bg-bright active:bg-press focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright active:scale-[0.97]">Записаться на сплит-тренировку</a>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <!-- 06 · Индивидуально -->
+      <div class="border-b border-line">
+        <h3 class="sr-only">Индивидуально</h3>
+        <details>
+          <summary aria-label="Об индивидуальной тренировке" class="group grid grid-cols-12 items-center gap-x-4 gap-y-1 px-2 py-6 transition-colors duration-200 hover:bg-surface focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright md:py-8">
+            <span class="col-span-2 text-sm text-mut md:col-span-1">06</span>
+            <span class="col-span-9 font-display text-2xl font-semibold uppercase tracking-wide transition-colors duration-200 group-hover:text-bright md:col-span-5 md:text-[28px]">Индивидуально</span>
+            <span class="col-span-9 col-start-3 text-sm text-mut md:col-span-4 md:col-start-7">Один на&#160;один</span>
+            <span class="col-span-3 col-start-10 flex justify-end md:col-span-2 md:col-start-12"><span class="sign text-xl text-mut transition-colors duration-200 group-hover:text-flame" aria-hidden="true"></span></span>
+          </summary>
+          <div class="grid gap-6 px-2 pb-8 md:grid-cols-2 md:gap-x-12">
+            <div>
+              <p class="max-w-[68ch]">Один на&#160;один с&#160;тренером. Программа учитывает ваши цели и&#160;подготовку.</p>
+              <p class="mt-4 price-num font-semibold">Пробная тренировка — 1&#160;500&#160;₽. Разовое занятие — 2&#160;000&#160;₽. Абонемент на&#160;12&#160;занятий — 20&#160;000&#160;₽, действует 45&#160;дней.</p>
+            </div>
+            <div>
+              <a href="https://wa.me/79144234555?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%21%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%BE%D0%B1%D0%BD%D1%83%D1%8E%20%D0%B8%D0%BD%D0%B4%D0%B8%D0%B2%D0%B8%D0%B4%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D1%83%D1%8E%20%D1%82%D1%80%D0%B5%D0%BD%D0%B8%D1%80%D0%BE%D0%B2%D0%BA%D1%83%20%D0%B7%D0%B0%201%20500%20%E2%82%BD.%20%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%20%D0%B2%D1%80%D0%B5%D0%BC%D1%8F." class="mt-4 inline-flex h-14 items-center bg-flame px-8 font-display text-sm font-semibold uppercase tracking-[0.2em] text-[#0b0a09] transition duration-200 hover:bg-bright active:bg-press focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright active:scale-[0.97]">Записаться на&#160;пробную за&#160;1&#160;500&#160;₽</a>
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <p class="mt-8"><a href="#prices" class="text-ink underline underline-offset-4 transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">Все цены и&#160;условия</a></p>
+  </div>
+</section>
+
+<!-- ====================== 4. ТРЕНЕРЫ ====================== -->
+<section id="coaches" aria-labelledby="h-coaches" class="border-t border-line">
+  <div class="mx-auto max-w-[1440px] px-5 py-16 md:px-10 md:py-32">
+    <p class="text-xs font-semibold uppercase tracking-[0.25em] text-mut"><span class="text-flame">03</span><span class="mx-3 inline-block h-px w-10 bg-line align-middle" aria-hidden="true"></span>Довериться и начать</p>
+    <h2 id="h-coaches" class="mt-6 font-display font-semibold uppercase leading-none text-[clamp(2rem,4.5vw,3.75rem)]">Начни в&#160;своём темпе.</h2>
+    <p class="mt-4 max-w-[68ch] text-sm text-mut">5&#160;тренеров — мастера спорта и&#160;кандидаты в&#160;мастера спорта по&#160;боксу.</p>
+    <p class="mt-2 max-w-[68ch]">Спарринги — не&#160;сразу и&#160;только по&#160;желанию.</p>
+    <p class="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm">
+      <a href="#coaches" class="text-ink underline underline-offset-4 transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">Познакомиться с&#160;тренерами</a>
+      <a href="#start" class="text-ink underline underline-offset-4 transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">Как проходит первое занятие</a>
+      <a href="#faq" class="text-ink underline underline-offset-4 transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">Частые вопросы</a>
+    </p>
+
+    <h3 class="mt-12 font-display text-xl font-semibold uppercase tracking-wide">Тренеры CHAMP</h3>
+
+    <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+
+      <!-- Евгений Лелеков — открытый образец -->
+      <article class="flex flex-col border border-line">
+        <img src="../../../../old_site_files/evgeny-lelekov_uweO.jpg" alt="Тренер Евгений Лелеков" class="aspect-[4/5] w-full border-b border-line object-cover">
+        <div class="flex flex-1 flex-col p-5">
+          <h3 class="font-display text-xl font-semibold uppercase tracking-wide">Евгений Лелеков</h3>
+          <p class="mt-2 text-sm text-mut">Мастер спорта по&#160;боксу.</p>
+          <details open class="mt-auto border-t border-line pt-4">
+            <summary class="inline-flex items-center gap-2 text-sm text-ink underline underline-offset-4 transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">
+              <span class="when-closed">Подробнее о тренере</span><span class="when-open">Закрыть карточку тренера</span><span class="sr-only">: Евгений Лелеков</span>
+            </summary>
+            <p class="mt-3 text-sm leading-[1.5] text-mut">Мастер спорта по&#160;боксу. Высшее образование — ДВГАФК. Тренирует групповые и&#160;персональные занятия. Тренерский стаж — более 5&#160;лет.</p>
+          </details>
+        </div>
+      </article>
+
+      <!-- Виктор Кириченко -->
+      <article class="flex flex-col border border-line">
+        <img src="../../../../old_site_files/viktor-kirichenko_uweO.jpg" alt="Тренер Виктор Кириченко" class="aspect-[4/5] w-full border-b border-line object-cover">
+        <div class="flex flex-1 flex-col p-5">
+          <h3 class="font-display text-xl font-semibold uppercase tracking-wide">Виктор Кириченко</h3>
+          <p class="mt-2 text-sm text-mut">Кандидат в&#160;мастера спорта по&#160;боксу.</p>
+          <details class="mt-auto border-t border-line pt-4">
+            <summary class="inline-flex items-center gap-2 text-sm text-ink underline underline-offset-4 transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">
+              <span class="when-closed">Подробнее о тренере</span><span class="when-open">Закрыть карточку тренера</span><span class="sr-only">: Виктор Кириченко</span>
+            </summary>
+            <p class="mt-3 text-sm leading-[1.5] text-mut">Кандидат в&#160;мастера спорта по&#160;боксу. Высшее образование — ДВГУПС. Тренирует групповые и&#160;персональные занятия. Тренерский стаж — более 5&#160;лет.</p>
+          </details>
+        </div>
+      </article>
+
+      <!-- Константин Касьянов -->
+      <article class="flex flex-col border border-line">
+        <img src="../../../../old_site_files/konstantin-kasyanov_uweO.jpg" alt="Тренер Константин Касьянов" class="aspect-[4/5] w-full border-b border-line object-cover">
+        <div class="flex flex-1 flex-col p-5">
+          <h3 class="font-display text-xl font-semibold uppercase tracking-wide">Константин Касьянов</h3>
+          <p class="mt-2 text-sm text-mut">Мастер спорта по&#160;боксу.</p>
+          <details class="mt-auto border-t border-line pt-4">
+            <summary class="inline-flex items-center gap-2 text-sm text-ink underline underline-offset-4 transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">
+              <span class="when-closed">Подробнее о тренере</span><span class="when-open">Закрыть карточку тренера</span><span class="sr-only">: Константин Касьянов</span>
+            </summary>
+            <p class="mt-3 text-sm leading-[1.5] text-mut">Мастер спорта по&#160;боксу. Высшее образование — ДВГАФК. Тренирует групповые и&#160;персональные занятия, имеет опыт работы с&#160;детьми. Тренерский стаж — более 13&#160;лет.</p>
+          </details>
+        </div>
+      </article>
+
+      <!-- Виктор Мартынов -->
+      <article class="flex flex-col border border-line">
+        <img src="../../../../old_site_files/viktor-martynov_uweO.jpg" alt="Тренер Виктор Мартынов" class="aspect-[4/5] w-full border-b border-line object-cover">
+        <div class="flex flex-1 flex-col p-5">
+          <h3 class="font-display text-xl font-semibold uppercase tracking-wide">Виктор Мартынов</h3>
+          <p class="mt-2 text-sm text-mut">Кандидат в&#160;мастера спорта по&#160;боксу.</p>
+          <details class="mt-auto border-t border-line pt-4">
+            <summary class="inline-flex items-center gap-2 text-sm text-ink underline underline-offset-4 transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">
+              <span class="when-closed">Подробнее о тренере</span><span class="when-open">Закрыть карточку тренера</span><span class="sr-only">: Виктор Мартынов</span>
+            </summary>
+            <p class="mt-3 text-sm leading-[1.5] text-mut">Кандидат в&#160;мастера спорта по&#160;боксу. Обучается в&#160;ДВГАФК. Тренирует групповые и&#160;персональные занятия. Тренерский стаж — более 2&#160;лет.</p>
+          </details>
+        </div>
+      </article>
+
+      <!-- Роман Ефанов -->
+      <article class="flex flex-col border border-line">
+        <img src="../../../../old_site_files/roman-efanov_uweO.jpg" alt="Тренер Роман Ефанов" class="aspect-[4/5] w-full border-b border-line object-cover">
+        <div class="flex flex-1 flex-col p-5">
+          <h3 class="font-display text-xl font-semibold uppercase tracking-wide">Роман Ефанов</h3>
+          <p class="mt-2 text-sm text-mut">Кандидат в&#160;мастера спорта по&#160;боксу.</p>
+          <details class="mt-auto border-t border-line pt-4">
+            <summary class="inline-flex items-center gap-2 text-sm text-ink underline underline-offset-4 transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">
+              <span class="when-closed">Подробнее о тренере</span><span class="when-open">Закрыть карточку тренера</span><span class="sr-only">: Роман Ефанов</span>
+            </summary>
+            <p class="mt-3 text-sm leading-[1.5] text-mut">Кандидат в&#160;мастера спорта по&#160;боксу. Обучается в&#160;ДВГАФК. Тренирует групповые и&#160;персональные занятия. Тренерский стаж — более 3&#160;лет.</p>
+          </details>
+        </div>
+      </article>
+    </div>
+    <p class="mt-4 max-w-[68ch] text-sm text-mut">Фото — сырые кадры из&#160;архива клуба; студийная обработка — S7/S8 <span class="text-ink">[ПОДТВЕРДИТЬ]</span>. Фото тренеров — только реальные снимки клуба; на&#160;S8 имена тренеров связываются с&#160;обработанными изображениями.</p>
+  </div>
+</section>
+
+<!-- ====================== 5. ПЕРВОЕ ЗАНЯТИЕ ====================== -->
+<section id="start" aria-labelledby="h-start" class="border-t border-line">
+  <div class="mx-auto max-w-[1440px] px-5 py-16 md:px-10 md:py-32">
+    <h2 id="h-start" class="mt-6 font-display font-semibold uppercase leading-none text-[clamp(1.5rem,3vw,2.5rem)]">Первое занятие</h2>
+    <div class="mt-6 max-w-[68ch] space-y-4">
+      <p>Для начала возьмите спортивную форму и&#160;удобную сменную обувь. Специальная подготовка не&#160;нужна.</p>
+      <p>Обычно тренировка состоит из&#160;разминки, основной части и&#160;растяжки. В&#160;основной части изучают и&#160;отрабатывают приёмы, работают на&#160;мешках и&#160;лапах. Спарринги начинаются не&#160;сразу и&#160;только по&#160;желанию.</p>
+      <p class="text-mut">Первое занятие в общей, детской или женской группе бесплатно, кроме мини-групп. Напишите, чтобы согласовать время.</p>
+    </div>
+    <a href="https://wa.me/79144234555" aria-describedby="cond-start" class="mt-8 inline-flex h-14 items-center bg-flame px-8 font-display text-sm font-semibold uppercase tracking-[0.2em] text-[#0b0a09] transition duration-200 hover:bg-bright active:bg-press focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright active:scale-[0.97]">Записаться на&#160;бесплатное групповое занятие</a>
+    <p id="cond-start" class="sr-only">Первое занятие в общей, детской или женской группе — бесплатно, кроме мини-групп.</p>
+  </div>
+</section>
+
+<!-- ====================== 6. СТОИМОСТЬ ====================== -->
+<section id="prices" aria-labelledby="h-prices" class="border-t border-line">
+  <div class="mx-auto max-w-[1440px] px-5 py-16 md:px-10 md:py-32">
+    <h2 id="h-prices" class="mt-6 font-display font-semibold uppercase leading-none text-[clamp(1.5rem,3vw,2.5rem)]">Стоимость занятий</h2>
+
+    <!-- Мобильная раскладка: строки-блоки (<768) — числа не режутся -->
+    <div class="mt-8 border border-line md:hidden">
+      <ul class="divide-y divide-line">
+        <li class="p-4">
+          <p class="font-semibold">Общая группа</p>
+          <p class="mt-1 text-sm text-mut">Разовое занятие — <span class="price-num font-semibold text-ink">700&#160;₽</span> · 12&#160;занятий — <span class="price-num font-semibold text-ink">6&#160;000&#160;₽</span></p>
+        </li>
+        <li class="p-4">
+          <p class="font-semibold">Детская группа</p>
+          <p class="mt-1 text-sm text-mut">Разовое занятие — <span class="price-num font-semibold text-ink">500&#160;₽</span> · 12&#160;занятий — <span class="price-num font-semibold text-ink">5&#160;000&#160;₽</span></p>
+        </li>
+        <li class="p-4">
+          <p class="font-semibold">Женская группа</p>
+          <p class="mt-1 text-sm text-mut">Разовое занятие — <span class="price-num font-semibold text-ink">700&#160;₽</span> · 12&#160;занятий — <span class="price-num font-semibold text-ink">6&#160;000&#160;₽</span></p>
+        </li>
+        <li class="p-4">
+          <p class="font-semibold">Мини-группа</p>
+          <p class="mt-1 text-sm text-mut">Разовое занятие — <span class="price-num font-semibold text-ink">900&#160;₽</span> · 12&#160;занятий — <span class="price-num font-semibold text-ink">7&#160;000&#160;₽</span></p>
+        </li>
+        <li class="p-4">
+          <p class="font-semibold">Сплит-тренировка</p>
+          <p class="mt-1 text-sm text-mut">Разовое занятие — <span class="price-num font-semibold text-ink">1&#160;400&#160;₽</span> · 12&#160;занятий — <span class="price-num font-semibold text-ink">14&#160;000&#160;₽</span></p>
+        </li>
+        <li class="p-4">
+          <p class="font-semibold">Индивидуальная тренировка</p>
+          <p class="mt-1 text-sm text-mut">Разовое занятие — <span class="price-num font-semibold text-ink">2&#160;000&#160;₽</span> · 12&#160;занятий — <span class="price-num font-semibold text-ink">20&#160;000&#160;₽</span></p>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Таблица (≥768) -->
+    <div class="mt-8 hidden min-w-0 overflow-x-auto border border-line md:block">
+      <table class="w-full border-collapse text-left">
+        <thead>
+          <tr class="border-b border-linestrong">
+            <th scope="col" class="px-4 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-mut">Формат</th>
+            <th scope="col" class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-[0.2em] text-mut">Разовое занятие</th>
+            <th scope="col" class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-[0.2em] text-mut">12&#160;занятий</th>
+          </tr>
+        </thead>
+        <tbody class="price-num text-base">
+          <tr class="border-b border-line"><th scope="row" class="px-4 py-3 font-normal">Общая группа</th><td class="px-4 py-3 text-right font-semibold">700&#160;₽</td><td class="px-4 py-3 text-right font-semibold">6&#160;000&#160;₽</td></tr>
+          <tr class="border-b border-line"><th scope="row" class="px-4 py-3 font-normal">Детская группа</th><td class="px-4 py-3 text-right font-semibold">500&#160;₽</td><td class="px-4 py-3 text-right font-semibold">5&#160;000&#160;₽</td></tr>
+          <tr class="border-b border-line"><th scope="row" class="px-4 py-3 font-normal">Женская группа</th><td class="px-4 py-3 text-right font-semibold">700&#160;₽</td><td class="px-4 py-3 text-right font-semibold">6&#160;000&#160;₽</td></tr>
+          <tr class="border-b border-line"><th scope="row" class="px-4 py-3 font-normal">Мини-группа</th><td class="px-4 py-3 text-right font-semibold">900&#160;₽</td><td class="px-4 py-3 text-right font-semibold">7&#160;000&#160;₽</td></tr>
+          <tr class="border-b border-line"><th scope="row" class="px-4 py-3 font-normal">Сплит-тренировка</th><td class="px-4 py-3 text-right font-semibold">1&#160;400&#160;₽</td><td class="px-4 py-3 text-right font-semibold">14&#160;000&#160;₽</td></tr>
+          <tr class="border-b border-line"><th scope="row" class="px-4 py-3 font-normal">Индивидуальная тренировка</th><td class="px-4 py-3 text-right font-semibold">2&#160;000&#160;₽</td><td class="px-4 py-3 text-right font-semibold">20&#160;000&#160;₽</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="mt-6 max-w-[68ch] text-sm text-mut">Абонемент на 12 занятий действует 45 дней. Первое занятие в общей, детской или женской группе бесплатно, кроме мини-групп. Пробная индивидуальная тренировка — 1 500 ₽.</p>
+    <div class="mt-8 flex flex-wrap gap-4">
+      <a href="https://wa.me/79144234555" aria-describedby="cond-prices" class="inline-flex h-14 items-center bg-flame px-8 font-display text-sm font-semibold uppercase tracking-[0.2em] text-[#0b0a09] transition duration-200 hover:bg-bright active:bg-press focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright active:scale-[0.97]">Записаться на бесплатное групповое занятие</a>
+      <a href="https://wa.me/79144234555?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%21%20%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%B5%D1%81%D1%83%D0%B5%D1%82%20%D1%81%D0%BF%D0%BB%D0%B8%D1%82-%D1%82%D1%80%D0%B5%D0%BD%D0%B8%D1%80%D0%BE%D0%B2%D0%BA%D0%B0%20%D0%BD%D0%B0%20%D0%B4%D0%B2%D0%BE%D0%B8%D1%85.%20%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%20%D0%B2%D1%80%D0%B5%D0%BC%D1%8F." class="inline-flex h-14 items-center border border-line px-8 font-display text-sm font-semibold uppercase tracking-[0.2em] transition duration-200 hover:border-flame hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">Записаться на сплит-тренировку</a>
+    </div>
+    <p id="cond-prices" class="sr-only">Первое занятие в общей, детской или женской группе — бесплатно, кроме мини-групп.</p>
+  </div>
+</section>
+
+<!-- ====================== 7. ВОПРОСЫ ====================== -->
+<section id="faq" aria-labelledby="h-faq" class="border-t border-line">
+  <div class="mx-auto max-w-[1440px] px-5 py-16 md:px-10 md:py-32">
+    <h2 id="h-faq" class="mt-6 font-display font-semibold uppercase leading-none text-[clamp(1.5rem,3vw,2.5rem)]">Частые вопросы</h2>
+
+    <div class="mt-10 max-w-[820px] border-t border-line">
+      <details class="border-b border-line">
+        <summary class="group flex items-center justify-between gap-4 py-5 transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">
+          <span class="text-left font-semibold">Что взять на&#160;первую тренировку?</span>
+          <span class="sign shrink-0 text-xl text-mut transition-colors duration-200 group-hover:text-flame" aria-hidden="true"></span>
+        </summary>
+        <p class="max-w-[68ch] pb-5 text-mut">Спортивную форму и&#160;удобную сменную обувь. Остальная экипировка потребуется на&#160;дальнейших этапах тренировок.</p>
+      </details>
+      <details class="border-b border-line">
+        <summary class="group flex items-center justify-between gap-4 py-5 transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">
+          <span class="text-left font-semibold">Можно прийти без спортивной подготовки?</span>
+          <span class="sign shrink-0 text-xl text-mut transition-colors duration-200 group-hover:text-flame" aria-hidden="true"></span>
+        </summary>
+        <p class="max-w-[68ch] pb-5 text-mut">Да. Начать можно без опыта занятий спортом.</p>
+      </details>
+      <details class="border-b border-line">
+        <summary class="group flex items-center justify-between gap-4 py-5 transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">
+          <span class="text-left font-semibold">Как проходит тренировка?</span>
+          <span class="sign shrink-0 text-xl text-mut transition-colors duration-200 group-hover:text-flame" aria-hidden="true"></span>
+        </summary>
+        <p class="max-w-[68ch] pb-5 text-mut">Обычно это разминка, основная часть с&#160;отработкой приёмов и&#160;работой на&#160;мешках и&#160;лапах, затем растяжка.</p>
+      </details>
+      <details open class="border-b border-line">
+        <summary class="group flex items-center justify-between gap-4 py-5 transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">
+          <span class="text-left font-semibold">Будут ли спарринги на первых тренировках?</span>
+          <span class="sign shrink-0 text-xl text-mut transition-colors duration-200 group-hover:text-flame" aria-hidden="true"></span>
+        </summary>
+        <p class="max-w-[68ch] pb-5 text-mut">Нет. Сначала отрабатываете удары и защиту. Спарринги начинаются позже и только по желанию.</p>
+      </details>
+      <details class="border-b border-line">
+        <summary class="group flex items-center justify-between gap-4 py-5 transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">
+          <span class="text-left font-semibold">Со скольких лет можно заниматься?</span>
+          <span class="sign shrink-0 text-xl text-mut transition-colors duration-200 group-hover:text-flame" aria-hidden="true"></span>
+        </summary>
+        <p class="max-w-[68ch] pb-5 text-mut">В детскую группу принимают с 7 лет. В клубе также тренируются взрослые до 60 лет. Тренер поможет подобрать нагрузку с учётом возраста и подготовки. Если не знаете, какая группа подходит, напишите — подскажем по возрасту и подготовке.</p>
+      </details>
+      <details class="border-b border-line">
+        <summary class="group flex items-center justify-between gap-4 py-5 transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">
+          <span class="text-left font-semibold">Есть женская группа?</span>
+          <span class="sign shrink-0 text-xl text-mut transition-colors duration-200 group-hover:text-flame" aria-hidden="true"></span>
+        </summary>
+        <p class="max-w-[68ch] pb-5 text-mut">Да. В&#160;ней занимаются девушки и&#160;женщины с&#160;любым уровнем подготовки.</p>
+      </details>
+      <details class="border-b border-line">
+        <summary class="group flex items-center justify-between gap-4 py-5 transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">
+          <span class="text-left font-semibold">Сколько стоит первое занятие?</span>
+          <span class="sign shrink-0 text-xl text-mut transition-colors duration-200 group-hover:text-flame" aria-hidden="true"></span>
+        </summary>
+        <p class="max-w-[68ch] pb-5 text-mut">В общей, детской и женской группах оно бесплатно. В мини-группе занятие стоит 900 ₽; индивидуальная пробная тренировка — 1 500 ₽. Сплит-тренировка — 1&#160;400&#160;₽ за занятие.</p>
+      </details>
+      <details class="border-b border-line">
+        <summary class="group flex items-center justify-between gap-4 py-5 transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">
+          <span class="text-left font-semibold">Сколько действует абонемент?</span>
+          <span class="sign shrink-0 text-xl text-mut transition-colors duration-200 group-hover:text-flame" aria-hidden="true"></span>
+        </summary>
+        <p class="max-w-[68ch] pb-5 text-mut">Абонемент на&#160;12&#160;занятий действует 45&#160;дней.</p>
+      </details>
+      <details class="border-b border-line">
+        <summary class="group flex items-center justify-between gap-4 py-5 transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">
+          <span class="text-left font-semibold">Как записаться и&#160;согласовать время?</span>
+          <span class="sign shrink-0 text-xl text-mut transition-colors duration-200 group-hover:text-flame" aria-hidden="true"></span>
+        </summary>
+        <p class="max-w-[68ch] pb-5 text-mut">Напишите в&#160;WhatsApp или позвоните: +7&#160;(914)&#160;423-45-55.</p>
+      </details>
+    </div>
+
+    <p class="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm">
+      <a href="#prices" class="text-ink underline underline-offset-4 transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">Все цены и&#160;условия</a>
+      <a href="https://wa.me/79144234555" class="text-ink underline underline-offset-4 transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">Записаться на&#160;бесплатное групповое занятие</a>
+      <a href="tel:+79144234555" class="text-ink underline underline-offset-4 transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">Позвонить</a>
+    </p>
+  </div>
+</section>
+
+<!-- ====================== 8. КОНТАКТЫ ====================== -->
+<section id="contacts" aria-labelledby="h-contacts" class="border-t border-line">
+  <div class="mx-auto max-w-[1440px] px-5 py-16 md:px-10 md:py-32">
+    <p class="text-xs font-semibold uppercase tracking-[0.25em] text-mut"><span class="text-flame">04</span><span class="mx-3 inline-block h-px w-10 bg-line align-middle" aria-hidden="true"></span>Сделать шаг</p>
+    <h2 id="h-contacts" class="mt-6 font-display font-semibold uppercase leading-none text-[clamp(2rem,4.5vw,3.75rem)]">Приходи в клуб.</h2>
+    <p class="mt-4 text-lg">г. Хабаровск, ул. Восточное шоссе, 41, 3 этаж.</p>
+
+    <div class="mt-10 grid gap-10 lg:grid-cols-2">
+      <div>
+        <a href="https://wa.me/79144234555" aria-describedby="cond-contacts" aria-label="Пробное бесплатно — записаться на&#160;групповое занятие в&#160;WhatsApp" class="inline-flex h-14 items-center bg-flame px-8 font-display text-sm font-semibold uppercase tracking-[0.2em] text-[#0b0a09] transition duration-200 hover:bg-bright active:bg-press focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright active:scale-[0.97]">Пробное бесплатно</a>
+        <p id="cond-contacts" class="mt-3 max-w-xs text-sm text-mut">Первое занятие в общей, детской или женской группе — бесплатно, кроме мини-групп. Рядом — <a href="/privacy/" class="text-ink underline underline-offset-4 transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">Политика конфиденциальности</a>.</p>
+        <p class="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm">
+          <a href="tel:+79144234555" class="text-ink underline underline-offset-4 transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">Позвонить: +7 (914) 423-45-55</a>
+          <a href="#" class="text-ink underline underline-offset-4 transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">Построить маршрут</a>
+          <a href="#" class="text-ink underline underline-offset-4 transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">Мы во ВКонтакте</a>
+        </p>
+        <p class="mt-3 text-xs text-mut">URL маршрута и&#160;ссылки ВКонтакте уточняются до S9 <span class="text-ink">[ПОДТВЕРДИТЬ]</span>; ссылки в&#160;прототипе — заглушки.</p>
+      </div>
+      <div>
+        <figure class="flex aspect-[16/10] flex-col items-center justify-end gap-3 border border-line bg-raised p-4 pb-5 text-center">
+          <span aria-hidden="true" class="text-4xl text-mut">▨</span>
+          <figcaption class="max-w-[420px] text-sm leading-relaxed text-mut">
+            Карта: встраиваемый сервис подключается на&#160;S9 <span class="text-ink">[ПОДТВЕРДИТЬ]</span>; до этого — заглушка с&#160;адресом.
+          </figcaption>
+        </figure>
+        <div class="mt-4 border border-line p-4">
+          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-mut">Если карта не загрузилась</p>
+          <p class="mt-2 text-sm">Не удалось загрузить карту. Адрес: г. Хабаровск, ул. Восточное шоссе, 41, 3 этаж. <a href="#" class="text-ink underline underline-offset-4 transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">Построить маршрут</a>.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== ПРИЛОЖЕНИЕ: СОСТОЯНИЯ ====================== -->
+<section aria-labelledby="h-states" class="border-t border-line">
+  <div class="mx-auto max-w-[1440px] px-5 py-16 md:px-10 md:py-24">
+    <p class="text-xs uppercase tracking-[0.25em] text-mut">Приложение к&#160;прототипу — не&#160;часть потока сайта</p>
+    <h2 id="h-states" class="mt-3 font-display text-2xl font-semibold uppercase tracking-wide md:text-3xl">Состояния и образцы</h2>
+
+    <div class="mt-10 grid gap-10 lg:grid-cols-2">
+      <!-- Мобильная шапка и открытое меню -->
+      <div class="min-w-0">
+        <p class="font-display text-sm font-semibold uppercase tracking-[0.2em]">Мобильная шапка и открытое меню</p>
+        <div class="mx-auto mt-4 w-[390px] max-w-full border border-line">
+          <div class="flex h-16 items-center justify-between border-b border-line px-5">
+            <img src="logo.svg" alt="CHAMP" class="h-7 w-auto">
+            <span class="flex h-11 w-11 items-center justify-center border border-line">
+              <span aria-hidden="true" class="block h-[1.5px] w-5 rotate-45 bg-ink before:absolute before:block before:h-[1.5px] before:w-5 before:-rotate-45 before:bg-ink"></span>
+            </span>
+          </div>
+          <div class="bg-surface p-5">
+            <p class="flex items-center justify-between">
+              <span class="font-display text-sm font-semibold uppercase tracking-[0.2em]">Меню</span>
+              <span class="inline-flex h-11 items-center border border-line px-4 font-display text-xs font-semibold uppercase tracking-[0.2em]">Закрыть меню</span>
+            </p>
+            <nav class="mt-5 flex flex-col gap-4 font-display text-xl font-semibold uppercase tracking-wide" aria-label="Открытое мобильное меню (образец)">
+              <a href="#formats" class="w-fit transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">Тренировки</a>
+              <a href="#coaches" class="w-fit transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">Команда</a>
+              <a href="#contacts" class="w-fit transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">Контакты</a>
+              <a href="https://wa.me/79144234555" aria-describedby="cond-menu" class="mt-2 inline-flex h-14 items-center justify-center bg-flame px-6 font-display text-sm font-semibold uppercase tracking-[0.2em] text-[#0b0a09] transition duration-200 hover:bg-bright active:bg-press focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright active:scale-[0.97]">Пробное бесплатно</a>
+              <p id="cond-menu" class="text-xs leading-relaxed text-mut">Первое занятие в общей, детской или женской группе — бесплатно, кроме мини-групп. <a href="/privacy/" class="text-ink underline underline-offset-4 transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">Политика конфиденциальности</a></p>
+              <a href="tel:+79144234555" class="text-sm text-ink underline underline-offset-4 transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">Позвонить: +7 (914) 423-45-55</a>
+            </nav>
+          </div>
+        </div>
+        <p class="mt-3 max-w-[420px] text-sm text-mut">Кнопка «Открыть меню» — статичный образец: открытие меню демонстрируется блоком ниже без обработчика. Логика меню — на&#160;S8 по&#160;спецификации G6 (Escape, управление фокусом, возврат к&#160;инициатору).</p>
+      </div>
+
+      <!-- Состояния кнопок -->
+      <div class="min-w-0">
+        <p class="font-display text-sm font-semibold uppercase tracking-[0.2em]">Кнопка primary — все состояния</p>
+        <div class="mt-4 flex flex-wrap items-end gap-6">
+          <div>
+            <a href="https://wa.me/79144234555" class="inline-flex h-14 items-center bg-flame px-8 font-display text-sm font-semibold uppercase tracking-[0.2em] text-[#0b0a09] transition duration-200 hover:bg-bright active:bg-press focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright active:scale-[0.97]">Пробное бесплатно</a>
+            <p class="mt-2 text-xs text-mut">default · 5.34:1</p>
+          </div>
+          <div>
+            <span class="demo-hover-primary inline-flex h-14 items-center bg-flame px-8 font-display text-sm font-semibold uppercase tracking-[0.2em] text-[#0b0a09]">Пробное бесплатно</span>
+            <p class="mt-2 text-xs text-mut">hover · #ff7a1f · 7.59:1</p>
+          </div>
+          <div>
+            <span class="demo-press-primary inline-flex h-14 scale-[0.97] items-center bg-flame px-8 font-display text-sm font-semibold uppercase tracking-[0.2em] text-[#0b0a09]">Пробное бесплатно</span>
+            <p class="mt-2 text-xs text-mut">pressed · #d94e0d · 4.75:1 · scale 0.97</p>
+          </div>
+          <div>
+            <span class="demo-focus inline-flex h-14 items-center bg-flame px-8 font-display text-sm font-semibold uppercase tracking-[0.2em] text-[#0b0a09]">Пробное бесплатно</span>
+            <p class="mt-2 text-xs text-mut">focus-visible · outline 2px #ff7a1f</p>
+          </div>
+          <div>
+            <button type="button" disabled class="inline-flex h-14 cursor-not-allowed items-center bg-disbg px-8 font-display text-sm font-semibold uppercase tracking-[0.2em] text-mut">Пробное бесплатно</button>
+            <p class="mt-2 text-xs text-mut">disabled · 5.13:1</p>
+          </div>
+        </div>
+
+        <p class="mt-8 font-display text-sm font-semibold uppercase tracking-[0.2em]">Если WhatsApp недоступен</p>
+        <div class="mt-4 border border-line p-4">
+          <p class="text-sm">Не&#160;получается открыть WhatsApp? Позвоните: +7&#160;(914)&#160;423-45-55.</p>
+          <a href="tel:+79144234555" class="mt-3 inline-flex h-12 items-center border border-line px-6 font-display text-xs font-semibold uppercase tracking-[0.2em] transition duration-200 hover:border-flame hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">Позвонить</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ====================== ФУТЕР ====================== -->
+<footer class="border-t border-line">
+  <div class="mx-auto max-w-[1440px] px-5 py-8 md:px-10">
+    <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <a href="#top" aria-label="CHAMP BOXING CLUB — на главную" class="inline-flex items-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">
+        <img src="logo.svg" alt="CHAMP" class="h-7 w-auto">
+      </a>
+      <p class="text-sm text-mut">г. Хабаровск, ул. Восточное шоссе, 41, 3 этаж</p>
+      <div class="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+        <a href="tel:+79144234555" class="text-ink underline underline-offset-4 transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">Позвонить: +7 (914) 423-45-55</a>
+        <a href="/privacy/" class="text-ink underline underline-offset-4 transition-colors duration-200 hover:text-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-bright">Политика конфиденциальности</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Единственный JS прототипа: демонстрация состояния кнопки паузы тикера.
+  (() => {
+    const btn = document.getElementById('ticker-toggle');
+    const marquee = document.getElementById('ticker-marquee');
+    const text = document.getElementById('ticker-toggle-text');
+    if (!btn || !marquee || !text) return;
+    let paused = false;
+    btn.addEventListener('click', () => {
+      paused = !paused;
+      marquee.style.animationPlayState = paused ? 'paused' : 'running';
+      text.textContent = paused ? 'Продолжить' : 'Пауза';
+      btn.setAttribute('aria-label', paused ? 'Продолжить тикер' : 'Пауза тикера');
+    });
+  })();
+</script>
+
+</body>
+</html>

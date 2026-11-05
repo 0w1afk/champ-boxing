@@ -35,7 +35,7 @@ function load() {
   const config = JSON.parse(fs.readFileSync(CONFIG_PATH, 'utf8'));
   const state = fs.existsSync(STATE_PATH)
     ? JSON.parse(fs.readFileSync(STATE_PATH, 'utf8'))
-    : { screens: [], gates: {}, checklists: { s0: {}, opencode: {}, s9: {} }, history: [] };
+    : { screens: [], gates: {}, checklists: { s9: {} }, history: [] };
   for (const [id, g] of Object.entries(state.gates)) {
     if (!STATUSES.includes(g.status)) throw new Usage(`status.json повреждён: ${id} имеет неизвестный статус «${g.status}»`);
   }
@@ -175,8 +175,8 @@ function approveReasons(ctx, gate, list) {
 
 function setGate(ctx, id, patch) {
   ctx.state.gates[id] = { status: NOT, ...ctx.state.gates[id], ...patch };
-  // Любое сомнение в G9 отменяет чек-лист запуска: его нужно пройти заново на актуальной версии сайта.
-  if (id === 'G9' && [REWORK, STALE].includes(patch.status)) ctx.state.checklists.s9 = {};
+  // Любое сомнение в G4 отменяет чек-лист запуска: его нужно пройти заново на актуальной версии сайта.
+  if (id === 'G4' && [REWORK, STALE].includes(patch.status)) ctx.state.checklists.s9 = {};
 }
 
 function log(ctx, action, gate, detail) {
@@ -211,8 +211,6 @@ function invalidateChecklistDependents(ctx, checklist, list) {
 // ---------- status.md ----------
 
 function currentStage(ctx) {
-  const open = checklistReasons(ctx, 's0');
-  if (open.length) return `S0 Настройка: осталось пунктов ${open.length}`;
   const list = gateList(ctx);
   const firstOpen = list.find((g) => statusOf(ctx, g.id) !== OK);
   if (!firstOpen) return 'Все гейты утверждены';
@@ -234,12 +232,9 @@ function checklistMd(ctx, name) {
 function renderMd(ctx) {
   const { state, config } = ctx;
   const list = gateList(ctx);
-  const gateRows = config.gates.flatMap((def) => {
-    if (def.per_screen && state.screens.length === 0) return [`| ${def.id} | ${def.title} | экраны не добавлены | | |`];
-    return list.filter((g) => (def.per_screen ? g.template === def.id : g.id === def.id)).map((g) => {
-      const s = state.gates[g.id] ?? {};
-      return `| ${g.id} | ${g.title} | ${s.status ?? NOT} | ${s.date ?? ''} | ${(s.materials ?? []).join('<br>')} |`;
-    });
+  const gateRows = list.map((g) => {
+    const s = state.gates[g.id] ?? {};
+    return `| ${g.id} | ${g.title} | ${s.status ?? NOT} | ${s.date ?? ''} | ${(s.materials ?? []).join('<br>')} |`;
   });
   const matrix = config.gates.map((d) => {
     const scoped = d.scoped_invalidates ? `. С \`--screens\`: ${d.scoped_invalidates.join(', ')}` : '';
@@ -255,20 +250,16 @@ function renderMd(ctx) {
     '',
     `Текущий этап: **${currentStage(ctx)}**`,
     '',
-    `Экраны по порядку сборки: ${state.screens.join(', ') || 'ещё не добавлены'}`,
-    '',
-    checklistMd(ctx, 's0'),
-    checklistMd(ctx, 'opencode'),
+    checklistMd(ctx, 's9'),
     '## Гейты',
     '',
     '| Гейт | Что утверждается | Статус | Дата | Материалы |',
     '|---|---|---|---|---|',
     ...gateRows,
     '',
-    checklistMd(ctx, 's9'),
     '## Зависимости',
     '',
-    '`Требует`: что должно быть утверждено, включая всю цепочку раньше. `Правка делает устаревшими`: что переходит в статус «устарело» при `rework` этого гейта. `G6.*` означает все экраны.',
+    '`Требует`: что должно быть утверждено, включая всю цепочку раньше. `Правка делает устаревшими`: что переходит в статус «устарело» при `rework` этого гейта.',
     '',
     '| Гейт | Требует | Правка делает устаревшими |',
     '|---|---|---|',
@@ -380,25 +371,8 @@ const commands = {
     console.log(`${id}: ${REWORK}. Устарели: ${stale.join(', ') || 'нет'}.`);
   },
 
-  screen(ctx, { positional }) {
-    const [action, slug] = positional;
-    if (!['add', 'remove'].includes(action) || !slug) throw new Usage('Использование: screen add|remove <идентификатор>');
-    if (!/^[a-z0-9-]+$/.test(slug)) throw new Usage('Идентификатор экрана: строчная латиница, цифры, дефис');
-    if (statusOf(ctx, 'G2') !== OK) throw new Blocked(`Состав экранов задаётся после утверждения G2, сейчас: ${statusOf(ctx, 'G2')}`);
-    if (statusOf(ctx, 'G4') === OK) throw new Blocked('Тексты уже утверждены для текущего состава экранов. Изменение карты сайта идёт через rework G2');
-    const { screens } = ctx.state;
-    if (action === 'add') {
-      if (screens.includes(slug)) throw new Usage(`Экран ${slug} уже есть`);
-      screens.push(slug);
-    } else {
-      if (!screens.includes(slug)) throw new Usage(`Экрана ${slug} нет`);
-      ctx.state.screens = screens.filter((s) => s !== slug);
-      delete ctx.state.gates[`G6.${slug}`];
-      delete ctx.state.gates[`G8.${slug}`];
-    }
-    log(ctx, `screen ${action}`, null, slug);
-    save(ctx);
-    console.log(`Экраны: ${ctx.state.screens.join(', ') || 'нет'}.`);
+  screen() {
+    throw new Usage('Состав экранов в воркфлоу v2 не ведётся: страницы определяются концепцией (G1).');
   },
 
   item(ctx, { positional, flags }) {
@@ -416,8 +390,8 @@ const commands = {
       console.log(`${itemId}: снято. Устарели: ${stale.join(', ') || 'нет'}.`);
       return;
     }
-    if (name === 's9' && ![WORK, REWORK].includes(statusOf(ctx, 'G9'))) {
-      throw new Blocked(`Чек-лист запуска заполняется, когда G9 в работе, сейчас: ${statusOf(ctx, 'G9')}`);
+    if (name === 's9' && ![WORK, REWORK].includes(statusOf(ctx, 'G4'))) {
+      throw new Blocked(`Чек-лист запуска заполняется, когда G4 в работе, сейчас: ${statusOf(ctx, 'G4')}`);
     }
     const na = one(flags, 'na');
     if (na !== undefined && !list.na_allowed) throw new Blocked(`В чек-листе ${name} пункт нельзя пометить неприменимым`);
@@ -428,11 +402,7 @@ const commands = {
     console.log(`${itemId}: отмечено.`);
   },
 
-  figma() {
-    throw new Usage('Figma выведена из процесса: прототипы в docs/design/drafts/ заменяют макеты Figma.');
-  },
 };
-
 try {
   const [command, ...rest] = process.argv.slice(2);
   if (!commands[command]) throw new Usage(`Команды: ${Object.keys(commands).join(', ')}`);

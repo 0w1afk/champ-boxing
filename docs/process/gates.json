@@ -1,92 +1,32 @@
 {
   "gates": [
     {
-      "id": "G1", "stage": "S1", "title": "Бриф и материалы",
+      "id": "G1", "stage": "S1", "title": "Концепция и тексты",
       "requires": [],
-      "materials": ["docs/brief/brief.md", "PRODUCT.md"],
-      "checklist_before_start": "s0",
-      "invalidates": ["G2", "G3", "G4", "G5", "G6.*", "G6", "G7", "G8.*", "G9"]
+      "materials": ["docs/design/concept.md", "docs/copy/home.md", "docs/copy/privacy.md", "docs/copy/error.md"],
+      "invalidates": ["G2", "G3", "G4"]
     },
     {
-      "id": "G2", "stage": "S2", "title": "Стратегия и карта сайта",
+      "id": "G2", "stage": "S2", "title": "Основа",
       "requires": ["G1"],
-      "materials": ["docs/strategy/strategy.md", "docs/strategy/sitemap.md"],
-      "invalidates": ["G3", "G4", "G5", "G6.*", "G6", "G7", "G8.*", "G9"]
-    },
-    {
-      "id": "G3", "stage": "S3", "title": "Направление концепции",
-      "requires": ["G2"],
-      "materials": ["docs/design/concept.md"],
-      "invalidates": ["G4", "G5", "G6.*", "G6", "G7", "G8.*", "G9"]
-    },
-    {
-      "id": "G4", "stage": "S4", "title": "Тексты",
-      "requires": ["G3"],
-      "materials": ["docs/copy/{each}.md"],
-      "invalidates": ["G6.*", "G6", "G7", "G8.*", "G9"],
-      "scoped_invalidates": ["G6.{screen}", "G6", "G7", "G8.{screen}", "G9"]
-    },
-    {
-      "id": "G5", "stage": "S5", "title": "Цветовая схема и основа",
-      "requires": ["G4"],
       "materials": ["docs/design/tokens.json"],
-      "checklist_before_review": "opencode",
-      "invalidates": ["G6.*", "G6", "G7", "G8.*", "G9"]
+      "invalidates": ["G3", "G4"]
     },
     {
-      "id": "G6.{screen}", "stage": "S6", "title": "Экран в прототипе: {screen}", "per_screen": true,
-      "requires": ["G5", "G6.{prev}"],
-      "materials": ["docs/design/screens/{screen}.md"],
-      "invalidates": ["G6", "G7", "G8.{screen}", "G9"]
+      "id": "G3", "stage": "S3", "title": "Сайт",
+      "requires": ["G2"],
+      "materials": ["docs/review/site/qa.md", "docs/review/site/review.md"],
+      "invalidates": ["G4"]
     },
     {
-      "id": "G6", "stage": "S6", "title": "Переходы и движение",
-      "requires": ["G6.*"],
-      "materials": ["docs/design/motion.md"],
-      "invalidates": ["G7", "G8.*", "G9"]
-    },
-    {
-      "id": "G7", "stage": "S7", "title": "Старт реализации",
-      "requires": ["G6.*", "G6"],
-      "materials": ["docs/design/handoff.md"],
-      "invalidates": ["G8.*", "G9"]
-    },
-    {
-      "id": "G8.{screen}", "stage": "S8", "title": "Экран в коде: {screen}", "per_screen": true,
-      "requires": ["G7", "G8.{prev}"],
-      "materials": ["docs/review/{screen}/desktop.png", "docs/review/{screen}/mobile.png", "docs/review/{screen}/qa.md", "docs/review/{screen}/review.md"],
-      "invalidates": ["G9"]
-    },
-    {
-      "id": "G9", "stage": "S9", "title": "Готовность к запуску",
-      "requires": ["G8.*"],
-      "materials": ["docs/review/release/qa.md", "docs/review/release/review.md", "DESIGN.md"],
+      "id": "G4", "stage": "S4", "title": "Запуск",
+      "requires": ["G3"],
+      "materials": ["docs/review/release/qa.md", "docs/review/release/review.md"],
       "checklist_before_review": "s9",
       "invalidates": []
     }
   ],
   "checklists": {
-    "opencode": {
-      "title": "Переход на OpenCode",
-      "items": [
-        { "id": "command", "text": "Команда /pipeline доступна в OpenCode и управляет статусом через gate.mjs" },
-        { "id": "agents", "text": "Роли из .opencode/agent загружаются как субагенты и отвечают на простое задание" },
-        { "id": "images", "text": "image.mjs создал тестовое изображение через ChatGPT (Codex)" }
-      ]
-    },
-    "s0": {
-      "title": "S0: настройка",
-      "items": [
-        { "id": "hooks", "text": "Хуки Impeccable из .codex/hooks.json подтверждены в Codex" },
-        { "id": "figma-plugin", "text": "Figma Desktop установлена, пользователь авторизован, управление экраном доступно" },
-        { "id": "figma-file", "text": "Файл Figma создан, ссылка записана" },
-        { "id": "figma-tools", "text": "Проверено управление Figma через desktop UI; доступность MCP-инструментов записана отдельно" },
-        { "id": "figma-write", "text": "Пробная запись на отдельной странице: фрейм, переменная, компонент, кириллица, связь прототипа, изображение. Способ записи выбран" },
-        { "id": "figma-limit", "text": "Зафиксировано: desktop_ui не расходует лимит MCP; счётчик применяется только к чтениям через MCP" },
-        { "id": "agents", "text": "Каждый агент запущен с простым заданием и работает на назначенной модели" },
-        { "id": "probe", "text": "Изолированный пробный проход в tmp/s0-probe выполнен, папка удалена" }
-      ]
-    },
     "s9": {
       "title": "S9: запуск",
       "na_allowed": true,
