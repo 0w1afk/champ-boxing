@@ -4,6 +4,6 @@
   Подключается инлайн (наследует Oswald страницы); конвертация текста в кривые — на G4/запуске.
 -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 156 40" width="156" height="40">
-  <rect x="2" y="9" width="11" height="11" transform="rotate(45 7.5 14.5)" fill="#fde097"></rect>
+  <rect x="2" y="9" width="11" height="11" transform="rotate(45 7.5 14.5)" fill="#d4af37"></rect>
   <text x="24" y="30" font-family="Oswald, 'Arial Narrow', sans-serif" font-weight="700" font-size="27" letter-spacing="2.5" fill="#ece7de">CHAMP</text>
 </svg>
