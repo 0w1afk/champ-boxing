@@ -66,8 +66,8 @@ function parsePairs(values) {
   return jobs;
 }
 
-function codexArgs(refs) {
-  const args = ['exec', '--skip-git-repo-check', '--ephemeral', '-s', 'workspace-write', '-m', 'gpt-6-luna', '-c', 'model_reasoning_effort="low"'];
+function codexArgs(refs, work) {
+  const args = ['exec', ...(work ? ['-C', work] : []), '--skip-git-repo-check', '--ephemeral', '-s', 'workspace-write', '-m', 'gpt-6-luna', '-c', 'model_reasoning_effort="low"'];
   for (const ref of refs) args.push('-i', ref);
   args.push('-');
   return args;
@@ -104,12 +104,12 @@ function runSingle(job, refs) {
   const before = new Set(imagesIn(generated));
   const work = fs.mkdtempSync(path.join(os.tmpdir(), 'champ-image-'));
   try {
-    const args = ['exec', '--skip-git-repo-check', '--ephemeral', '-C', work, ...codexArgs(refs)];
+    const args = codexArgs(refs, work);
     const run = spawnSync(codexBin(), args, { cwd: work, input: instructionFor(job.prompt), encoding: 'utf8', timeout: TIMEOUT_MS, maxBuffer: 64 * 1024 * 1024 });
     if (run.error) throw new Error(`Codex не запустился: ${run.error.message}`);
 
     const source = imagesIn(work)[0] ?? imagesIn(generated).filter((f) => !before.has(f)).sort((a, b) => fs.statSync(b).mtimeMs - fs.statSync(a).mtimeMs)[0];
-    if (!source) throw new Error(`Codex не создал изображение (код ${run.status}): ${`${run.stderr}\n${run.stdout}`.trim().slice(-500)}`);
+    if (!source || fs.statSync(source).size < 1024) throw new Error(`Codex не создал изображение (код ${run.status}): ${`${run.stderr}\n${run.stdout}`.trim().slice(-500)}`);
 
     console.log(path.relative(ROOT, saveResult(reserveBase(job.name), source, job.prompt, refs)));
   } finally {
@@ -129,7 +129,7 @@ async function runBatch(jobs, refs) {
       const job = planned[index];
       try {
         const run = await new Promise((resolve, reject) => {
-          const child = spawn(codexBin(), codexArgs(refs), { cwd: job.work, stdio: ['pipe', 'pipe', 'pipe'] });
+          const child = spawn(codexBin(), codexArgs(refs, job.work), { cwd: job.work, stdio: ['pipe', 'pipe', 'pipe'] });
           let output = '';
           let error = '';
           const timer = setTimeout(() => child.kill('SIGTERM'), TIMEOUT_MS);
@@ -141,7 +141,7 @@ async function runBatch(jobs, refs) {
         });
 
         const source = imagesIn(job.work)[0];
-        if (!source) throw new Error(`Codex не создал изображение (код ${run.code}): ${`${run.error}\n${run.output}`.trim().slice(-500)}`);
+        if (!source || fs.statSync(source).size < 1024) throw new Error(`Codex не создал изображение (код ${run.code}): ${`${run.error}\n${run.output}`.trim().slice(-500)}`);
         results[index] = { ok: true, path: path.relative(ROOT, saveResult(job.base, source, job.prompt, refs)) };
       } catch (error) {
         results[index] = { ok: false, name: job.name, message: error.message };
