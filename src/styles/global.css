@@ -70,19 +70,11 @@ body::after {
   -webkit-text-stroke: 1.5px #d4af37;
 }
 
-/* Бегущая строка (marquee 32s, пауза на hover — точные указатели) */
-@keyframes marquee {
-  to {
-    transform: translateX(-50%);
-  }
-}
-.animate-marquee {
-  animation: marquee 32s linear infinite;
-}
-@media (hover: hover) and (pointer: fine) {
-  .ticker:hover .animate-marquee {
-    animation-play-state: paused;
-  }
+/* Swiper (тикер, галерея, киноплёнка превью): движение без пауз на стыках */
+.ticker-swiper .swiper-wrapper,
+.gallery-strip .swiper-wrapper,
+[data-preview-swiper] .swiper-wrapper {
+  transition-timing-function: linear;
 }
 
 /* reveal-block: появление при входе в вьюпорт, один раз (классы добавляет JS) */
@@ -181,19 +173,29 @@ details[open] .sign::after {
   transform: scale(1) rotate(-2deg);
 }
 
-/* Киноплёнка превью формата: три кадра + дубль первого, лента едет сверху вниз
-   без пауз. Сдвиг ровно на три кадра (−75% → 0), конец цикла совпадает
-   с началом, поэтому петля незаметна. Только transform — работа композитора. */
-@keyframes film-roll {
-  from {
-    transform: translateY(-75%);
-  }
-  to {
-    transform: translateY(0);
-  }
+/* Карта контактов: конструктор Яндекса вставляет iframe в контейнер;
+   фолбэк (адрес + ссылка) виден, пока карта не загрузилась */
+[data-map] {
+  position: relative;
 }
-[data-preview-film].is-rolling {
-  animation: film-roll 12s linear infinite;
+[data-map] iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+[data-map][data-map-state='ready'] [data-map-fallback] {
+  display: none;
+}
+
+/* Сетка и затемнение поверх кадров; при наведении на кадр снимаются (group-hover) */
+.gallery-veil {
+  background-color: rgb(11 10 9 / 0.55);
+  background-image:
+    linear-gradient(to right, rgb(236 231 222 / 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(236 231 222 / 0.07) 1px, transparent 1px);
+  background-size: 48px 48px;
 }
 
 /* Кастомный курсор: системный скрывается только при активном кастомном;
@@ -204,6 +206,13 @@ details[open] .sign::after {
 }
 #cursor {
   display: none;
+}
+/* Пока открыто превью формата, кольцо курсора скрыто — остаётся только точка */
+[data-cursor-ring] {
+  transition: opacity 200ms cubic-bezier(0.2, 0, 0, 1);
+}
+html.has-preview [data-cursor-ring] {
+  opacity: 0;
 }
 @media (hover: hover) and (pointer: fine) {
   html.has-cursor body,
@@ -245,9 +254,6 @@ details[open] .sign::after {
   html {
     scroll-behavior: auto;
   }
-  .animate-marquee {
-    animation: none;
-  }
   .reveal-init {
     opacity: 1;
     transform: none;
@@ -255,6 +261,17 @@ details[open] .sign::after {
   }
   .mobile-menu[open] .menu-item {
     animation: none;
+  }
+  /* Тикер и галерея без Swiper: строка переносится, ленту можно прокрутить вручную */
+  .ticker-swiper {
+    overflow: visible;
+  }
+  .ticker-swiper .swiper-wrapper {
+    flex-wrap: wrap;
+    row-gap: 0.5rem;
+  }
+  .gallery-strip {
+    overflow-x: auto;
   }
   #cursor {
     display: none !important;
@@ -269,9 +286,6 @@ details[open] .sign::after {
   [data-preview-card] {
     transition: none !important;
     transform: none !important;
-  }
-  [data-preview-film].is-rolling {
-    animation: none;
   }
   a:active,
   button:active {

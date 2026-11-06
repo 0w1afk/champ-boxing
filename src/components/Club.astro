@@ -1,7 +1,9 @@
 ---
+import { Image } from 'astro:assets';
 import { CLUB } from '../data/site';
 import SectionHead from './SectionHead.astro';
 import Placeholder from './Placeholder.astro';
+import clubImg from '../assets/img/club-punch.png';
 ---
 
 <section id="club" class="pb-20 md:pb-28">
@@ -19,10 +21,12 @@ import Placeholder from './Placeholder.astro';
           parallaxShift="top-10 h-full"
           class="aspect-[3/4] w-full"
         >
-          <img
-            src="/img/club-punch.png"
+          <Image
+            src={clubImg}
             alt="Иллюстрация: боксёрская перчатка крупным планом"
-            class="h-full w-full object-cover scale-105"
+            widths={[500, 800, 1100]}
+            sizes="(min-width: 1024px) 40vw, 100vw"
+            class="h-full w-full scale-105 object-cover"
             data-cursor-shift="14"
           />
         </Placeholder>

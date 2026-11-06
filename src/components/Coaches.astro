@@ -1,7 +1,11 @@
 ---
+import { Image } from 'astro:assets';
 import { COACHES } from '../data/site';
 import SectionHead from './SectionHead.astro';
-import Placeholder from './Placeholder.astro';
+
+const coachPhotos = import.meta.glob<{ default: ImageMetadata }>('../assets/img/coaches/*.jpg', {
+  eager: true,
+});
 ---
 
 <section id="coaches" class="pb-20 md:pb-28">
@@ -22,7 +26,16 @@ import Placeholder from './Placeholder.astro';
         <div data-reveal style={`transition-delay: ${0.08 * i}s`}>
           <article class="group">
             <div class="relative">
-              <Placeholder label={c.slot} class="aspect-[3/4] w-full [&>div]:transition-transform [&>div]:duration-700 [&>div]:ease-out group-hover:[&>div]:scale-[1.04]" />
+              <div class="relative aspect-[3/4] w-full overflow-hidden border border-line bg-raised">
+                <Image
+                  src={coachPhotos[`../assets/img/coaches/${c.img}.jpg`]!.default}
+                  alt={`${c.name}, тренер CHAMP Boxing Club`}
+                  widths={[350, 700]}
+                  sizes="(min-width: 768px) 33vw, 100vw"
+                  loading="lazy"
+                  class="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+                />
+              </div>
               <span class="absolute right-4 top-4 z-[2] font-display text-sm text-flame">0{i + 1}</span>
               <span class="absolute bottom-0 left-0 z-[2] h-1 w-0 bg-flame transition-all duration-500 group-hover:w-full" aria-hidden></span>
             </div>

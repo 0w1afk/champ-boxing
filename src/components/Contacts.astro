@@ -87,16 +87,26 @@ const waHref = wa(MSG.base);
       </div>
     </div>
 
-    {/* Карта: 2GIS-виджет (код пользователя 05.11.2026); при отказе — адрес текстом */}
+    {/* Карта: Яндекс.Конструктор (код пользователя 06.11.2026); грузится у вьюпорта,
+        при отказе сервиса остаётся фолбэк — адрес и ссылка на Яндекс (см. map.ts) */}
     <div class="mt-16" data-reveal>
       <div class="border border-line">
-        <iframe
-          title="CHAMP BOXING CLUB — карта"
-          src={CONTACTS.mapSrc}
-          sandbox="allow-modals allow-forms allow-scripts allow-same-origin allow-popups allow-top-navigation-by-user-activation"
-          loading="lazy"
-          class="h-[420px] w-full"
-        ></iframe>
+        <div data-map class="h-[400px] w-full overflow-hidden">
+          <div
+            data-map-fallback
+            class="flex h-full w-full flex-col items-center justify-center gap-3 p-6 text-center"
+          >
+            <p class="text-sm text-ink">г. Хабаровск, ул. Восточное шоссе, 41, 3 этаж</p>
+            <a
+              href={CONTACTS.mapLink}
+              target="_blank"
+              rel="noopener"
+              class="text-[11px] font-semibold uppercase tracking-[0.2em] text-bright underline-offset-4 hover:underline"
+            >
+              Открыть на Яндексе
+            </a>
+          </div>
+        </div>
       </div>
       <p class="mt-3 text-xs text-mut">{CONTACTS.mapNote}</p>
     </div>

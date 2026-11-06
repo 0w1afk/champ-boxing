@@ -1,7 +1,9 @@
 ---
+import { Image } from 'astro:assets';
 import { HERO, MSG, wa } from '../data/site';
 import Ticker from './Ticker.astro';
 import Placeholder from './Placeholder.astro';
+import heroImg from '../assets/img/hero-boxer.png';
 ---
 
 <section id="top" class="relative flex min-h-[100dvh] flex-col pt-16 lg:h-[100dvh] lg:min-h-[700px]">
@@ -74,9 +76,11 @@ import Placeholder from './Placeholder.astro';
     <div class="relative lg:col-span-5">
       <div class="relative h-[52vh] min-h-[380px] lg:h-full">
         <Placeholder label="Иллюстрация: боксёр в защитном шлеме, крупный план" parallax class="h-full w-full">
-          <img
-            src="/img/hero-boxer.png"
+          <Image
+            src={heroImg}
             alt="Иллюстрация: боксёр в защитном шлеме, крупный план половины лица"
+            widths={[600, 900, 1200]}
+            sizes="(min-width: 1024px) 40vw, 100vw"
             class="h-full w-full object-cover"
           />
         </Placeholder>

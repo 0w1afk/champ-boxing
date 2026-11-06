@@ -1,6 +1,12 @@
 ---
+import { Image } from 'astro:assets';
 import { FORMATS, wa } from '../data/site';
 import SectionHead from './SectionHead.astro';
+
+const frameFiles = import.meta.glob<{ default: ImageMetadata }>('../assets/img/formats/*.jpg', {
+  eager: true,
+});
+const frame = (slug: string, n: number) => frameFiles[`../assets/img/formats/${slug}-${n}.jpg`]!.default;
 ---
 
 <section id="formats" class="relative pb-20 md:pb-28" data-preview-area>
@@ -18,23 +24,25 @@ import SectionHead from './SectionHead.astro';
       data-preview-card
       class="halftone relative -ml-28 -mt-44 flex h-80 w-56 items-center justify-center overflow-hidden border border-line bg-surface shadow-2xl shadow-black/60"
     >
-      {/* Киноплёнка: по ленте из 3 кадров на каждый формат, 4-й — дубль первого
-          для бесшовного цикла. Лента едет сверху вниз, поэтому кадры в разметке
-          идут в обратном порядке (1-3-2-1): так на экране они сменяются 1→2→3.
-          Между кадрами — чёрная полоса 3px */}
+      {/* Киноплёнка: вертикальный Swiper из трёх кадров формата, едет непрерывно
+          сверху вниз; между кадрами — чёрная полоса 3px */}
       {FORMATS.map((p) => (
-        <div data-preview-strip={p.img} class="absolute inset-0 hidden overflow-hidden" aria-hidden>
-          <div data-preview-film class="flex h-[400%] w-full flex-col">
-            {[1, 3, 2, 1].map((n) => (
-              <img
-                src={`/img/formats/${p.img}-${n}.jpg`}
-                alt=""
-                width="224"
-                height="320"
-                loading="lazy"
-                class="h-1/4 w-full shrink-0 border-b-[3px] border-black object-cover"
-              />
-            ))}
+        <div data-preview-strip={p.img} class="invisible absolute inset-0 overflow-hidden" aria-hidden>
+          <div class="swiper h-full w-full" data-preview-swiper>
+            <div class="swiper-wrapper">
+              {[1, 2, 3].map((n) => (
+                <div class="swiper-slide h-full">
+                  <Image
+                    src={frame(p.img, n)}
+                    alt=""
+                    widths={[224, 448]}
+                    sizes="224px"
+                    loading="lazy"
+                    class="h-full w-full border-b-[3px] border-black object-cover"
+                  />
+                </div>
+              ))}
+            </div>
           </div>
           <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20" />
         </div>

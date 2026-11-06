@@ -3,7 +3,25 @@ import { PRICING, MSG, wa } from '../data/site';
 import SectionHead from './SectionHead.astro';
 ---
 
-<section id="prices" class="pb-20 md:pb-28">
+<section id="prices" class="relative isolate overflow-hidden pb-20 md:pb-28">
+  {/* Фон секции — видео из хиро старого сайта, затемнено под карточки;
+      грузится и играет только когда секция на экране (JS), без JS — постер */}
+  <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10">
+    <video
+      data-bg-video
+      class="h-full w-full object-cover"
+      src="/video/gym.mp4"
+      poster="/video/gym-poster.jpg"
+      muted
+      loop
+      playsinline
+      preload="none"
+      tabindex="-1"
+    ></video>
+    <div class="absolute inset-0 bg-bg/70"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-bg via-transparent to-bg"></div>
+  </div>
+
   <SectionHead index="04" label="Цены">
     Стоимость <span class="text-stroke-flame">занятий</span><span class="text-flame">.</span>
   </SectionHead>
@@ -17,8 +35,8 @@ import SectionHead from './SectionHead.astro';
       <div data-reveal style={`transition-delay: ${0.08 * i}s`} class="h-full">
         <article
           class:list={[
-            'relative flex h-full flex-col border p-8 transition-colors duration-300',
-            p.highlight ? 'border-flame bg-surface' : 'border-line hover:border-mut/40',
+            'relative flex h-full flex-col border bg-bg/60 p-8 transition-colors duration-300',
+            p.highlight ? 'border-flame' : 'border-line hover:border-mut/40',
           ]}
         >
           {p.badge && (
