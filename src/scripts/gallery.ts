@@ -6,8 +6,7 @@ import 'photoswipe/style.css';
 import { reduced } from './env';
 
 /** Лента галереи: Embla с бесконечной прокруткой. AutoScroll двигает ленту
- *  непрерывно с постоянной скоростью (speed — px за шаг 1/60 с: 1.5 = 90 px/s),
- *  при наведении мыши останавливает сразу и продолжает с того же места.
+ *  непрерывно с постоянной скоростью (speed — px за шаг 1/60 с: 1.5 = 90 px/s).
  *  Свайп — с инерцией (dragFree), колёсико — только горизонтальное (тачпад,
  *  Shift+колесо), вертикальное листает страницу. Сетка и затемнение кадра
  *  снимаются через CSS. */
@@ -15,10 +14,73 @@ const viewport = document.querySelector<HTMLElement>('[data-gallery-embla]');
 const embla =
   viewport && !reduced
     ? EmblaCarousel(viewport, { loop: true, dragFree: true, align: 'start' }, [
-        AutoScroll({ speed: 1.5, startDelay: 0, stopOnMouseEnter: true, stopOnInteraction: false }),
+        // встроенные паузы плагина выключены — ими управляет hold ниже: плагин
+        // запускал ленту на mouseleave посреди перетаскивания (жест обрывался)
+        // и на focusout, когда нажатие мышью переводит фокус с миниатюры на
+        // миниатюру (лента ехала под курсором, захватить её было нельзя).
+        // stopOnInteraction: true — плагин только останавливается на нажатии.
+        AutoScroll({
+          speed: 1.5,
+          startDelay: 0,
+          playOnInit: false,
+          stopOnInteraction: true,
+          stopOnMouseEnter: false,
+          stopOnFocusIn: false,
+        }),
         WheelGesturesPlugin({ forceWheelAxis: 'x' }),
       ])
     : undefined;
+const autoScroll = embla?.plugins().autoScroll;
+
+/** Лента стоит, пока выполнено хоть одно: над ней мышь (пауза мгновенная,
+ *  продолжает с того же места), её тянут или она докатывается по инерции,
+ *  фокус с клавиатуры на миниатюре, открыт лайтбокс. */
+const hold = { hover: false, drag: false, settling: false, focus: false, open: false };
+const sync = () => {
+  if (!autoScroll) return;
+  if (Object.values(hold).some(Boolean)) autoScroll.stop();
+  else if (!autoScroll.isPlaying()) autoScroll.play();
+};
+if (viewport && embla) {
+  const isTouch = (e: PointerEvent) => e.pointerType === 'touch';
+  viewport.addEventListener('pointerenter', (e) => {
+    if (isTouch(e)) return;
+    hold.hover = true;
+    sync();
+  });
+  viewport.addEventListener('pointerleave', (e) => {
+    if (isTouch(e)) return;
+    hold.hover = false;
+    sync();
+  });
+  // перетаскивание мышью, свайп и колёсико (WheelGestures идёт тем же путём)
+  embla.on('pointerDown', () => {
+    hold.drag = true;
+    hold.settling = false;
+    sync();
+  });
+  embla.on('pointerUp', () => {
+    hold.drag = false;
+    hold.settling = true;
+  });
+  embla.on('settle', () => {
+    if (!hold.settling) return;
+    hold.settling = false;
+    sync();
+  });
+  // фокус после нажатия мышью не :focus-visible — ленту не держит
+  viewport.addEventListener('focusin', (e) => {
+    hold.focus = (e.target as Element).matches(':focus-visible');
+    sync();
+  });
+  viewport.addEventListener('focusout', (e) => {
+    if (viewport.contains(e.relatedTarget as Node | null)) return;
+    hold.focus = false;
+    sync();
+  });
+  hold.hover = viewport.matches(':hover');
+  sync();
+}
 
 /** Лайтбокс — PhotoSwipe: свайп между кадрами, pinch-zoom и двойной тап,
  *  закрытие свайпом вниз, клавиатура (стрелки, Esc), фокус заперт внутри.
@@ -99,20 +161,16 @@ if (thumbs.length) {
     el?.setAttribute('aria-label', 'Фото галереи');
   });
 
-  // пока лайтбокс открыт, лента под ним стоит; AutoScroll сам запускается на
-  // mouseleave (курсор уходит на оверлей) — гасим такой запуск
-  const autoScroll = embla?.plugins().autoScroll;
-  let open = false;
-  embla?.on('autoScroll:play', () => {
-    if (open) queueMicrotask(() => autoScroll?.stop());
-  });
+  // пока лайтбокс открыт, лента под ним стоит; после закрытия курсор может
+  // оказаться над лентой без нового pointerenter — берём :hover
   lightbox.on('beforeOpen', () => {
-    open = true;
-    autoScroll?.stop();
+    hold.open = true;
+    sync();
   });
   lightbox.on('destroy', () => {
-    open = false;
-    if (!viewport?.matches(':hover')) autoScroll?.play();
+    hold.open = false;
+    hold.hover = Boolean(viewport?.matches(':hover'));
+    sync();
   });
 
   lightbox.init();
@@ -120,7 +178,7 @@ if (thumbs.length) {
   for (const [index, thumb] of thumbs.entries()) {
     thumb.addEventListener('click', (e) => {
       // фокус возвращаем на миниатюру только при открытии с клавиатуры:
-      // после клика мышью фокус на миниатюре остановил бы ленту (stopOnFocusIn)
+      // после клика мышью кольцо фокуса на миниатюре было бы лишним
       const byKeyboard = e.detail === 0;
       lightbox.options.returnFocus = byKeyboard;
       if (!byKeyboard) thumb.blur();
