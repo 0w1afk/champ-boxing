@@ -13,7 +13,13 @@ import Placeholder from './Placeholder.astro';
     {/* Заглушка — sticky, как в example */}
     <div class="lg:col-span-5" data-reveal>
       <div class="lg:sticky lg:top-28">
-        <Placeholder label={CLUB.imageSlot} parallax watermark class="aspect-[3/4] w-full" />
+        <Placeholder label="Иллюстрация: удар в кожаную грушу, меловая пыль" parallax class="aspect-[3/4] w-full">
+          <img
+            src="/img/club-punch.jpg"
+            alt="Иллюстрация: перчатка в момент удара по кожаной груше, облако меловой пыли"
+            class="h-full w-full object-cover"
+          />
+        </Placeholder>
         <p class="mt-4 flex items-center gap-3 text-[11px] uppercase tracking-[0.22em] text-mut">
           <span class="h-px w-8 bg-flame" aria-hidden></span>
           {CLUB.imageCaption}
