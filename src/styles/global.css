@@ -181,6 +181,21 @@ details[open] .sign::after {
   transform: scale(1) rotate(-2deg);
 }
 
+/* Киноплёнка превью формата: три кадра + дубль первого, лента едет сверху вниз
+   без пауз. Сдвиг ровно на три кадра (−75% → 0), конец цикла совпадает
+   с началом, поэтому петля незаметна. Только transform — работа композитора. */
+@keyframes film-roll {
+  from {
+    transform: translateY(-75%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+[data-preview-film].is-rolling {
+  animation: film-roll 12s linear infinite;
+}
+
 /* Кастомный курсор: системный скрывается только при активном кастомном;
    сам курсор pointer-events: none — не перехватывает клики */
 #cursor,
@@ -254,6 +269,9 @@ details[open] .sign::after {
   [data-preview-card] {
     transition: none !important;
     transform: none !important;
+  }
+  [data-preview-film].is-rolling {
+    animation: none;
   }
   a:active,
   button:active {

@@ -144,6 +144,25 @@ if (!reduced && fine && document.getElementById('cursor')) {
   })();
 }
 
+/** Киноплёнка в превью: лента из трёх кадров едет сверху вниз без пауз.
+ *  4-й кадр — дубль первого, поэтому цикл замыкается незаметно.
+ *  Движение — CSS-анимация (film-roll), JS только включает активную ленту. */
+const strips = document.querySelectorAll<HTMLElement>('[data-preview-strip]');
+
+const showFilm = (slug: string | null) => {
+  for (const strip of strips) {
+    const active = strip.dataset.previewStrip === slug;
+    strip.classList.toggle('hidden', !active);
+    const film = strip.querySelector<HTMLElement>('[data-preview-film]');
+    if (!film) continue;
+    film.classList.remove('is-rolling');
+    if (active) {
+      void film.offsetWidth; // сброс зафиксирован — лента начинается с первого кадра
+      film.classList.add('is-rolling');
+    }
+  }
+};
+
 /** Плавающее превью формата за курсором (только точные указатели). */
 const area = document.querySelector<HTMLElement>('[data-preview-area]');
 const preview = document.querySelector<HTMLElement>('[data-preview]');
@@ -167,8 +186,10 @@ if (!reduced && fine && area && preview && previewCard && previewLabel) {
     if (row) {
       previewLabel.textContent = row.getAttribute('data-slot') || '';
       previewCard.classList.add('is-active');
+      showFilm(row.getAttribute('data-img'));
     } else {
       previewCard.classList.remove('is-active');
+      showFilm(null);
     }
   };
   for (const row of area.querySelectorAll('[data-slot]')) {
@@ -182,6 +203,23 @@ if (!reduced && fine && area && preview && previewCard && previewLabel) {
       setActive(null);
     }
   });
+
+  /** Кадры ленты грузим заранее, когда секция подходит к вьюпорту:
+   *  превью возникает под курсором, ждать загрузку нельзя. Ленты лежат
+   *  в display:none-слоях, поэтому lazy-загрузка сама не начнётся. */
+  if (matchMedia('(min-width: 1024px)').matches && 'IntersectionObserver' in window) {
+    const warm = new IntersectionObserver(
+      ([entry], io) => {
+        if (!entry.isIntersecting) return;
+        io.disconnect();
+        for (const img of document.querySelectorAll<HTMLImageElement>('[data-preview-strip] img')) {
+          img.loading = 'eager';
+        }
+      },
+      { rootMargin: '600px 0px' },
+    );
+    warm.observe(area);
+  }
 }
 
 /** Слежение за курсором: элемент мягко смещается за указателем внутри своей плоскости
