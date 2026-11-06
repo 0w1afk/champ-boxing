@@ -279,6 +279,9 @@ html .pswp {
   width: 18px;
   height: 18px;
   fill: none;
+  /* PhotoSwipe ставит самому svg color: --pswp-icon-color-secondary (у нас
+     цвет фона) — без inherit currentColor давал тёмную обводку на тёмной кнопке */
+  color: inherit;
   stroke: currentColor;
   stroke-width: 1.5;
   overflow: visible;
