@@ -41,7 +41,6 @@ export const HERO = {
   contourWord: 'Бокс',
   badgeTop: 'Первое занятие в группе — бесплатно',
   badgeBottom: 'CHAMP BOXING CLUB — Хабаровск',
-  imageSlot: 'макро: перчатка, бинты',
   stats: [
     { value: '6', label: 'форматов тренировок' },
     { value: '5', label: 'тренеров — МС и КМС' },

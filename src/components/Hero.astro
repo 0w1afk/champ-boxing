@@ -73,11 +73,11 @@ import Placeholder from './Placeholder.astro';
     {/* Правая колонка — изображение-заглушка с бейджами */}
     <div class="relative lg:col-span-5">
       <div class="relative h-[52vh] min-h-[380px] lg:h-full">
-        <Placeholder label={HERO.imageSlot} parallax class="h-full w-full">
+        <Placeholder label="Иллюстрация: боксёр в защитном шлеме, крупный план" parallax class="h-full w-full">
           <img
-            src="/logo.png"
-            alt="Маскот CHAMP — медведь-боксёр в перчатках"
-            class="h-[78%] w-auto"
+            src="/img/hero-boxer.png"
+            alt="Иллюстрация: боксёр в защитном шлеме, крупный план половины лица"
+            class="h-full w-full object-cover"
           />
         </Placeholder>
         <div class="absolute left-4 top-4 z-[2] flex items-center gap-2 border border-line bg-bg/85 px-3 py-2 backdrop-blur-sm">
