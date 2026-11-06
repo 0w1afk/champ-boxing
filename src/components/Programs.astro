@@ -24,25 +24,22 @@ const frame = (slug: string, n: number) => frameFiles[`../assets/img/formats/${s
       data-preview-card
       class="halftone relative -ml-28 -mt-44 flex h-80 w-56 items-center justify-center overflow-hidden border border-line bg-surface shadow-2xl shadow-black/60"
     >
-      {/* Киноплёнка: вертикальный Swiper из трёх кадров формата, едет непрерывно
-          сверху вниз; между кадрами — чёрная полоса 3px */}
+      {/* Киноплёнка: CSS-анимация (.film-track в global.css) — три кадра формата
+          и их копия, дорожка едет вниз на высоту трёх кадров и бесшовно
+          повторяется; между кадрами — чёрная полоса 3px. Кадр h-80 = высота карточки. */}
       {FORMATS.map((p) => (
         <div data-preview-strip={p.img} class="invisible absolute inset-0 overflow-hidden" aria-hidden>
-          <div class="swiper h-full w-full" data-preview-swiper>
-            <div class="swiper-wrapper">
-              {[1, 2, 3].map((n) => (
-                <div class="swiper-slide h-full">
-                  <Image
-                    src={frame(p.img, n)}
-                    alt=""
-                    widths={[224, 448]}
-                    sizes="224px"
-                    loading="lazy"
-                    class="h-full w-full border-b-[3px] border-black object-cover"
-                  />
-                </div>
-              ))}
-            </div>
+          <div class="film-track flex flex-col">
+            {[1, 2, 3, 1, 2, 3].map((n) => (
+              <Image
+                src={frame(p.img, n)}
+                alt=""
+                widths={[224, 448]}
+                sizes="224px"
+                loading="lazy"
+                class="h-80 w-full shrink-0 border-b-[3px] border-black object-cover"
+              />
+            ))}
           </div>
           <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20" />
         </div>

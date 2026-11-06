@@ -1,28 +1,24 @@
-import Swiper from 'swiper';
-import { Autoplay, FreeMode, Mousewheel } from 'swiper/modules';
+import EmblaCarousel from 'embla-carousel';
+import AutoScroll from 'embla-carousel-auto-scroll';
+import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures';
 import { reduced } from './env';
 
-/** Лента галереи: бесконечная лента Swiper (Autoplay), колонки по два кадра.
- *  На hover лента замирает, сетка и затемнение кадра снимаются через CSS;
- *  горизонтальное колёсико (тачпад, Shift+колесо) листает ленту. */
-const strip = document.querySelector<HTMLElement>('[data-gallery-swiper]');
-if (strip && !reduced) {
-  new Swiper(strip, {
-    modules: [Autoplay, FreeMode, Mousewheel],
-    freeMode: true,
-    slidesPerView: 'auto',
-    spaceBetween: 5,
-    loop: true,
-    loopAdditionalSlides: 2,
-    loopPreventsSliding: false,
-    speed: 4500,
-    autoplay: { delay: 0, disableOnInteraction: false, pauseOnMouseEnter: true },
-    mousewheel: { forceToAxis: true },
-  });
+/** Лента галереи: Embla с бесконечной прокруткой. AutoScroll двигает ленту
+ *  непрерывно с постоянной скоростью (speed — px за шаг 1/60 с: 1.5 = 90 px/s),
+ *  при наведении мыши останавливает сразу и продолжает с того же места.
+ *  Свайп — с инерцией (dragFree), колёсико — только горизонтальное (тачпад,
+ *  Shift+колесо), вертикальное листает страницу. Сетка и затемнение кадра
+ *  снимаются через CSS. */
+const viewport = document.querySelector<HTMLElement>('[data-gallery-embla]');
+if (viewport && !reduced) {
+  EmblaCarousel(viewport, { loop: true, dragFree: true, align: 'start' }, [
+    AutoScroll({ speed: 1.5, startDelay: 0, stopOnMouseEnter: true, stopOnInteraction: false }),
+    WheelGesturesPlugin({ forceWheelAxis: 'x' }),
+  ]);
 }
 
-/** Лайтбокс на <dialog>: карточки дублируются Swiper-ом, поэтому индекс кадра
- *  берём из data, а не из позиции. Стрелки и свайп листают, Esc закрывает,
+/** Лайтбокс на <dialog>: индекс кадра берём из data, а не из позиции
+ *  (Embla переставляет колонки для бесконечной прокрутки). Стрелки и свайп листают, Esc закрывает,
  *  соседние кадры греем заранее. */
 const dialog = document.querySelector<HTMLDialogElement>('[data-gallery-dialog]');
 const thumbs = [...document.querySelectorAll<HTMLElement>('[data-gallery-photo]')];

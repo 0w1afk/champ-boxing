@@ -1,42 +1,13 @@
-import Swiper from 'swiper';
-import { Autoplay, FreeMode } from 'swiper/modules';
 import { fine, reduced } from './env';
 
-/** Киноплёнка в превью формата: вертикальная лента Swiper из трёх кадров
- *  (Autoplay). Инстанс создаётся при первом показе ленты. Неактивные
- *  ленты прячутся через visibility, а не display:none: display:none отменяет
- *  CSS-переход, transitionend не приходит и Autoplay останавливается. */
+/** Киноплёнка в превью формата едет CSS-анимацией (.film-track) — здесь только
+ *  выбор ленты. Неактивные ленты прячутся через visibility. */
 const strips = [...document.querySelectorAll<HTMLElement>('[data-preview-strip]')];
-const films = new Map<string, Swiper>();
-
-const ensureSwiper = (strip: HTMLElement) => {
-  const key = strip.dataset.previewStrip || '';
-  const existing = films.get(key);
-  if (existing) return existing;
-  const root = strip.querySelector<HTMLElement>('.swiper');
-  if (!root) return undefined;
-  const swiper = new Swiper(root, {
-    modules: [Autoplay, FreeMode],
-    freeMode: true,
-    direction: 'vertical',
-    loop: true,
-    loopAdditionalSlides: 2,
-    slidesPerView: 1,
-    allowTouchMove: false,
-    speed: 8000,
-    autoplay: { delay: 0, disableOnInteraction: false, reverseDirection: true },
-  });
-  films.set(key, swiper);
-  return swiper;
-};
 
 const showFilm = (slug: string | null) => {
   for (const strip of strips) {
     strip.classList.toggle('invisible', strip.dataset.previewStrip !== slug);
   }
-  if (!slug) return;
-  const strip = strips.find((s) => s.dataset.previewStrip === slug);
-  if (strip) ensureSwiper(strip);
 };
 
 /** Плавающее превью формата за курсором (только точные указатели). */

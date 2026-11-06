@@ -1,19 +1,24 @@
 ---
 import { TICKER } from '../data/site';
 
-// Тикер под хиро: Swiper в режиме непрерывной прокрутки (delay 0), пауза на hover.
-// Без JS и при prefers-reduced-motion строка остаётся статичной.
+// Тикер под хиро: CSS-анимация (.marquee-track в global.css). Дорожка — две
+// одинаковые копии фактов, едет на ширину одной копии и бесшовно повторяется;
+// пауза на hover мгновенная. Скорость в px/s выставляет ticker.ts.
+// Без JS лента едет с запасной длительностью; при prefers-reduced-motion
+// строка статична и переносится.
 ---
 
-<div class="ticker overflow-hidden border-y border-line py-4">
-  <div class="swiper ticker-swiper" data-ticker>
-    <div class="swiper-wrapper items-center">
-      {TICKER.map((t) => (
-        <div class="swiper-slide !w-auto flex items-center whitespace-nowrap">
-          <span class="font-display text-sm font-medium uppercase tracking-[0.28em] text-mut">{t}</span>
-          <span class="mx-8 inline-block h-2 w-2 rotate-45 bg-flame" aria-hidden="true"></span>
-        </div>
-      ))}
-    </div>
+<div class="ticker marquee overflow-hidden border-y border-line py-4" data-ticker>
+  <div class="marquee-track items-center" data-ticker-track>
+    {[false, true].map((copy) => (
+      <div class="flex shrink-0 items-center" data-marquee-copy={copy ? '' : undefined} aria-hidden={copy ? 'true' : undefined}>
+        {TICKER.map((t) => (
+          <div class="flex items-center whitespace-nowrap">
+            <span class="font-display text-sm font-medium uppercase tracking-[0.28em] text-mut">{t}</span>
+            <span class="mx-8 inline-block h-2 w-2 rotate-45 bg-flame" aria-hidden="true"></span>
+          </div>
+        ))}
+      </div>
+    ))}
   </div>
 </div>

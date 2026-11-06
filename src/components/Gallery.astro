@@ -18,8 +18,8 @@ const photos = await Promise.all(
 // masonry в 2 ряда: слайд — колонка из двух фото, доли высоты чередуются 60/40 и 40/60.
 // Ширина колонки (aspect-ratio) считается при сборке как среднее натуральных ширин
 // обоих кадров при их доле высоты; кадры подрезаются object-cover. Нечётный последний
-// кадр занимает колонку целиком. Крутит Swiper (Autoplay с delay 0), пауза при
-// наведении, горизонтальное колёсико; лайтбокс — свой <dialog>.
+// кадр занимает колонку целиком. Крутит Embla (AutoScroll, ровный ход, мгновенная
+// пауза при наведении), свайп с инерцией, горизонтальное колёсико; лайтбокс — свой <dialog>.
 const SHARES = [
   [0.6, 0.4],
   [0.4, 0.6],
@@ -55,13 +55,14 @@ const ratio = (col: { i: number; share: number }[]) => {
 
   {/* Лента: без контейнера, во всю ширину экрана */}
   <div
-    class="gallery-strip swiper mt-10 h-[60vh] max-h-[760px] min-h-[320px] md:h-[80vh]"
-    data-gallery-swiper
+    class="gallery-strip mt-10 h-[60vh] max-h-[760px] min-h-[320px] touch-pan-y touch-pinch-zoom overflow-hidden md:h-[80vh]"
+    data-gallery-embla
   >
-    <div class="swiper-wrapper">
+    {/* Embla: корень — вьюпорт, первый потомок — дорожка, её дети — слайды */}
+    <div class="flex h-full">
       {columns.map((col) => (
         <div
-          class="swiper-slide !flex !h-full !w-auto flex-col gap-[5px]"
+          class="mr-[5px] flex h-full min-w-0 shrink-0 grow-0 flex-col gap-[5px]"
           style={`aspect-ratio: ${ratio(col)}`}
         >
           {col.map(({ i, share }) => (

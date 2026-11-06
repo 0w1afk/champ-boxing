@@ -70,11 +70,35 @@ body::after {
   -webkit-text-stroke: 1.5px #d4af37;
 }
 
-/* Swiper (тикер, галерея, киноплёнка превью): движение без пауз на стыках */
-.ticker-swiper .swiper-wrapper,
-.gallery-strip .swiper-wrapper,
-[data-preview-swiper] .swiper-wrapper {
-  transition-timing-function: linear;
+/* Бегущие ленты на CSS-анимации: дорожка из двух одинаковых копий едет на
+   ширину (высоту) одной копии и бесшовно повторяется; transform — на композиторе.
+   Тикер: скорость в px/s задаёт ticker.ts через --marquee-duration, пауза на hover.
+   Киноплёнка превью: 3 кадра по 320px, 8 s на кадр, едет вниз. */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-x var(--marquee-duration, 52s) linear infinite;
+}
+@keyframes marquee-x {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@media (hover: hover) and (pointer: fine) {
+  .marquee:hover .marquee-track {
+    animation-play-state: paused;
+  }
+}
+.film-track {
+  animation: film-down 24s linear infinite;
+}
+@keyframes film-down {
+  from {
+    transform: translateY(-50%);
+  }
+  to {
+    transform: translateY(0);
+  }
 }
 
 /* reveal-block: появление при входе в вьюпорт, один раз (классы добавляет JS) */
@@ -262,13 +286,22 @@ html.has-preview [data-cursor-ring] {
   .mobile-menu[open] .menu-item {
     animation: none;
   }
-  /* Тикер и галерея без Swiper: строка переносится, ленту можно прокрутить вручную */
-  .ticker-swiper {
-    overflow: visible;
+  /* Тикер без анимации: одна копия, строка переносится; галерею можно прокрутить вручную */
+  .marquee-track,
+  .film-track {
+    animation: none;
   }
-  .ticker-swiper .swiper-wrapper {
+  .marquee-track {
+    width: auto;
+  }
+  .marquee-track > :first-child {
+    flex-shrink: 1;
+    min-width: 0;
     flex-wrap: wrap;
     row-gap: 0.5rem;
+  }
+  [data-marquee-copy] {
+    display: none;
   }
   .gallery-strip {
     overflow-x: auto;

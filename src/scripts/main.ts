@@ -2,8 +2,6 @@
  * Точка входа скриптов сайта: каждый эффект — отдельный модуль,
  * грузится одним бандлом через Astro. Порядок не важен.
  */
-import 'swiper/css';
-
 import './parallax';
 import './hero-word';
 import './reveal';
