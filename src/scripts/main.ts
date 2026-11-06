@@ -14,3 +14,5 @@ import './gallery';
 import './video-bg';
 import './map';
 import './menu';
+import './nav-active';
+import './consent';

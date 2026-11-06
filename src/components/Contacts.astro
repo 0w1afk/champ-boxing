@@ -5,7 +5,10 @@ import Placeholder from './Placeholder.astro';
 const waHref = wa(MSG.base);
 ---
 
-<section id="contacts" class="relative overflow-hidden pb-20 md:pb-28">
+<section id="contacts" class="relative -scroll-mt-16 overflow-hidden pb-20 md:-scroll-mt-24 md:pb-28">
+  {/* overflow-hidden (под фон) не даёт верхнему отступу шапки раздела (mt-16/24)
+      выйти за секцию, как у остальных разделов, — якорь оказался бы ниже на этот
+      отступ; отрицательный scroll-margin выравнивает переход по меню */}
   {/* Фон: заглушка с параллаксом + градиент от фона (по референсу) */}
   <div class="absolute inset-0" aria-hidden="true">
     <Placeholder label={CONTACTS.imageSlot} decor watermark parallax class="h-full w-full border-0 opacity-45" />

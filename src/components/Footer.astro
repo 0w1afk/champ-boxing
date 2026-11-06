@@ -1,5 +1,5 @@
 ---
-import { FOOTER, NAV } from '../data/site';
+import { COOKIE, FOOTER, NAV } from '../data/site';
 ---
 
 <footer class="mt-auto border-t border-line">
@@ -38,6 +38,13 @@ import { FOOTER, NAV } from '../data/site';
       <a href={FOOTER.privacy.href} class="text-[11px] font-medium uppercase tracking-[0.2em] text-mut underline underline-offset-4 transition-colors duration-300 hover:text-bright">
         {FOOTER.privacy.label}
       </a>
+      <button
+        type="button"
+        data-consent-open
+        class="cursor-pointer border-0 bg-transparent p-0 text-[11px] font-medium uppercase tracking-[0.2em] text-mut underline underline-offset-4 transition-colors duration-300 hover:text-bright"
+      >
+        {COOKIE.settings}
+      </button>
     </div>
   </div>
 </footer>

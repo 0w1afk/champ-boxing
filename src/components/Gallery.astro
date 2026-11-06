@@ -9,8 +9,9 @@ const files = import.meta.glob<{ default: ImageMetadata }>('../assets/img/galler
 const photos = await Promise.all(
   GALLERY.map(async (g) => {
     const src = files[`../assets/img/gallery/${g.n}.jpg`]!.default;
-    const full = await getImage({ src, width: Math.min(1600, src.width), format: 'webp', quality: 80 });
-    return { ...g, src, full: full.src };
+    const width = Math.min(1600, src.width);
+    const full = await getImage({ src, width, format: 'webp', quality: 80 });
+    return { ...g, src, full: full.src, fullW: width, fullH: Math.round((src.height * width) / src.width) };
   }),
 );
 
@@ -19,7 +20,7 @@ const photos = await Promise.all(
 // Ширина колонки (aspect-ratio) считается при сборке как среднее натуральных ширин
 // обоих кадров при их доле высоты; кадры подрезаются object-cover. Нечётный последний
 // кадр занимает колонку целиком. Крутит Embla (AutoScroll, ровный ход, мгновенная
-// пауза при наведении), свайп с инерцией, горизонтальное колёсико; лайтбокс — свой <dialog>.
+// пауза при наведении), свайп с инерцией, горизонтальное колёсико; лайтбокс — PhotoSwipe (gallery.ts).
 const SHARES = [
   [0.6, 0.4],
   [0.4, 0.6],
@@ -70,6 +71,8 @@ const ratio = (col: { i: number; share: number }[]) => {
               type="button"
               data-gallery-photo={String(i)}
               data-full={photos[i]!.full}
+              data-full-w={String(photos[i]!.fullW)}
+              data-full-h={String(photos[i]!.fullH)}
               aria-label={`Открыть фото ${i + 1} из ${GALLERY.length}`}
               class="group relative min-h-0 w-full cursor-pointer overflow-hidden border-0 bg-transparent p-0"
               style={`flex: ${share * 10} 1 0%`}
@@ -96,51 +99,4 @@ const ratio = (col: { i: number; share: number }[]) => {
     </div>
   </div>
 
-  {/* Лайтбокс на нативном <dialog>: Esc и клик по фону закрывают, стрелки листают */}
-  <dialog
-    data-gallery-dialog
-    aria-label="Фото галереи"
-    class="m-auto h-dvh max-h-none w-full max-w-none border-0 bg-transparent p-0 backdrop:bg-bg/95"
-  >
-    <img
-      data-gallery-full
-      alt=""
-      class="absolute inset-0 m-auto max-h-[86dvh] max-w-[94vw] object-contain"
-    />
-    <button
-      type="button"
-      data-gallery-prev
-      aria-label="Предыдущее фото"
-      class="absolute left-3 top-1/2 -translate-y-1/2 border border-line bg-bg/70 px-4 py-4 text-ink transition-colors hover:border-flame hover:text-bright"
-    >
-      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden>
-        <path d="M14 4l-7 7 7 7" />
-      </svg>
-    </button>
-    <button
-      type="button"
-      data-gallery-next
-      aria-label="Следующее фото"
-      class="absolute right-3 top-1/2 -translate-y-1/2 border border-line bg-bg/70 px-4 py-4 text-ink transition-colors hover:border-flame hover:text-bright"
-    >
-      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden>
-        <path d="M8 4l7 7-7 7" />
-      </svg>
-    </button>
-    <button
-      type="button"
-      data-gallery-close
-      aria-label="Закрыть"
-      class="absolute right-3 top-3 border border-line bg-bg/70 p-3 text-ink transition-colors hover:border-flame hover:text-bright"
-    >
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden>
-        <path d="M3 3l12 12M15 3L3 15" />
-      </svg>
-    </button>
-    <p
-      data-gallery-counter
-      class="absolute bottom-4 left-1/2 -translate-x-1/2 font-display text-xs uppercase tracking-[0.28em] text-mut"
-    >
-    </p>
-  </dialog>
 </section>

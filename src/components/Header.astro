@@ -2,7 +2,9 @@
 import { NAV, PHONE_DISPLAY, MSG, wa } from '../data/site';
 
 // Шапка по референсу example: fixed, blur, лого-ромб, десктоп-навигация,
-// полноэкранное мобильное меню на <details> (работает без JS).
+// полноэкранное мобильное меню на <details> (работает без JS). Активный раздел
+// подсвечивается по aria-current (nav-active.ts): светлый текст, на десктопе —
+// золотая линия под пунктом.
 ---
 
 <header class="fixed inset-x-0 top-0 z-50 border-b border-line bg-bg/80 backdrop-blur-sm">
@@ -14,7 +16,10 @@ import { NAV, PHONE_DISPLAY, MSG, wa } from '../data/site';
 
     <nav class="hidden items-center gap-7 lg:flex" aria-label="Основная навигация">
       {NAV.map((n) => (
-        <a href={n.href} class="text-xs font-medium uppercase tracking-[0.22em] text-mut transition-colors duration-300 hover:text-bright">
+        <a
+          href={n.href}
+          class="relative py-1 text-xs font-medium uppercase tracking-[0.22em] text-mut transition-colors duration-300 after:absolute after:-bottom-0.5 after:left-0 after:right-[0.22em] after:h-px after:origin-left after:scale-x-0 after:bg-flame after:transition-transform after:duration-300 hover:text-bright aria-[current=location]:text-bright aria-[current=location]:after:scale-x-100"
+        >
           {n.label}
         </a>
       ))}
@@ -67,7 +72,7 @@ import { NAV, PHONE_DISPLAY, MSG, wa } from '../data/site';
                 class="menu-item group flex items-baseline gap-4 border-b border-line py-4"
               >
                 <span class="text-xs text-flame">0{i + 1}</span>
-                <span class="font-display text-4xl font-medium uppercase tracking-[0.025em] transition-colors group-hover:text-bright">
+                <span class="font-display text-4xl font-medium uppercase tracking-[0.025em] transition-colors group-hover:text-bright group-aria-[current=location]:text-bright">
                   {n.label}
                 </span>
               </a>

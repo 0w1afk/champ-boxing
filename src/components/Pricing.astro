@@ -3,7 +3,10 @@ import { PRICING, MSG, wa } from '../data/site';
 import SectionHead from './SectionHead.astro';
 ---
 
-<section id="prices" class="relative isolate overflow-hidden pb-20 md:pb-28">
+<section id="prices" class="relative isolate -scroll-mt-16 overflow-hidden pb-20 md:-scroll-mt-24 md:pb-28">
+  {/* overflow-hidden (под фон) не даёт верхнему отступу шапки раздела (mt-16/24)
+      выйти за секцию, как у остальных разделов, — якорь оказался бы ниже на этот
+      отступ; отрицательный scroll-margin выравнивает переход по меню */}
   {/* Фон секции — видео из хиро старого сайта, затемнено под карточки;
       грузится и играет только когда секция на экране (JS), без JS — постер */}
   <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10">

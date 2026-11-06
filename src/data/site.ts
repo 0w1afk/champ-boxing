@@ -353,13 +353,29 @@ export const CONTACTS = {
   imageSlot: 'зал клуба, ринг',
 } as const;
 
+/** Яндекс Метрика: счётчик старого сайта с теми же настройками. Пока выключен
+ *  (решение пользователя от 06.11.2026) — баннер согласия показывается, но счётчик
+ *  не грузится. Включать: enabled: true. Грузится только после «Принять». */
+export const METRIKA = {
+  id: 98114653,
+  enabled: false,
+  options: { clickmap: true, trackLinks: true, accurateTrackBounce: true, webvisor: true },
+} as const;
+
+export const COOKIE = {
+  text: 'Мы используем файлы cookie и Яндекс Метрику, чтобы понимать, как посетители пользуются сайтом.',
+  note: 'Метрика включится, только если вы согласитесь.',
+  policy: 'Подробнее — в политике конфиденциальности',
+  accept: 'Принять',
+  decline: 'Отказаться',
+  settings: 'Настройки cookie',
+} as const;
+
 export const FOOTER = {
   name: 'CHAMP BOXING CLUB',
   tagline: 'Боксёрский клуб, Хабаровск',
   socials: [
     { label: 'VK', href: 'https://vk.com/champ.boxing27' },
-    // Подпись заменена по решению пользователя от 05.11.2026; ссылка не публикуется.
-    { label: '[РКН]', href: null },
   ],
   privacy: { href: '/privacy/', label: 'Политика конфиденциальности' },
 } as const;

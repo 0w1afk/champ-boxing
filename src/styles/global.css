@@ -213,6 +213,170 @@ details[open] .sign::after {
   display: none;
 }
 
+/* Лайтбокс галереи (PhotoSwipe) в стиле сайта: сплошная тёмная подложка с
+   плёночным зерном, квадратные кнопки 44px с тонкой рамкой и линейными иконками
+   (как в шапке), золото на наведении и фокусе, счётчик шрифтом заголовков,
+   индикатор загрузки — золотой ромб (как маркеры тикера).
+   html .pswp — переменные PhotoSwipe объявлены на .pswp в его CSS, который
+   подключается позже; без повышения специфичности они перебивают наши. */
+html .pswp {
+  --pswp-bg: var(--color-bg);
+  --pswp-placeholder-bg: var(--color-surface);
+  --pswp-icon-color: var(--color-ink);
+  --pswp-icon-color-secondary: var(--color-bg);
+  --pswp-icon-stroke-color: var(--color-bg);
+  --pswp-error-text-color: var(--color-mut);
+  /* выше всего на странице (зерно — 80), но ниже кастомного курсора (90) */
+  --pswp-root-z-index: 85;
+}
+.pswp::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.pswp .pswp__top-bar {
+  top: 1rem;
+  left: 1.25rem;
+  right: 1.25rem;
+  width: auto;
+  height: 2.75rem;
+  align-items: center;
+  gap: 0.5rem;
+}
+.pswp .pswp__button,
+.pswp .pswp__button:hover,
+.pswp .pswp__button:active,
+.pswp .pswp__button:focus {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid var(--color-line);
+  background: rgb(11 10 9 / 0.7);
+  color: var(--color-ink);
+  opacity: 1;
+  transition:
+    border-color 300ms,
+    color 300ms;
+}
+.pswp .pswp__button:hover,
+.pswp .pswp__button:focus-visible {
+  border-color: var(--color-flame);
+  color: var(--color-bright);
+}
+.pswp .pswp__button:focus-visible {
+  outline: 2px solid var(--color-bright);
+  outline-offset: 3px;
+}
+.pswp .pswp__button .pswp__icn {
+  position: static;
+  margin: 0;
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  overflow: visible;
+}
+.pswp .pswp__button--close {
+  margin-right: 0;
+}
+.pswp.pswp--zoom-allowed .pswp__button--zoom {
+  display: inline-flex;
+}
+.pswp .pswp__button--arrow {
+  top: 50%;
+  margin-top: -1.375rem;
+}
+.pswp .pswp__button--arrow--prev {
+  left: 1.25rem;
+}
+.pswp .pswp__button--arrow--next {
+  right: 1.25rem;
+}
+.pswp .pswp__button--arrow--next .pswp__icn {
+  transform: scale(-1, 1);
+}
+.pswp-count {
+  margin-right: auto;
+  font-family: var(--font-display);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  color: var(--color-mut);
+  user-select: none;
+}
+.pswp-count__cur {
+  color: var(--color-flame);
+}
+.pswp-count__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.pswp--one-slide .pswp-count {
+  display: none;
+}
+.pswp .pswp__preloader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin-right: 0;
+}
+.pswp .pswp__preloader .pswp__icn {
+  display: none;
+}
+.pswp .pswp__preloader::after {
+  content: "";
+  width: 0.5rem;
+  height: 0.5rem;
+  background: var(--color-flame);
+  transform: rotate(45deg);
+  opacity: 0;
+  transition: opacity 200ms;
+}
+.pswp .pswp__preloader--active::after {
+  opacity: 1;
+  animation: pswp-diamond 900ms ease-in-out infinite;
+}
+@keyframes pswp-diamond {
+  50% {
+    transform: rotate(225deg) scale(0.6);
+  }
+  100% {
+    transform: rotate(405deg);
+  }
+}
+.pswp .pswp__error-msg {
+  font-family: var(--font-display);
+  font-size: 0.8125rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+@media (min-width: 768px) {
+  .pswp .pswp__top-bar {
+    top: 1.5rem;
+    left: 2.5rem;
+    right: 2.5rem;
+  }
+  .pswp .pswp__button--arrow--prev {
+    left: 2.5rem;
+  }
+  .pswp .pswp__button--arrow--next {
+    right: 2.5rem;
+  }
+}
+
 /* Сетка и затемнение поверх кадров; при наведении на кадр снимаются (group-hover) */
 .gallery-veil {
   background-color: rgb(11 10 9 / 0.55);
@@ -247,6 +411,12 @@ html.has-preview [data-cursor-ring] {
   }
   html.has-cursor #cursor {
     display: block;
+  }
+  /* в лайтбоксе тоже только кастомный курсор: PhotoSwipe ставит свои
+     zoom-in/grab — иначе поверх кадра было бы два курсора */
+  html.has-cursor .pswp,
+  html.has-cursor .pswp * {
+    cursor: none !important;
   }
 }
 
