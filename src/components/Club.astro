@@ -13,11 +13,16 @@ import Placeholder from './Placeholder.astro';
     {/* Заглушка — sticky, как в example */}
     <div class="lg:col-span-5" data-reveal>
       <div class="lg:sticky lg:top-28">
-        <Placeholder label="Иллюстрация: боксёрская перчатка крупным планом" parallax class="aspect-[3/4] w-full">
+        <Placeholder
+          label="Иллюстрация: боксёрская перчатка крупным планом"
+          parallax={3}
+          parallaxShift="top-0 h-full"
+          class="aspect-[3/4] w-full"
+        >
           <img
             src="/img/club-punch.png"
             alt="Иллюстрация: боксёрская перчатка крупным планом"
-            class="h-full w-full object-cover object-top"
+            class="h-full w-full object-cover"
           />
         </Placeholder>
         <p class="mt-4 flex items-center gap-3 text-[11px] uppercase tracking-[0.22em] text-mut">

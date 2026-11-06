@@ -4,20 +4,30 @@
 interface Props {
   label: string;
   class?: string;
-  parallax?: boolean;
+  parallax?: boolean | number;
   /** Декоративный фон (подпись не выводится) — фоновые плоскости секций. */
   decor?: boolean;
   /** Водяной знак — маскот CHAMP по центру плоскости. */
   watermark?: boolean;
+  /** Классы параллакс-слоя; по умолчанию запас -top-[10%] h-[120%] под дрейф. */
+  parallaxShift?: string;
 }
-const { label, class: className = '', parallax = false, decor = false, watermark = false } = Astro.props;
+const {
+  label,
+  class: className = '',
+  parallax = false,
+  decor = false,
+  watermark = false,
+  parallaxShift = '-top-[10%] h-[120%]',
+} = Astro.props;
 const hasChildren = Astro.slots.has('default');
+const parallaxAmount = typeof parallax === 'number' ? parallax : parallax ? 7 : 0;
 ---
 
 <div class:list={[`halftone relative overflow-hidden border border-line bg-raised ${className}`]}>
   <div
-    class="absolute inset-x-0 -top-[10%] flex h-[120%] w-full items-center justify-center"
-    data-parallax={parallax ? '7' : undefined}
+    class:list={['absolute inset-x-0 flex items-center justify-center', parallaxShift]}
+    data-parallax={parallaxAmount || undefined}
   >
     {hasChildren ? (
       <slot />
