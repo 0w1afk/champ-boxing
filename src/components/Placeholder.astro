@@ -1,5 +1,7 @@
 ---
-// Заглушка изображения: тёмная плоскость + halftone + подпись-слот (или маскот-водяной знак).
+import LogoMark from './LogoMark.astro';
+
+// Заглушка изображения: тёмная плоскость + halftone + подпись-слот (или знак клуба водяным знаком).
 // Опционально: параллакс плоскости; дети через default-slot заменяют содержимое.
 interface Props {
   label: string;
@@ -7,7 +9,7 @@ interface Props {
   parallax?: boolean | number;
   /** Декоративный фон (подпись не выводится) — фоновые плоскости секций. */
   decor?: boolean;
-  /** Водяной знак — маскот CHAMP по центру плоскости. */
+  /** Водяной знак — знак клуба (перчатка в круге) по центру плоскости. */
   watermark?: boolean;
   /** Классы параллакс-слоя; по умолчанию запас -top-[10%] h-[120%] под дрейф. */
   parallaxShift?: string;
@@ -33,7 +35,7 @@ const parallaxAmount = typeof parallax === 'number' ? parallax : parallax ? 7 : 
       <slot />
     ) : (
       <div class="flex flex-col items-center gap-5 px-6 text-center">
-        {watermark && <img src="/logo.png" alt="" class="h-1/2 max-h-56 w-auto opacity-80" />}
+        {watermark && <LogoMark class="aspect-square h-56 max-h-[50%] w-auto text-flame opacity-80" />}
         {!decor && (
           <span class="text-[11px] uppercase tracking-[0.22em] text-mut/70">
             Изображение: {label}

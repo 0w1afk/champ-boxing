@@ -87,7 +87,7 @@ const ratio = (col: { i: number; share: number }[]) => {
                 loading="lazy"
                 class="absolute inset-0 h-full w-full object-cover"
               />
-              {/* Сетка и затемнение: снимаются при наведении на конкретный кадр */}
+              {/* Сетка и затемнение: снимаются при наведении на конкретный кадр; на тач-экранах их нет (global.css) */}
               <span
                 class="gallery-veil pointer-events-none absolute inset-0 opacity-100 transition-opacity duration-300 group-hover:opacity-0"
                 aria-hidden="true"

@@ -1,0 +1,30 @@
+---
+// Знак клуба — перчатка в круге. Перерисован в вектор по логотипу старого сайта
+// (old_site_files/logo1-1_uweO.png, PNG 996×300 с размытыми краями).
+// Линии в currentColor: цвет задаётся классом (text-flame — золото сайта).
+// Толщина линии — 3.6 из 100: при высоте 32–40 px около 1.3 px, как иконки шапки.
+interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+---
+
+<svg
+  viewBox="0 0 100 100"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="3.6"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  class={className}
+>
+  <circle cx="50" cy="50" r="46" />
+  <path d="M31 31C29.5 25 32.5 21 38 21H62.5C69.5 21 75 25.5 77.5 32.5C81 42 80.5 54 75.5 63L69 70.5" />
+  <path d="M31 31C25 30.5 19.5 37 19 46C18.6 56 25 64 31.5 70.5" />
+  <path d="M31 31C36 33 39 38 36.5 43C34.5 47 31.5 50 32 54C32.5 57 34 59 36 61" />
+  <path d="M36.5 43C39 45 41 46 44 46.8C52 48.5 63 46 68.5 39.5C70.5 37 72.5 35.5 75.5 35" />
+  <path d="M31.5 70.5H69V87H31.5Z" />
+  <path d="M31.5 76H69M31.5 81.5H69" />
+  <path d="M46 70.5V65.5a4 4 0 0 1 8 0V70.5" />
+</svg>

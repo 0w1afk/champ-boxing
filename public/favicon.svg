@@ -1,0 +1,13 @@
+<!-- Фавиконка CHAMP: перчатка из знака клуба (LogoMark.astro) без круга —
+     на 16–32 px круг сливается с перчаткой. Линия толще, чем в знаке. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="12" fill="#0b0a09"/>
+  <g transform="translate(32 33) scale(0.78) translate(-49 -54)" fill="none" stroke="#d4af37" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M31 31C29.5 25 32.5 21 38 21H62.5C69.5 21 75 25.5 77.5 32.5C81 42 80.5 54 75.5 63L69 70.5"/>
+    <path d="M31 31C25 30.5 19.5 37 19 46C18.6 56 25 64 31.5 70.5"/>
+    <path d="M31 31C36 33 39 38 36.5 43C34.5 47 31.5 50 32 54C32.5 57 34 59 36 61"/>
+    <path d="M36.5 43C39 45 41 46 44 46.8C52 48.5 63 46 68.5 39.5C70.5 37 72.5 35.5 75.5 35"/>
+    <path d="M31.5 70.5H69V87H31.5Z"/>
+    <path d="M31.5 78.7H69"/>
+  </g>
+</svg>

@@ -37,12 +37,16 @@ body {
   outline-offset: 3px;
 }
 
-/* Плёночное зерно поверх всей страницы (example: opacity 0.05, z-80) */
+/* Плёночное зерно поверх страницы (example: opacity 0.05). z-40 — ниже шапки
+   (z-50), меню и cookie-баннера: Safari 26 на iOS красит полосу под строкой
+   состояния цветом первого закреплённого элемента в 4px от верха; псевдоэлемент
+   он считает самим body, и зерно поверх шапки перехватывало проверку — над
+   шапкой просвечивала страница. */
 body::after {
   content: "";
   position: fixed;
   inset: 0;
-  z-index: 80;
+  z-index: 40;
   pointer-events: none;
   opacity: 0.05;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
@@ -149,6 +153,21 @@ details[open] .sign::after {
   transform: rotate(90deg);
 }
 
+/* Шапка: на тач-экранах фон сплошной, цвета страницы — Safari на iOS 26 красит
+   полосу под строкой состояния фоном закреплённой шапки, только если он
+   непрозрачный (полупрозрачный с blur не продлевает — над шапкой видна страница).
+   На точных указателях — полупрозрачный с размытием. */
+.site-header {
+  background-color: var(--color-bg);
+}
+@media (hover: hover) and (pointer: fine) {
+  .site-header {
+    background-color: rgb(11 10 9 / 0.8);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+  }
+}
+
 /* Мобильное меню на details: полноэкранный оверлей, работает без JS.
    Атрибут open получает <details class="mobile-menu-trigger"> — селектор от него.
    Явные 100vw/100dvh: backdrop-filter шапки создаёт containing block,
@@ -167,6 +186,16 @@ details[open] .sign::after {
 }
 .mobile-menu-trigger[open] .mobile-menu {
   display: flex;
+}
+/* Пока меню открыто, страница под ним не прокручивается: иначе на iOS листание
+   меню уходит в страницу — панель Safari сворачивается/разворачивается, высота
+   100dvh меняется и пункты меню прыгают. overscroll-behavior — чтобы прокрутка
+   самого меню (в альбомной ориентации) не переходила на страницу. */
+html:has(.mobile-menu-trigger[open]) {
+  overflow: hidden;
+}
+.mobile-menu {
+  overscroll-behavior: contain;
 }
 .mobile-menu-trigger[open] .menu-item {
   animation: menu-in 400ms cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -380,13 +409,20 @@ html .pswp {
   }
 }
 
-/* Сетка и затемнение поверх кадров; при наведении на кадр снимаются (group-hover) */
+/* Сетка и затемнение поверх кадров; при наведении на кадр снимаются (group-hover).
+   Только точные указатели: на тач-экранах навести нельзя — кадры без вуали */
 .gallery-veil {
-  background-color: rgb(11 10 9 / 0.55);
-  background-image:
-    linear-gradient(to right, rgb(236 231 222 / 0.07) 1px, transparent 1px),
-    linear-gradient(to bottom, rgb(236 231 222 / 0.07) 1px, transparent 1px);
-  background-size: 48px 48px;
+  display: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  .gallery-veil {
+    display: block;
+    background-color: rgb(11 10 9 / 0.55);
+    background-image:
+      linear-gradient(to right, rgb(236 231 222 / 0.07) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(236 231 222 / 0.07) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
 }
 
 /* Кастомный курсор: системный скрывается только при активном кастомном;
@@ -432,6 +468,21 @@ html.has-preview [data-cursor-ring] {
 @media (hover: hover) and (pointer: fine) {
   .format-row:hover .row-arrow {
     transform: translate(4px, -4px);
+  }
+}
+
+/* Кадры форматов лентой (formats-slides.ts) — только тач-экраны: там нет превью
+   за курсором. Нижняя граница строки переезжает под ленту */
+.format-slides {
+  display: none;
+}
+@media (not (hover: hover)) or (not (pointer: fine)) {
+  .format-row {
+    border-bottom-width: 0;
+    padding-bottom: 1.5rem;
+  }
+  .format-slides {
+    display: grid;
   }
 }
 

@@ -3,6 +3,8 @@
  * Факты: old_site.html. Иллюстрации — заглушки (этап иллюстраций позже).
  */
 
+import { withBase } from '../lib/base';
+
 export const PHONE_DISPLAY = '+7 (914) 423-45-55';
 export const PHONE_TEL = 'tel:+79144234555';
 export const WA = 'https://wa.me/79144234555';
@@ -19,13 +21,13 @@ export const MSG = {
 } as const;
 
 export const NAV = [
-  { href: '/#club', label: 'Клуб' },
-  { href: '/#formats', label: 'Тренировки' },
-  { href: '/#coaches', label: 'Тренеры' },
-  { href: '/#prices', label: 'Цены' },
-  { href: '/#gallery', label: 'Галерея' },
-  { href: '/#faq', label: 'FAQ' },
-  { href: '/#contacts', label: 'Контакты' },
+  { href: withBase('/#club'), label: 'Клуб' },
+  { href: withBase('/#formats'), label: 'Тренировки' },
+  { href: withBase('/#coaches'), label: 'Тренеры' },
+  { href: withBase('/#prices'), label: 'Цены' },
+  { href: withBase('/#gallery'), label: 'Галерея' },
+  { href: withBase('/#faq'), label: 'FAQ' },
+  { href: withBase('/#contacts'), label: 'Контакты' },
 ] as const;
 
 /** Фото галереи мероприятий: порядок кадров; файлы — src/assets/img/gallery/{n}.jpg. */
@@ -266,7 +268,8 @@ export const PRICING = {
       sub: 'Пробная — 1 500 ₽ · Абонемент 12 занятий — 20 000 ₽ · 45 дней',
       badge: 'Пробная — 1 500 ₽',
       highlight: false,
-      cta: 'Записаться на пробную за 1 500 ₽',
+      //   — неразрывные пробелы: «за 1 500 ₽» не разрывается переносом
+      cta: 'Записаться на пробную за 1 500 ₽',
       msg: MSG.individual,
     },
   ],
@@ -377,5 +380,5 @@ export const FOOTER = {
   socials: [
     { label: 'VK', href: 'https://vk.com/champ.boxing27' },
   ],
-  privacy: { href: '/privacy/', label: 'Политика конфиденциальности' },
+  privacy: { href: withBase('/privacy/'), label: 'Политика конфиденциальности' },
 } as const;

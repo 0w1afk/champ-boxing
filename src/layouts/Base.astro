@@ -1,6 +1,13 @@
 ---
 import '../styles/global.css';
 import CookieBanner from '../components/CookieBanner.astro';
+import { withBase } from '../lib/base';
+// Шрифты первого экрана (основной текст и заголовки, кириллица) грузятся сразу
+// вместе со страницей: иначе браузер узнаёт о них только из CSS, текст успевает
+// отрисоваться запасным шрифтом и при подмене (font-display: swap) строки
+// перестраиваются — контент ниже сдвигается (CLS). Остальные начертания — по CSS.
+import manrope400 from '../assets/fonts/manrope-400-cyrillic.woff2?url';
+import oswald600 from '../assets/fonts/oswald-600-cyrillic.woff2?url';
 
 interface Props {
   title: string;
@@ -15,15 +22,18 @@ const { title, description } = Astro.props;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
+    <link rel="preload" href={manrope400} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={oswald600} as="font" type="font/woff2" crossorigin />
     <meta name="description" content={description} />
     <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
-    <link rel="icon" href="/favicon.png" type="image/png" />
+    <link rel="icon" href={withBase('/favicon.svg')} type="image/svg+xml" />
+    <link rel="icon" href={withBase('/favicon.png')} type="image/png" sizes="64x64" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="ru_RU" />
     <meta property="og:url" content={new URL(Astro.url.pathname, Astro.site)} />
-    <meta property="og:image" content={new URL('/og.jpg', Astro.site)} />
+    <meta property="og:image" content={new URL(withBase('/og.jpg'), Astro.site)} />
     <meta name="twitter:card" content="summary_large_image" />
     <slot name="head" />
   </head>

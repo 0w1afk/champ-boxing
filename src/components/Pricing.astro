@@ -1,5 +1,6 @@
 ---
 import { PRICING, MSG, wa } from '../data/site';
+import { withBase } from '../lib/base';
 import SectionHead from './SectionHead.astro';
 ---
 
@@ -8,13 +9,14 @@ import SectionHead from './SectionHead.astro';
       выйти за секцию, как у остальных разделов, — якорь оказался бы ниже на этот
       отступ; отрицательный scroll-margin выравнивает переход по меню */}
   {/* Фон секции — видео из хиро старого сайта, затемнено под карточки;
-      грузится и играет только когда секция на экране (JS), без JS — постер */}
+      только на десктопе: src ставит JS, когда секция на экране; на тач-экранах
+      и без JS — постер, видео не скачивается */}
   <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10">
     <video
       data-bg-video
       class="h-full w-full object-cover"
-      src="/video/gym.mp4"
-      poster="/video/gym-poster.jpg"
+      data-src={withBase('/video/gym.mp4')}
+      poster={withBase('/video/gym-poster.jpg')}
       muted
       loop
       playsinline

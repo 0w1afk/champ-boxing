@@ -9,6 +9,7 @@ docs/design/drafts/**/captures/
 
 # Одноразовые артефакты проверок, не код сайта
 tmp/
+.lighthouseci/
 
 # Локальный граф проекта Graphify; пересобирается из исходников
 graphify-out/

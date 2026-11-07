@@ -7,7 +7,11 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "check": "astro check"
+    "check": "astro check",
+    "lighthouse": "astro build && rm -rf tmp/lighthouse && lhci autorun",
+    "lighthouse:desktop": "astro build && rm -rf tmp/lighthouse && LH_PRESET=desktop lhci autorun",
+    "lighthouse:prod": "rm -rf tmp/lighthouse && LH_URL=https://gussy-pussy.ru/champ-box/ lhci autorun",
+    "lighthouse:open": "node -e \"for (const r of require('./tmp/lighthouse/manifest.json')) if (r.isRepresentativeRun) require('child_process').execFileSync('open', [r.htmlPath])\""
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.0",
@@ -16,10 +20,12 @@
     "embla-carousel-auto-scroll": "^8.6.0",
     "embla-carousel-wheel-gestures": "^8.1.0",
     "photoswipe": "^5.4.4",
-    "tailwindcss": "^4.1.0"
+    "tailwindcss": "^4.1.0",
+    "web-vitals": "^6.2.3"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.4",
+    "@lhci/cli": "^0.15.1",
     "typescript": "^5.9.0"
   }
 }

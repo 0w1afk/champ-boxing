@@ -1,0 +1,23 @@
+---
+import LogoMark from './LogoMark.astro';
+
+// Логотип CHAMP BOXING CLUB: знак (SVG) + надпись живым текстом шрифтами сайта.
+// Компоновка — как у логотипа старого сайта: знак слева, CHAMP крупно,
+// BOXING CLUB мелко с разрядкой на ту же ширину. Цвета: знак и CHAMP — золото
+// (flame), BOXING CLUB — основной светлый (ink).
+// Надпись декоративная (aria-hidden): имя ссылки задаёт aria-label родителя.
+interface Props {
+  class?: string;
+  /** Классы знака — например, анимация при наведении на ссылку-родителя. */
+  markClass?: string;
+}
+const { class: className = '', markClass = '' } = Astro.props;
+---
+
+<span class:list={['flex items-center gap-3', className]}>
+  <LogoMark class:list={['h-10 w-10 shrink-0 text-flame', markClass]} />
+  <span class="flex flex-col leading-none" aria-hidden="true">
+    <span class="-mr-[0.16em] font-display text-[23px] font-bold uppercase tracking-[0.16em] text-flame">Champ</span>
+    <span class="-mr-[0.43em] mt-[5px] text-[8.5px] font-medium uppercase tracking-[0.43em] text-ink">Boxing club</span>
+  </span>
+</span>
