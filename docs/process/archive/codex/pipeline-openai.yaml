@@ -1,7 +1,0 @@
-interface:
-  display_name: "Pipeline"
-  short_description: "Этапы и гейты утверждения сайта"
-  default_prompt: "Use $pipeline status to show the current stage."
-
-policy:
-  allow_implicit_invocation: false

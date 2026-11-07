@@ -1,8 +1,9 @@
 import { METRIKA } from '../data/site';
+import { PROD_HOST } from '../lib/base';
 
 /** Согласие на cookie и Яндекс Метрику. Выбор хранится в localStorage
  *  ('accepted' | 'declined'); пока его нет — показываем баннер. Метрика грузится
- *  только при согласии и включённом счётчике (METRIKA.enabled). «Настройки cookie»
+ *  только при согласии и на основном домене (PROD_HOST). «Настройки cookie»
  *  в подвале снова открывают баннер; отказ после согласия удаляет cookie Метрики
  *  и перезагружает страницу, чтобы счётчик выгрузился. */
 type Choice = 'accepted' | 'declined';
@@ -26,7 +27,8 @@ const write = (v: Choice) => {
 
 let metrikaLoaded = false;
 const loadMetrika = () => {
-  if (!METRIKA.enabled || metrikaLoaded) return;
+  const host = location.hostname.replace(/^www\./, '');
+  if (host !== PROD_HOST || metrikaLoaded) return;
   metrikaLoaded = true;
   type Ym = ((...args: unknown[]) => void) & { a?: unknown[][]; l?: number };
   const w = window as unknown as { ym?: Ym };

@@ -3,10 +3,11 @@
  *
  *   npm run lighthouse           собрать сайт и проверить локально (мобильный профиль)
  *   npm run lighthouse:desktop   то же, десктоп-профиль
- *   npm run lighthouse:prod      проверить прод https://gussy-pussy.ru/champ-box/
+ *   npm run lighthouse:prod      проверить прод https://champ-box.ru/
+ *   npm run lighthouse:preview   проверить временный адрес https://gussy-pussy.ru/champ-box/
  *   npm run lighthouse:open      открыть в браузере отчёты медианных прогонов
  *
- * Локально сайт раздаёт `astro preview` (с base /champ-box, как на проде).
+ * Локально сайт раздаёт `astro preview` — сборка для champ-box.ru (в корне).
  * Каждая страница прогоняется 3 раза, в отчёт идёт медианный прогон.
  * Отчёты (HTML + JSON) — в tmp/lighthouse/, перед каждым запуском папка очищается.
  * В manifest.json медианный прогон каждой страницы помечен isRepresentativeRun.
@@ -20,7 +21,7 @@ const PORT = 4329;
 const external = process.env.LH_URL;
 const desktop = process.env.LH_PRESET === 'desktop';
 
-const local = `http://localhost:${PORT}/champ-box`;
+const local = `http://localhost:${PORT}`;
 
 module.exports = {
   ci: {

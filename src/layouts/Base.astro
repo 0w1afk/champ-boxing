@@ -1,7 +1,7 @@
 ---
 import '../styles/global.css';
 import CookieBanner from '../components/CookieBanner.astro';
-import { withBase } from '../lib/base';
+import { IS_PROD_SITE, withBase } from '../lib/base';
 // Шрифты первого экрана (основной текст и заголовки, кириллица) грузятся сразу
 // вместе со страницей: иначе браузер узнаёт о них только из CSS, текст успевает
 // отрисоваться запасным шрифтом и при подмене (font-display: swap) строки
@@ -12,8 +12,13 @@ import oswald600 from '../assets/fonts/oswald-600-cyrillic.woff2?url';
 interface Props {
   title: string;
   description: string;
+  /** Служебная страница (404): noindex, без canonical. */
+  noindex?: boolean;
 }
-const { title, description } = Astro.props;
+const { title, description, noindex = false } = Astro.props;
+// Адрес страницы со слэшем на конце: главная под base собирается как /champ-box
+const path = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : `${Astro.url.pathname}/`;
+const pageUrl = new URL(path, Astro.site);
 ---
 
 <!doctype html>
@@ -25,14 +30,16 @@ const { title, description } = Astro.props;
     <link rel="preload" href={manrope400} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={oswald600} as="font" type="font/woff2" crossorigin />
     <meta name="description" content={description} />
-    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+    {/* временный адрес (gussy-pussy.ru/champ-box) — не индексировать, чтобы не дублировать champ-box.ru */}
+    {(noindex || !IS_PROD_SITE) && <meta name="robots" content={IS_PROD_SITE ? 'noindex' : 'noindex, nofollow'} />}
+    {!noindex && <link rel="canonical" href={pageUrl} />}
     <link rel="icon" href={withBase('/favicon.svg')} type="image/svg+xml" />
     <link rel="icon" href={withBase('/favicon.png')} type="image/png" sizes="64x64" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="ru_RU" />
-    <meta property="og:url" content={new URL(Astro.url.pathname, Astro.site)} />
+    <meta property="og:url" content={pageUrl} />
     <meta property="og:image" content={new URL(withBase('/og.jpg'), Astro.site)} />
     <meta name="twitter:card" content="summary_large_image" />
     <slot name="head" />

@@ -348,21 +348,23 @@ export const CONTACTS = {
     { label: '[РКН]', handle: '@champ.boxing27', href: null },
   ],
   mapNote: 'Не удалось загрузить карту? Адрес: г. Хабаровск, ул. Восточное шоссе, 41, 3 этаж.',
-  // Яндекс.Карты: конструктор, код предоставлен пользователем 06.11.2026
-  mapScript:
-    'https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3Aefa8b455226d84970ab27edb1a70b94a07825760f5876949643e080b99f2ef11&width=100%25&height=400&lang=ru_RU&scroll=true',
-  mapLink: `https://yandex.ru/maps/?text=${encodeURIComponent('Хабаровск, Восточное шоссе, 41')}`,
+  // Яндекс Карты: виджет карточки клуба, как на старом сайте (old_site.html,
+  // iframe map-widget, организация 230297421457); замена конструктора — решение
+  // пользователя от 07.11.2026
+  mapWidget:
+    'https://yandex.ru/map-widget/v1/?ll=135.139943%2C48.480414&mode=search&oid=230297421457&ol=biz&z=15',
+  mapLink: 'https://yandex.ru/maps/org/chemp_boksing_klub/230297421457/',
   waFallback: `Не получается открыть WhatsApp? Позвоните: ${PHONE_DISPLAY}.`,
   imageSlot: 'зал клуба, ринг',
 } as const;
 
-/** Яндекс Метрика: счётчик старого сайта с теми же настройками. Пока выключен
- *  (решение пользователя от 06.11.2026) — баннер согласия показывается, но счётчик
- *  не грузится. Включать: enabled: true. Грузится только после «Принять». */
+/** Яндекс Метрика: счётчик старого сайта (old_site.html) с теми же настройками,
+ *  кроме Вебвизора (выключен по решению пользователя от 07.11.2026). Грузится только
+ *  после «Принять» в cookie-баннере и только на основном домене (PROD_HOST в lib/base):
+ *  на временном адресе, локально и в dev счётчик не загружается. */
 export const METRIKA = {
   id: 98114653,
-  enabled: false,
-  options: { clickmap: true, trackLinks: true, accurateTrackBounce: true, webvisor: true },
+  options: { clickmap: true, trackLinks: true, accurateTrackBounce: true, webvisor: false },
 } as const;
 
 export const COOKIE = {

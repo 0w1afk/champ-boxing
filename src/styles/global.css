@@ -226,8 +226,8 @@ html:has(.mobile-menu-trigger[open]) {
   transform: scale(1) rotate(-2deg);
 }
 
-/* Карта контактов: конструктор Яндекса вставляет iframe в контейнер;
-   фолбэк (адрес + ссылка) виден, пока карта не загрузилась */
+/* Карта контактов: iframe виджета Яндекса поверх адреса-фолбэка — адрес
+   виден, пока карта грузится или если сервис недоступен */
 [data-map] {
   position: relative;
 }
@@ -237,9 +237,6 @@ html:has(.mobile-menu-trigger[open]) {
   width: 100%;
   height: 100%;
   border: 0;
-}
-[data-map][data-map-state='ready'] [data-map-fallback] {
-  display: none;
 }
 
 /* Лайтбокс галереи (PhotoSwipe) в стиле сайта: сплошная тёмная подложка с

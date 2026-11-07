@@ -1,15 +1,23 @@
 import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 
-// `astro dev` — сайт в корне localhost:4321/; сборка и `astro preview` — с подпутём,
-// как на проде (preview и Lighthouse ловят ошибки путей под /champ-box/).
+// Две цели сборки (deploy.sh собирает обе):
+//   prod    — https://champ-box.ru/, сайт в корне домена;
+//   preview — https://gussy-pussy.ru/champ-box/, временный адрес для проверки заказчиком
+//             (noindex, без Метрики).
+// Цель выбирается переменной SITE_TARGET (по умолчанию prod). `astro dev` — всегда в корне
+// localhost:4321/; ошибки путей под подпутём ловит `npm run build:preview` (+ preview).
+const TARGETS = {
+  prod: { site: 'https://champ-box.ru', base: '/' },
+  preview: { site: 'https://gussy-pussy.ru', base: '/champ-box' },
+};
+const target = TARGETS[process.env.SITE_TARGET ?? 'prod'];
+if (!target) throw new Error(`SITE_TARGET: ожидается prod или preview, получено «${process.env.SITE_TARGET}»`);
 const dev = process.argv.includes('dev');
 
 export default defineConfig({
-  // Домен деплоя (решение пользователя от 06.11.2026): сайт клуба живёт
-  // на подпути /champ-box домена gussy-pussy.ru; canonical, sitemap и OG — от него.
-  site: 'https://gussy-pussy.ru',
-  base: dev ? '/' : '/champ-box',
+  site: target.site,
+  base: dev ? '/' : target.base,
   vite: {
     plugins: [tailwindcss()],
     // Ядро PhotoSwipe грузится лениво (import() при первом открытии лайтбокса),

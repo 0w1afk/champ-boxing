@@ -1,9 +1,0 @@
-{
-  "origin": "OpenAI image generation через Codex",
-  "date": "2026-11-05",
-  "prompt": "Professional studio portrait treatment of the man in the reference photo. Keep his face, features, hairstyle and expression exactly the same, do not change his identity. Replace the background with a seamless warm near-black studio backdrop. Dramatic low-key studio lighting with soft key light and subtle warm orange rim light. Boxing club studio portrait, photorealistic, sharp detail",
-  "references": [
-    "old_site_files/viktor-martynov_uweO.jpg"
-  ],
-  "documentary": false
-}

@@ -1,5 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /500.html
-
-Sitemap: https://gussy-pussy.ru/champ-box/sitemap.xml

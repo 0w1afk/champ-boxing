@@ -6,11 +6,13 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "build:preview": "SITE_TARGET=preview astro build",
     "preview": "astro preview",
     "check": "astro check",
     "lighthouse": "astro build && rm -rf tmp/lighthouse && lhci autorun",
     "lighthouse:desktop": "astro build && rm -rf tmp/lighthouse && LH_PRESET=desktop lhci autorun",
-    "lighthouse:prod": "rm -rf tmp/lighthouse && LH_URL=https://gussy-pussy.ru/champ-box/ lhci autorun",
+    "lighthouse:prod": "rm -rf tmp/lighthouse && LH_URL=https://champ-box.ru/ lhci autorun",
+    "lighthouse:preview": "rm -rf tmp/lighthouse && LH_URL=https://gussy-pussy.ru/champ-box/ lhci autorun",
     "lighthouse:open": "node -e \"for (const r of require('./tmp/lighthouse/manifest.json')) if (r.isRepresentativeRun) require('child_process').execFileSync('open', [r.htmlPath])\""
   },
   "dependencies": {

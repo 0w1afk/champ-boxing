@@ -90,28 +90,35 @@ const waHref = wa(MSG.base);
       </div>
     </div>
 
-    {/* Карта: Яндекс.Конструктор (код пользователя 06.11.2026); грузится у вьюпорта,
-        при отказе сервиса остаётся фолбэк — адрес и ссылка на Яндекс (см. map.ts) */}
+    {/* Карта: виджет Яндекс Карт с карточкой клуба (как на старом сайте). Браузер
+        грузит iframe сам, когда секция подходит к экрану (loading="lazy"); пока
+        он грузится или если сервис недоступен, под ним виден адрес. Подпись под
+        картой с адресом и ссылкой на Яндекс Карты видна всегда. */}
     <div class="mt-16" data-reveal>
       <div class="border border-line">
         <div data-map class="h-[400px] w-full overflow-hidden">
-          <div
-            data-map-fallback
-            class="flex h-full w-full flex-col items-center justify-center gap-3 p-6 text-center"
-          >
-            <p class="text-sm text-ink">г. Хабаровск, ул. Восточное шоссе, 41, 3 этаж</p>
-            <a
-              href={CONTACTS.mapLink}
-              target="_blank"
-              rel="noopener"
-              class="text-[11px] font-semibold uppercase tracking-[0.2em] text-bright underline-offset-4 hover:underline"
-            >
-              Открыть на Яндексе
-            </a>
-          </div>
+          <p class="absolute inset-0 flex items-center justify-center p-6 text-center text-sm text-ink">
+            г. Хабаровск, ул. Восточное шоссе, 41, 3 этаж
+          </p>
+          <iframe
+            src={CONTACTS.mapWidget}
+            title="CHAMP BOXING CLUB на Яндекс Картах"
+            loading="lazy"
+            allowfullscreen
+          ></iframe>
         </div>
       </div>
-      <p class="mt-3 text-xs text-mut">{CONTACTS.mapNote}</p>
+      <p class="mt-3 text-xs text-mut">
+        {CONTACTS.mapNote}
+        <a
+          href={CONTACTS.mapLink}
+          target="_blank"
+          rel="noopener"
+          class="ml-1 font-semibold uppercase tracking-[0.2em] text-bright underline-offset-4 hover:underline"
+        >
+          Открыть на Яндекс Картах
+        </a>
+      </p>
     </div>
   </div>
 </section>
