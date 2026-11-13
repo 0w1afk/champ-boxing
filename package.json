@@ -7,6 +7,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "build:preview": "SITE_TARGET=preview astro build",
+    "build:pages": "SITE_TARGET=pages astro build",
     "preview": "astro preview",
     "check": "astro check",
     "lighthouse": "astro build && rm -rf tmp/lighthouse && lhci autorun",
