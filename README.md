@@ -53,6 +53,10 @@ cookie-баннере и только на `champ-box.ru` (`PROD_HOST` в `src/l
 | `preview` | `/srv/champ-box.ru/preview/` |
 | `dev` | `/srv/zimorodok-dev.ru/champ/` |
 
+Каждый деплой дополнительно снимает метрики Lighthouse с боевого адреса и обновляет
+`https://champ.zimorodok-dev.ru/lighthouse/` — мобильный и десктопный прогоны,
+рядом полные отчёты. Скрипт — `scripts/lighthouse-page.mjs`.
+
 Для `dev` есть и штатный путь без локальной сборки: push в `main` → CI, затем
 Actions → Deploy. Ключ Actions ограничен rrsync-каталогом `/srv/zimorodok-dev.ru`.
 `dev`-сборка закрыта от индексации: `robots.txt` с `Disallow: /`, `noindex, nofollow`

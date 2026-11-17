@@ -171,7 +171,8 @@ const html = `<!doctype html>
       </div>
       <p class="note">
         ${captured?.lighthouseVersion ? `Lighthouse ${escape(captured.lighthouseVersion)}. ` : ''}
-        Страница и отчёты закрыты от индексации. Сайт — тестовая сборка zimorodok-dev.
+        SEO ниже 100 — не ошибка: тестовый адрес намеренно закрыт от индексации (noindex),
+        Lighthouse снижает за это оценку. Страница и отчёты тоже закрыты от поисковиков.
       </p>
     </main>
   </body>
