@@ -56,6 +56,9 @@ jobs:
       name: production
       url: https://champ.zimorodok-dev.ru/
     steps:
+      # Скрипт страницы метрик лежит в репозитории; сборка приходит артефактом.
+      - uses: actions/checkout@v7
+
       - name: Артефакт сборки
         uses: actions/download-artifact@v8
         with:
