@@ -11,6 +11,11 @@ docs/design/drafts/**/captures/
 tmp/
 .lighthouseci/
 
+# Сырые отчёты метрик не коммитим; бюджеты — коммитим
+metrics/lhci/
+metrics/*.json
+!metrics/budgets.json
+
 # Локальный граф проекта Graphify; пересобирается из исходников
 graphify-out/
 

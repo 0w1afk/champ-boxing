@@ -1,0 +1,15 @@
+{
+  "_comment": "Бюджеты сайта. Значения из брифа (раздел 8), иначе дефолты TOOLS.md, раздел H. Пустые ключи = дефолт.",
+  "lighthouse": {
+    "mobile": { "performance": 0.9, "accessibility": 0.95, "best-practices": 0.95, "seo": 0.95, "lcpMs": 3000, "cls": 0.1, "tbtMs": 200, "scriptKb": 200 },
+    "desktop": { "performance": 0.9, "accessibility": 0.95, "best-practices": 0.95, "seo": 0.95, "lcpMs": 2500, "cls": 0.1, "tbtMs": 200, "scriptKb": 200 }
+  },
+  "scroll": {
+    "mobile": { "p95FrameMs": 33.4, "longFramePct": 10 },
+    "desktop": { "p95FrameMs": 16.7, "longFramePct": 5 }
+  },
+  "assets": {
+    "glbMaxKb": { "mobile": 3072, "desktop": 5120 },
+    "imageMaxKb": 400
+  }
+}

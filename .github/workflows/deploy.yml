@@ -1,0 +1,81 @@
+name: Deploy
+
+# Ручная выкладка на https://champ.zimorodok-dev.ru/.
+# Запуск: Actions → Deploy → Run workflow (ветка main или тег).
+# Боевой champ-box.ru этим workflow не трогается — он выкладывается отдельно
+# (./deploy.sh prod, сервер champ-box.ru).
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    name: Проверки перед деплоем
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      SITE_TARGET: dev
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Зависимости
+        run: npm ci
+
+      - name: Типы и разметка (Astro)
+        run: npm run check --if-present
+
+      - name: Сборка под https://champ.zimorodok-dev.ru/
+        run: npm run build
+
+      - name: Артефакт сборки
+        uses: actions/upload-artifact@v7
+        with:
+          name: site
+          path: dist/
+          if-no-files-found: error
+          retention-days: 7
+
+  deploy:
+    name: Деплой на champ.zimorodok-dev.ru
+    needs: verify
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: production
+      url: https://champ.zimorodok-dev.ru/
+    steps:
+      - name: Артефакт сборки
+        uses: actions/download-artifact@v8
+        with:
+          name: site
+          path: dist
+
+      - name: Ключ деплоя
+        env:
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+      # Ключ на сервере ограничен rrsync: доступна только запись в /srv/zimorodok-dev.ru.
+      - name: Rsync в /srv/zimorodok-dev.ru/champ/
+        run: |
+          rsync -az --delete --delay-updates \
+            -e "ssh -i ~/.ssh/deploy_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes" \
+            dist/ deploy@81.163.30.117:champ/

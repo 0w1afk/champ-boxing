@@ -1,61 +1,52 @@
-/**
- * Lighthouse CI — аудит скорости, доступности, практик и SEO.
- *
- *   npm run lighthouse           собрать сайт и проверить локально (мобильный профиль)
- *   npm run lighthouse:desktop   то же, десктоп-профиль
- *   npm run lighthouse:prod      проверить прод https://champ-box.ru/
- *   npm run lighthouse:preview   проверить временный адрес https://gussy-pussy.ru/champ-box/
- *   npm run lighthouse:open      открыть в браузере отчёты медианных прогонов
- *
- * Локально сайт раздаёт `astro preview` — сборка для champ-box.ru (в корне).
- * Каждая страница прогоняется 3 раза, в отчёт идёт медианный прогон.
- * Отчёты (HTML + JSON) — в tmp/lighthouse/, перед каждым запуском папка очищается.
- * В manifest.json медианный прогон каждой страницы помечен isRepresentativeRun.
- * Мобильный профиль Lighthouse по умолчанию: эмуляция телефона среднего класса,
- * медленный 4G, CPU замедлен в 4 раза.
- *
- * Переменные: LH_URL — проверить внешний адрес без локального сервера;
- * LH_PRESET=desktop — десктоп-профиль.
- */
-const PORT = 4329;
-const external = process.env.LH_URL;
-const desktop = process.env.LH_PRESET === 'desktop';
+// Lighthouse CI для сайта. Скопировать в корень проекта как lighthouserc.cjs.
+//   FORM=mobile  npx @lhci/cli@0.15.1 autorun
+//   FORM=desktop npx @lhci/cli@0.15.1 autorun
+// Бюджеты берутся из metrics/budgets.json (создаётся из брифа), иначе — дефолты TOOLS.md, раздел H.
+const fs = require('node:fs')
 
-const local = `http://localhost:${PORT}`;
+const FORM = process.env.FORM === 'desktop' ? 'desktop' : 'mobile'
+const defaults = {
+  mobile: { performance: 0.8, accessibility: 0.95, 'best-practices': 0.95, seo: 0.95, lcpMs: 2500, cls: 0.1, tbtMs: 300, scriptKb: 200 },
+  desktop: { performance: 0.9, accessibility: 0.95, 'best-practices': 0.95, seo: 0.95, lcpMs: 1500, cls: 0.1, tbtMs: 150, scriptKb: 200 },
+}
+const file = 'metrics/budgets.json'
+const b = { ...defaults[FORM], ...(fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf8')).lighthouse?.[FORM] : {}) }
+
+// Старые отчёты этой формы удаляются перед прогоном: иначе в папке копятся
+// HTML/JSON прошлых запусков и непонятно, какой отчёт свежий.
+const outputDir = `metrics/lhci/${FORM}`
+fs.rmSync(outputDir, { recursive: true, force: true })
+
+// Astro (статика): STATIC_DIR=dist. Next: START="npm run start" URL=http://localhost:3000
+// 404/500 не аудируем: у страниц ошибок нет осмысленных SEO/доступности.
+const collect = process.env.STATIC_DIR
+  ? {
+      staticDistDir: process.env.STATIC_DIR,
+      ...(process.env.URL ? { url: process.env.URL.split(',') } : {}),
+      autodiscoverUrlBlocklist: ['/404.html', '/500.html'],
+    }
+  : { startServerCommand: process.env.START || 'npm run preview', url: (process.env.URL || 'http://localhost:4321/').split(',') }
 
 module.exports = {
   ci: {
     collect: {
-      ...(external
-        ? { url: [external] }
-        : {
-            url: [`${local}/`, `${local}/privacy/`],
-            startServerCommand: `npx astro preview --port ${PORT}`,
-            startServerReadyPattern: 'ready|Local',
-          }),
+      ...collect,
       numberOfRuns: 3,
-      settings: desktop ? { preset: 'desktop' } : {},
+      settings: FORM === 'desktop' ? { preset: 'desktop' } : {}, // mobile — дефолт Lighthouse (Moto G Power, slow 4G)
     },
-    // Пороги: категории — по шкале Lighthouse (0–1), метрики — границы «хорошо»
-    // из Core Web Vitals. error — команда завершается с ошибкой, warn — только
-    // предупреждение. Скорость в лаборатории зависит от машины, поэтому по ней warn.
     assert: {
-      // сравнивать с порогами медианный прогон, а не лучший (по умолчанию —
-      // optimistic: один удачный прогон из трёх скрывал проблему)
       aggregationMethod: 'median-run',
       assertions: {
-        'categories:performance': ['warn', { minScore: 0.9 }],
-        'categories:accessibility': ['error', { minScore: 0.95 }],
-        'categories:best-practices': ['error', { minScore: 0.95 }],
-        'categories:seo': ['error', { minScore: 0.95 }],
-        'largest-contentful-paint': ['warn', { maxNumericValue: 2500 }],
-        'total-blocking-time': ['warn', { maxNumericValue: 200 }],
-        'cumulative-layout-shift': ['error', { maxNumericValue: 0.1 }],
+        'categories:performance': ['error', { minScore: b.performance }],
+        'categories:accessibility': ['error', { minScore: b.accessibility }],
+        'categories:best-practices': ['error', { minScore: b['best-practices'] }],
+        'categories:seo': ['error', { minScore: b.seo }],
+        'largest-contentful-paint': ['error', { maxNumericValue: b.lcpMs }],
+        'cumulative-layout-shift': ['error', { maxNumericValue: b.cls }],
+        'total-blocking-time': ['warn', { maxNumericValue: b.tbtMs }],
+        'resource-summary:script:size': ['warn', { maxNumericValue: b.scriptKb * 1024 }], // байты, после сжатия при передаче
       },
     },
-    upload: {
-      target: 'filesystem',
-      outputDir: 'tmp/lighthouse',
-    },
+    upload: { target: 'filesystem', outputDir },
   },
-};
+}

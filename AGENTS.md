@@ -14,7 +14,7 @@
 - Сайт только на русском. Стек: Astro + TypeScript + Tailwind CSS, статический вывод, без серверной части.
 - Заявки — deep-ссылки WhatsApp и телефон, как на старом сайте. Форм и серверных обработчиков нет.
 - Код сайта — `src/` (гейт G3); прототипы — только в docs/design/drafts/. Сборка, адреса и деплой — README.md.
-- Две цели сборки: `prod` — champ-box.ru в корне, `preview` — gussy-pussy.ru/champ-box/ (noindex, без Метрики). Пути в разметке — только через `withBase()` (src/lib/base.ts); проверка путей — `npm run build:preview`.
+- Три цели сборки: `prod` — champ-box.ru в корне (индексируется), `preview` — landingmania.ru/champ-box/, `dev` — champ.zimorodok-dev.ru/ (обе временные, noindex). Пути в разметке — только через `withBase()` (src/lib/base.ts); проверка путей — `npm run build:preview`.
 - Аналитика — Яндекс Метрика (без Вебвизора), только после согласия в cookie-баннере. Новая интеграция или сбор данных → сначала правка политики (docs/copy/privacy.md и src/pages/privacy.astro).
 - Деплой (`./deploy.sh`) — только по явной просьбе пользователя.
 - Утверждает только пользователь, явным словом; `/pipeline approve` передаёт его фразу дословно.

@@ -30,9 +30,10 @@ const pageUrl = new URL(path, Astro.site);
     <link rel="preload" href={manrope400} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={oswald600} as="font" type="font/woff2" crossorigin />
     <meta name="description" content={description} />
-    {/* временный адрес (gussy-pussy.ru/champ-box) — не индексировать, чтобы не дублировать champ-box.ru */}
+    {/* временные адреса (landingmania.ru/champ-box, champ.zimorodok-dev.ru) — не индексировать,
+        чтобы не дублировать champ-box.ru */}
     {(noindex || !IS_PROD_SITE) && <meta name="robots" content={IS_PROD_SITE ? 'noindex' : 'noindex, nofollow'} />}
-    {!noindex && <link rel="canonical" href={pageUrl} />}
+    {!noindex && IS_PROD_SITE && <link rel="canonical" href={pageUrl} />}
     <link rel="icon" href={withBase('/favicon.svg')} type="image/svg+xml" />
     <link rel="icon" href={withBase('/favicon.png')} type="image/png" sizes="64x64" />
     <meta property="og:title" content={title} />

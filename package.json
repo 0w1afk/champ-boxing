@@ -10,11 +10,7 @@
     "build:pages": "SITE_TARGET=pages astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "lighthouse": "astro build && rm -rf tmp/lighthouse && lhci autorun",
-    "lighthouse:desktop": "astro build && rm -rf tmp/lighthouse && LH_PRESET=desktop lhci autorun",
-    "lighthouse:prod": "rm -rf tmp/lighthouse && LH_URL=https://champ-box.ru/ lhci autorun",
-    "lighthouse:preview": "rm -rf tmp/lighthouse && LH_URL=https://gussy-pussy.ru/champ-box/ lhci autorun",
-    "lighthouse:open": "node -e \"for (const r of require('./tmp/lighthouse/manifest.json')) if (r.isRepresentativeRun) require('child_process').execFileSync('open', [r.htmlPath])\""
+    "metrics": "npm run build && (FORM=mobile STATIC_DIR=dist lhci autorun; m=$?; FORM=desktop STATIC_DIR=dist lhci autorun; d=$?; node metrics/disable-fireworks.mjs; node metrics/scroll-perf.mjs http://localhost:4321/ --serve \"npm run preview\" --budgets metrics/budgets.json --out metrics/scroll-desktop.json; s=$?; node metrics/scroll-perf.mjs http://localhost:4321/ --serve \"npm run preview\" --mobile --cpu 4 --budgets metrics/budgets.json --out metrics/scroll-mobile.json; t=$?; echo \"метрики: mobile=$m desktop=$d scroll-desktop=$s scroll-mobile=$t\"; [ $m -eq 0 ] && [ $d -eq 0 ] && [ $s -eq 0 ] && [ $t -eq 0 ])"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.0",
@@ -29,6 +25,7 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.4",
     "@lhci/cli": "^0.15.1",
+    "playwright": "^1.64.1",
     "typescript": "^5.9.0"
   }
 }

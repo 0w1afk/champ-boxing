@@ -10,7 +10,7 @@ npm install
 npm run dev             # дев-сервер, сайт в корне localhost:4321/
 npm run check           # astro check (типы)
 npm run build           # сборка для champ-box.ru в dist/
-npm run build:preview   # сборка для gussy-pussy.ru/champ-box/ (под подпутём)
+npm run build:preview   # сборка для landingmania.ru/champ-box/ (под подпутём)
 npm run preview         # раздать последнюю сборку из dist/
 ```
 
@@ -19,9 +19,11 @@ npm run preview         # раздать последнюю сборку из di
 | Цель | Адрес | base | Индексация | Метрика |
 |---|---|---|---|---|
 | `prod` | https://champ-box.ru/ | `/` | да | да, после согласия |
-| `preview` | https://gussy-pussy.ru/champ-box/ | `/champ-box` | `noindex` | нет |
+| `preview` | https://landingmania.ru/champ-box/ | `/champ-box` | `noindex` | нет |
+| `dev` | https://champ.zimorodok-dev.ru/ | `/` | `noindex` | нет |
 
-`preview` — временный адрес на период проверки заказчиком. Цель выбирает переменная
+`preview` — прежний временный адрес на период проверки заказчиком. `dev` — основной
+тестовый поддомен: он собирается в CI и выкладывается workflow Deploy. Цель выбирает переменная
 `SITE_TARGET` (`astro.config.mjs`), по умолчанию `prod`. Одна сборка на оба адреса невозможна:
 Astro пишет абсолютные пути от `base` (`/_astro/…`, `/privacy/`).
 
@@ -37,9 +39,10 @@ cookie-баннере и только на `champ-box.ru` (`PROD_HOST` в `src/l
 ## Деплой
 
 ```sh
-./deploy.sh            # обе цели
+./deploy.sh            # prod + dev
 ./deploy.sh prod       # только champ-box.ru
-./deploy.sh preview    # только gussy-pussy.ru/champ-box/
+./deploy.sh preview    # только landingmania.ru/champ-box/
+./deploy.sh dev        # только champ.zimorodok-dev.ru
 ```
 
 Скрипт собирает сайт локально и rsync-ит на сервер:
@@ -48,6 +51,12 @@ cookie-баннере и только на `champ-box.ru` (`PROD_HOST` в `src/l
 |---|---|
 | `prod` | `/srv/champ-box.ru/www/` |
 | `preview` | `/srv/champ-box.ru/preview/` |
+| `dev` | `/srv/zimorodok-dev.ru/champ/` |
+
+Для `dev` есть и штатный путь без локальной сборки: push в `main` → CI, затем
+Actions → Deploy. Ключ Actions ограничен rrsync-каталогом `/srv/zimorodok-dev.ru`.
+`dev`-сборка закрыта от индексации: `robots.txt` с `Disallow: /`, `noindex, nofollow`
+в разметке и заголовок `X-Robots-Tag` в nginx.
 
 Сборка намеренно локальная: у VPS 477 MiB RAM — `astro build` там падает по памяти;
 на сервере только статика и nginx на хосте, без Docker (VPS Selectel, Россия).
@@ -67,7 +76,8 @@ nginx стоит на сервере (без Docker), сертификаты —
 | Домен | Конфиг в репо | На сервере |
 |---|---|---|
 | champ-box.ru | `deploy/nginx/champ-box.ru.conf` (этот репо) | `/etc/nginx/sites-available/champ-box.ru.conf` |
-| gussy-pussy.ru (+ `/champ-box/` → `preview`) | `~/Projects/gussy-pussy.ru/deploy/nginx/gussy-pussy.ru.conf` | `/etc/nginx/sites-available/gussy-pussy.ru.conf` |
+| landingmania.ru (+ `/champ-box/` → `preview`) | `~/Projects/landingmania.ru/deploy/nginx/landingmania.ru.conf` | `/etc/nginx/sites-available/landingmania.ru.conf` |
+| champ.zimorodok-dev.ru (`dev`) | `site-fabric/deploy/nginx/zimorodok-dev.ru.conf` | `/etc/nginx/sites-available/zimorodok-dev.ru.conf` |
 
 Правка конфига champ-box.ru:
 ```sh
@@ -79,7 +89,7 @@ ssh champ-box 'nginx -t && systemctl reload nginx'
 
 1. A-записи `champ-box.ru` и `www.champ-box.ru` → `81.163.30.117`; дождаться:
    `dig +short A champ-box.ru @1.1.1.1`.
-2. Сертификат — проверку Let's Encrypt отвечает default_server из конфига gussy-pussy, свой
+2. Сертификат — проверку Let's Encrypt отвечает default_server из конфига landingmania, свой
    конфиг для этого ещё не нужен:
    `ssh champ-box 'certbot certonly --webroot -w /var/www/certbot -d champ-box.ru -d www.champ-box.ru'`
 3. Включить сайт:
@@ -95,18 +105,18 @@ ssh champ-box 'nginx -t && systemctl reload nginx'
 ```sh
 curl -s -o /dev/null -w '%{http_code}\n' https://champ-box.ru/                # 200
 curl -s https://champ-box.ru/robots.txt                                       # Allow + Sitemap
-curl -s -o /dev/null -w '%{http_code}\n' https://gussy-pussy.ru/champ-box/    # 200
-curl -s https://gussy-pussy.ru/champ-box/ | grep -o 'noindex, nofollow'      # preview закрыт
+curl -s -o /dev/null -w '%{http_code}\n' https://champ.zimorodok-dev.ru/      # 200
+curl -s https://champ.zimorodok-dev.ru/robots.txt                             # Disallow: /
+curl -sI https://champ.zimorodok-dev.ru/ | grep -i x-robots-tag               # noindex, nofollow
+curl -s -o /dev/null -w '%{http_code}\n' https://landingmania.ru/champ-box/   # 200
 ```
 
 ## Проверки качества
 
 ```sh
-npm run lighthouse           # собрать и проверить локально (мобильный профиль)
-npm run lighthouse:desktop   # то же, десктоп
-npm run lighthouse:prod      # https://champ-box.ru/
-npm run lighthouse:preview   # https://gussy-pussy.ru/champ-box/
-npm run lighthouse:open      # открыть отчёты медианных прогонов
+npm run metrics              # build → Lighthouse (mobile + desktop) → плавность скролла
 ```
+
+Бюджеты — `metrics/budgets.json`, отчёты Lighthouse — `metrics/lhci/<form>/`, замеры скролла — `metrics/scroll-{desktop,mobile}.json`. Старые отчёты формы удаляются перед прогоном, «салют» в HTML-отчётах выключен (`metrics/disable-fireworks.mjs`).
 
 Web Vitals печатаются в консоль браузера: на dev — всегда, на сайте — с `?vitals` в адресе.

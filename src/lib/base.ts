@@ -1,6 +1,6 @@
 /**
  * Базовый путь и домен сайта (astro.config: цели prod и preview).
- * prod — champ-box.ru в корне; preview — gussy-pussy.ru/champ-box; dev — корень localhost.
+ * prod — champ-box.ru в корне; preview — landingmania.ru/champ-box; dev — корень localhost.
  * withBase('/x') — путь для ссылок и файлов из public/ в разметке.
  */
 export const BASE = import.meta.env.BASE_URL.replace(/\/+$/, '');
