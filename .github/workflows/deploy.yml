@@ -51,7 +51,7 @@ jobs:
     needs: verify
     if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     environment:
       name: production
       url: https://champ.zimorodok-dev.ru/
@@ -79,3 +79,28 @@ jobs:
           rsync -az --delete --delay-updates \
             -e "ssh -i ~/.ssh/deploy_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes" \
             dist/ deploy@81.163.30.117:champ/
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      # Метрики снимаются с уже выложенного адреса, поэтому шаг идёт после rsync.
+      # /lighthouse отдаёт nginx из /srv/zimorodok-dev.ru/lighthouse/champ/.
+      - name: Метрики Lighthouse → /lighthouse/
+        env:
+          SITE: https://champ.zimorodok-dev.ru/
+        run: |
+          mkdir -p lighthouse
+          FLAGS="--headless=new --no-sandbox --disable-gpu --disable-dev-shm-usage"
+          npx --yes lighthouse@13.6.0 "$SITE" --quiet --output=json --output=html \
+            --output-path=lighthouse/mobile \
+            --only-categories=performance,accessibility,best-practices,seo \
+            --chrome-flags="$FLAGS" || echo "мобильный прогон не удался"
+          npx --yes lighthouse@13.6.0 "$SITE" --quiet --preset=desktop --output=json --output=html \
+            --output-path=lighthouse/desktop \
+            --only-categories=performance,accessibility,best-practices,seo \
+            --chrome-flags="$FLAGS" || echo "десктопный прогон не удался"
+          node scripts/lighthouse-page.mjs lighthouse "$SITE"
+          rsync -az --delete --delay-updates \
+            -e "ssh -i ~/.ssh/deploy_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes" \
+            lighthouse/ deploy@81.163.30.117:lighthouse/champ/
